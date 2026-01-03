@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Guess Archive</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- PapaParse for CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+        .neon-text {
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000000; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; 
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useRef } = React;
+
+        // --- EMBEDDED DATA (From User's CSVs) ---
+        // This ensures the app works immediately without upload, but can be overridden.
+        const INITIAL_CLUES_CSV = `
+"Date (Day, Month DD, YYYY)",Prize Pot,Clue 1 (Correct / Guesses),Clue 2 (Correct / Guesses),Clue 3 (Correct / Guesses),Clue 4 (Correct / Guesses),Clue 5 (Correct / Guesses),Secret Item,Winning Clue,Number of Winners,Winner Payout,Total Players (approx.),Winner Names
+"Friday, January 2, 2026","$5,000","UNIVERSALLY RECOGNIZED (0 / 10,168)","ACCESSIBLE BY LAND AND BY SEA (0 / 13,871)","START APART FINISH TOGETHER (3 / 13,450)","THE ANSWER IS USUALLY BLACK AND WHITE (95 / 6,787)","A DELECTABLE DUO TO ENHANCE YOUR SOUP AND STEW (14,160 / 22,100)",SALT AND PEPPER,3,3,"$1,666.66","80,000","Reader47, Sassy Lolli724, Katon Htx"
+"Friday, January 2, 2026","$10,000","BAD LUCK TOGETHER (51 / 3,876)","ONE NEIGHBOR IS AFRAID OF THE OTHER (1,857 / 11,066)","STOP IN THE NAME OF LOVE (1,195 / 13,076)","IT GOES HAND IN HAND (668 / 12,266)","THE OTHER NEIGHBORS IN THE JOKE ARE EIGHT AND NINE (14,400 / 16,800)",67,2,1857,"$5.38","70,000","Bradalina, Cat, Mirror..."
+"Tuesday, December 9, 2025","$5,000","ENTER AT YOUR OWN RISK (1 / 3,200)","BACK AND FORTH BILLIONS OF TIMES (1 / 1,700)","KNOW IT ALL WHO IS STILL LEARNING (91 / N/A)","HELPS WRITE YOUR RESUME BUT MAY TAKE YOUR JOB (584 / N/A)","OPEN AI HAD A BOT (719 / N/A)",CHATGPT,1,1,"$5,000.00","12,000",Dum Dum
+"Tuesday, December 9, 2025","$10,000","NATURAL BUT NOT NATURAL (16 / 248)","CLASSIC ROCK GROUP THAT'S STILL TOGETHER (68 / 2,900)","1 3 26 16 BINGO (63 / 1,300)","THE ULTIMATE FACE OFF (48 / N/A)","DAKOTA HILLS POTUS GRILLS (127 / N/A)",MOUNT RUSHMORE,1,16,$625.00,"13,000","Big Pancake 92, Squalligans, Kdum 1..."
+"Monday, December 8, 2025","$10,000","THE NAME IS ADDICTIVE (72 / 1,880)","THE FINALE FOR CAMPING AND GLAMPING (1,838 / N/A)","","",S'MORES,3,9,"$1,111.11","14,000","Absurd Vanilla 216, Hefty Flax 729, Go Bucks 34, junior putter 94 56"
+"Monday, December 8, 2025","$5,000","GLOBAL MULTIMEDIA STAR (12 / 4,000)","KNOWN BY EVERYBODY BUT NOBODY ACTUALLY KNOWS THEM (5 / 2,100)","ROLE MODEL WHOSE ROLES INCLUDE MODEL (10 / N/A)","TOWERING ICON WHO'S LESS THAN ONE FOOT TALL (85 / N/A)","I TELL YOU KEN THINKS SHE'S A DOLL (4,000 / N/A)",BARBIE,5,4000,"$1.25","60,000","Various"
+`;
+
+        const INITIAL_EXPLANATIONS_CSV = `
+Date,Secret Item,Clue 1 - Host's Explanation,Clue 2 - Host's Explanation,Clue 3 - Host's Explanation,Clue 4 - Host's Explanation,Clue 5 - Host's Explanation,Host's Name,Popular Wrong Guesses
+"Friday, January 2, 2026",SALT AND PEPPER,"Universally recognized - ""universally recognized... who doesn't know what this is""","Accessible by land and by sea - ""This is from a pepper tree and this is from I think the ocean like the sea where do you get sea salt right it's from the seabed land and sea""","Start apart finish together - ""You go 'Oh it needs a little salt you know what needs a little pepper.' They start apart they end up together""","The answer is usually black and white - ""makes sense pepper's black salt is white black and white""","A delectable duo to enhance your soup and stew - ""these two things you put in your soup and your stew and you and you cook""",Howie Mandel,"Minions*, Mario*, Gold*, NASA, Eyes, Lego*, Oreo*, Sand*"
+"Friday, January 2, 2026",67,"Bad luck together - ""what's six and seven 13 6 + 7 is 13 they're bad luck together""","One neighbor is afraid of the other - ""why is six afraid of seven because seven eight nine right one neighbor six and seven they're neighbors""","Stop in the name of love - ""anybody who's walking around doing that... it's just stop [hand gesture]""","It goes hand in hand - ""hand in hand that's what 67 is famous for hand in hand""","The other neighbors in the joke are eight and nine - ""the other neighbors in the joke are eight and nine right you know the joke... why is six afraid of seven because seven ate nine""",Howie Mandel,"Bradalina, Cat, Mirror..."
+"Tuesday, December 9, 2025",CHATGPT,"Enter at your own risk","Back and forth billions of times","Know it all who is still learning","Helps write your resume but may take your job","Open AI had a bot",Hunter March,"Google, Internet, Siri"
+"Tuesday, December 9, 2025",MOUNT RUSHMORE,"Natural but not natural","Classic rock group that's still together","1 3 26 16 BINGO","The ultimate face off","Dakota hills potus grills",Hunter March,"The Rolling Stones, Beatles"
+"Monday, December 8, 2025",S'MORES,"The name is addictive","The finale for camping and glamping","","","",Hunter March,"Crack, Coffee"
+"Monday, December 8, 2025",BARBIE,"Global Multimedia Star - ""Global Multimedia Star""","Known by everybody but nobody actually knows them - ""Known by everybody but nobody actually knows them""","Role model whose roles include model - ""Role model to young girls, is a model""","Towering icon who's less than one foot tall - ""she's very small.""","I tell you Ken thinks she's a doll - ""of course it's made by Mattel and there's Ken.""",Hunter March,"Dua Lipa, Justin Bieber, Logan Paul, Cher, Banksy, Marshmello, Sia, Tyra Banks, Alexa, Madonna, Kim Kardashian, Tinkerbell, Minion, Yoda, Ken*"
+`;
+
+        // --- UTILITIES ---
+
+        const formatCurrency = (val) => {
+            if (typeof val === 'string') {
+                val = parseFloat(val.replace(/[^0-9.-]+/g,""));
+            }
+            if (isNaN(val)) return "$0.00";
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
+        };
+
+        const parseMoney = (str) => {
+            if (!str) return 0;
+            return parseFloat(str.replace(/[^0-9.-]+/g,"")) || 0;
+        };
+
+        const cleanString = (str) => str ? str.trim() : "";
+
+        // --- COMPONENTS ---
+
+        const Icons = {
+            Search: () => <i data-lucide="search"></i>,
+            Play: () => <i data-lucide="play-circle"></i>,
+            BarChart: () => <i data-lucide="bar-chart-2"></i>,
+            Database: () => <i data-lucide="database"></i>,
+            Upload: () => <i data-lucide="upload"></i>,
+            Help: () => <i data-lucide="help-circle"></i>,
+            Dollar: () => <i data-lucide="dollar-sign"></i>,
+            User: () => <i data-lucide="user"></i>,
+            Trophy: () => <i data-lucide="trophy"></i>,
+            Refresh: () => <i data-lucide="refresh-cw"></i>,
+            Check: () => <i data-lucide="check"></i>,
+            X: () => <i data-lucide="x"></i>
+        };
+
+        // Navigation Sidebar
+        const Navbar = ({ activeTab, setActiveTab }) => {
+            const tabs = [
+                { id: 'dashboard', label: 'Dashboard', icon: 'BarChart' },
+                { id: 'play', label: 'Play Game', icon: 'Play' },
+                { id: 'archive', label: 'Archive', icon: 'Database' },
+                { id: 'settings', label: 'Data Input', icon: 'Upload' },
+            ];
+
+            useEffect(() => {
+                lucide.createIcons();
+            }, []);
+
+            return (
+                <div className="w-full md:w-64 bg-black border-r border-slate-800 flex-shrink-0 flex flex-col h-screen overflow-y-auto">
+                    <div className="p-6 flex flex-col items-center border-b border-slate-800">
+                        <img 
+                            src="bestguessarchive.jpg" 
+                            alt="Best Guess Archive" 
+                            className="w-32 h-32 rounded-full object-cover border-4 border-purple-600 shadow-[0_0_15px_rgba(147,51,234,0.5)] mb-4"
+                            onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.parentElement.innerHTML += '<div class="w-32 h-32 rounded-full bg-slate-800 flex items-center justify-center border-4 border-purple-600 shadow-[0_0_15px_rgba(147,51,234,0.5)] mb-4"><span class="text-3xl font-bold text-purple-500">BG</span></div>'
+                            }}
+                        />
+                        <h1 className="text-xl font-black italic tracking-tighter text-white neon-text">
+                            BEST GUESS
+                            <span className="block text-sm text-purple-400 font-normal not-italic tracking-normal">Archive & Simulator</span>
+                        </h1>
+                    </div>
+                    <nav className="flex-1 p-4 space-y-2">
+                        {tabs.map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 font-bold ${
+                                    activeTab === tab.id 
+                                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/50' 
+                                    : 'text-white hover:bg-slate-800'
+                                }`}
+                            >
+                                <i data-lucide={tabs.find(t=>t.id===tab.id).icon === 'BarChart' ? 'bar-chart-2' : 
+                                               tabs.find(t=>t.id===tab.id).icon === 'Play' ? 'play-circle' :
+                                               tabs.find(t=>t.id===tab.id).icon === 'Database' ? 'database' : 'upload'}></i>
+                                <span>{tab.label}</span>
+                            </button>
+                        ))}
+                    </nav>
+                    <div className="p-4 text-xs text-slate-500 text-center">
+                        Fan made archive.<br/>Not affiliated with the show.
+                    </div>
+                </div>
+            );
+        };
+
+        // Charts Component
+        const Dashboard = ({ data }) => {
+            const stats = useMemo(() => {
+                const totalMoney = data.reduce((acc, curr) => acc + curr.prize, 0);
+                const totalGames = data.length;
+                const totalWinners = data.reduce((acc, curr) => acc + curr.winnerCount, 0);
+                
+                // Host stats
+                const hosts = {};
+                data.forEach(d => {
+                    const h = d.host || "Unknown";
+                    if(!hosts[h]) hosts[h] = 0;
+                    hosts[h] += d.prize;
+                });
+                const topHost = Object.entries(hosts).sort((a,b) => b[1] - a[1])[0];
+
+                return { totalMoney, totalGames, totalWinners, topHost };
+            }, [data]);
+
+            const canvasRef1 = useRef(null);
+            const canvasRef2 = useRef(null);
+
+            useEffect(() => {
+                if (!canvasRef1.current || !canvasRef2.current) return;
+
+                // Chart 1: Winning Clue Distribution
+                const clueCounts = [0,0,0,0,0]; // Indices 0-4 for Clues 1-5
+                data.forEach(game => {
+                    if (game.winningClue && game.winningClue >= 1 && game.winningClue <= 5) {
+                        clueCounts[game.winningClue - 1]++;
+                    }
+                });
+
+                const chart1 = new Chart(canvasRef1.current, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Clue 1', 'Clue 2', 'Clue 3', 'Clue 4', 'Clue 5'],
+                        datasets: [{
+                            label: 'Winning Clues',
+                            data: clueCounts,
+                            backgroundColor: '#9333ea',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: 'When is the Cash Won?', color: '#cbd5e1' }
+                        },
+                        scales: {
+                            y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                        }
+                    }
+                });
+
+                // Chart 2: Prize Distribution
+                const prizeRanges = {'Low (<$2k)': 0, 'Mid ($2k-$8k)': 0, 'High (>$8k)': 0};
+                data.forEach(game => {
+                    if(game.prize < 2000) prizeRanges['Low (<$2k)']++;
+                    else if(game.prize <= 8000) prizeRanges['Mid ($2k-$8k)']++;
+                    else prizeRanges['High (>$8k)']++;
+                });
+
+                const chart2 = new Chart(canvasRef2.current, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(prizeRanges),
+                        datasets: [{
+                            data: Object.values(prizeRanges),
+                            backgroundColor: ['#60a5fa', '#a855f7', '#ec4899'],
+                            borderColor: '#0f172a'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'right', labels: { color: '#cbd5e1' } },
+                            title: { display: true, text: 'Prize Pot Tiers', color: '#cbd5e1' }
+                        }
+                    }
+                });
+
+                return () => {
+                    chart1.destroy();
+                    chart2.destroy();
+                }
+            }, [data]);
+
+            return (
+                <div className="p-8 space-y-8 animate-fade-in">
+                    <header className="mb-8">
+                        <h2 className="text-3xl font-bold text-white mb-2">Stat Center</h2>
+                        <p className="text-slate-400">Tracking the millions given away.</p>
+                    </header>
+
+                    {/* KPI Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div className="glass-panel p-6 rounded-2xl border-l-4 border-purple-500">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-slate-400 text-sm font-semibold uppercase">Total Given Away</span>
+                                <i data-lucide="dollar-sign" className="text-purple-500 w-5 h-5"></i>
+                            </div>
+                            <div className="text-3xl font-bold text-white">{formatCurrency(stats.totalMoney)}</div>
+                        </div>
+                        <div className="glass-panel p-6 rounded-2xl border-l-4 border-blue-500">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-slate-400 text-sm font-semibold uppercase">Total Games</span>
+                                <i data-lucide="database" className="text-blue-500 w-5 h-5"></i>
+                            </div>
+                            <div className="text-3xl font-bold text-white">{stats.totalGames}</div>
+                        </div>
+                        <div className="glass-panel p-6 rounded-2xl border-l-4 border-green-500">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-slate-400 text-sm font-semibold uppercase">Total Winners</span>
+                                <i data-lucide="trophy" className="text-green-500 w-5 h-5"></i>
+                            </div>
+                            <div className="text-3xl font-bold text-white">{stats.totalWinners.toLocaleString()}</div>
+                        </div>
+                        <div className="glass-panel p-6 rounded-2xl border-l-4 border-yellow-500">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-slate-400 text-sm font-semibold uppercase">Top Host</span>
+                                <i data-lucide="user" className="text-yellow-500 w-5 h-5"></i>
+                            </div>
+                            <div className="text-xl font-bold text-white truncate">{stats.topHost ? stats.topHost[0] : "N/A"}</div>
+                            <div className="text-xs text-slate-500">gave away {formatCurrency(stats.topHost ? stats.topHost[1] : 0)}</div>
+                        </div>
+                    </div>
+
+                    {/* Charts */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div className="glass-panel p-6 rounded-2xl">
+                            <canvas ref={canvasRef1}></canvas>
+                        </div>
+                        <div className="glass-panel p-6 rounded-2xl">
+                            <canvas ref={canvasRef2}></canvas>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Archive List Component
+        const Archive = ({ data }) => {
+            const [searchTerm, setSearchTerm] = useState("");
+            const [sortField, setSortField] = useState("date");
+            const [expandedRow, setExpandedRow] = useState(null);
+
+            const filteredData = useMemo(() => {
+                let d = [...data];
+                if (searchTerm) {
+                    const lower = searchTerm.toLowerCase();
+                    d = d.filter(game => 
+                        game.item.toLowerCase().includes(lower) || 
+                        game.date.toLowerCase().includes(lower) ||
+                        game.host?.toLowerCase().includes(lower)
+                    );
+                }
+                d.sort((a,b) => {
+                    if (sortField === 'prize') return b.prize - a.prize;
+                    if (sortField === 'date') return new Date(b.date) - new Date(a.date);
+                    if (sortField === 'winners') return b.winnerCount - a.winnerCount;
+                    return 0;
+                });
+                return d;
+            }, [data, searchTerm, sortField]);
+
+            return (
+                <div className="p-8 h-full flex flex-col">
+                    <header className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h2 className="text-3xl font-bold text-white mb-2">The Archive</h2>
+                            <p className="text-slate-400">Explore past items, clues, and payouts.</p>
+                        </div>
+                        <div className="flex gap-2 w-full md:w-auto">
+                            <div className="relative flex-1 md:w-64">
+                                <i data-lucide="search" className="absolute left-3 top-3 text-slate-500 w-4 h-4"></i>
+                                <input 
+                                    type="text" 
+                                    placeholder="Search answers, dates..." 
+                                    className="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 pl-10 pr-4 text-white focus:outline-none focus:border-purple-500"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                            <select 
+                                className="bg-slate-800 border border-slate-700 rounded-lg py-2 px-4 text-white focus:outline-none focus:border-purple-500"
+                                value={sortField}
+                                onChange={(e) => setSortField(e.target.value)}
+                            >
+                                <option value="date">Newest</option>
+                                <option value="prize">Highest Prize</option>
+                                <option value="winners">Most Winners</option>
+                            </select>
+                        </div>
+                    </header>
+
+                    <div className="flex-1 overflow-auto glass-panel rounded-2xl">
+                        <table className="w-full text-left border-collapse border border-slate-700">
+                            <thead className="bg-black text-white sticky top-0 z-10">
+                                <tr>
+                                    <th className="p-4 font-semibold text-sm uppercase tracking-wider border border-slate-700">Date</th>
+                                    <th className="p-4 font-semibold text-sm uppercase tracking-wider border border-slate-700">Secret Item</th>
+                                    <th className="p-4 font-semibold text-sm uppercase tracking-wider border border-slate-700">Prize Pot</th>
+                                    <th className="p-4 font-semibold text-sm uppercase tracking-wider border border-slate-700">Winners</th>
+                                    <th className="p-4 font-semibold text-sm uppercase tracking-wider border border-slate-700">Payout</th>
+                                    <th className="p-4 border border-slate-700"></th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-700">
+                                {filteredData.map(game => (
+                                    <React.Fragment key={game.id}>
+                                        <tr 
+                                            className="hover:bg-slate-800/50 cursor-pointer transition-colors"
+                                            onClick={() => setExpandedRow(expandedRow === game.id ? null : game.id)}
+                                        >
+                                            <td className="p-4 text-slate-300 font-medium border border-slate-700">{game.date}</td>
+                                            <td className="p-4 text-purple-400 font-bold border border-slate-700">{game.item}</td>
+                                            <td className="p-4 text-green-400 font-mono border border-slate-700">{formatCurrency(game.prize)}</td>
+                                            <td className="p-4 text-slate-300 border border-slate-700">{game.winnerCount}</td>
+                                            <td className="p-4 text-slate-300 font-mono border border-slate-700">{formatCurrency(game.payout)}</td>
+                                            <td className="p-4 text-right border border-slate-700">
+                                                <i data-lucide={expandedRow === game.id ? "chevron-up" : "chevron-down"} className="w-4 h-4 text-slate-500 inline"></i>
+                                            </td>
+                                        </tr>
+                                        {expandedRow === game.id && (
+                                            <tr className="bg-slate-900/50 border border-slate-700">
+                                                <td colSpan="6" className="p-6">
+                                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                                        <div>
+                                                            <h4 className="text-slate-400 text-xs font-bold uppercase mb-3">Clues & Stats</h4>
+                                                            <div className="space-y-2">
+                                                                {game.clues.map((clue, idx) => (
+                                                                    <div key={idx} className={`p-3 rounded-lg border ${idx + 1 === game.winningClue ? 'border-green-500/50 bg-green-500/10' : 'border-slate-700 bg-slate-800'}`}>
+                                                                        <div className="flex justify-between items-start">
+                                                                            <span className="text-xs font-bold text-slate-500 mb-1">CLUE {idx + 1}</span>
+                                                                            {clue.stats && <span className="text-xs text-slate-500">{clue.stats}</span>}
+                                                                        </div>
+                                                                        <p className="text-sm text-white mb-1">{clue.text || "(No text)"}</p>
+                                                                        {clue.explanation && <p className="text-xs text-slate-400 italic">Host: "{clue.explanation}"</p>}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="text-slate-400 text-xs font-bold uppercase mb-3">Game Details</h4>
+                                                            <div className="bg-slate-800 p-4 rounded-lg space-y-3">
+                                                                <div className="flex justify-between border-b border-slate-700 pb-2">
+                                                                    <span className="text-slate-400 text-sm">Host</span>
+                                                                    <span className="text-white text-sm">{game.host || "N/A"}</span>
+                                                                </div>
+                                                                <div className="flex justify-between border-b border-slate-700 pb-2">
+                                                                    <span className="text-slate-400 text-sm">Total Players</span>
+                                                                    <span className="text-white text-sm">{game.totalPlayers}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span className="text-slate-400 text-sm block mb-1">Common Wrong Guesses</span>
+                                                                    <p className="text-white text-sm bg-slate-900 p-2 rounded">{game.wrongGuesses || "None recorded"}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                            </tbody>
+                        </table>
+                        {filteredData.length === 0 && (
+                            <div className="p-12 text-center text-slate-500">No games found matching your search.</div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        // Game Component
+        const Game = ({ data }) => {
+            const [gameState, setGameState] = useState('start'); // start, playing, won, lost, revealed
+            const [currentGame, setCurrentGame] = useState(null);
+            const [currentClueIdx, setCurrentClueIdx] = useState(0);
+            const [userGuess, setUserGuess] = useState("");
+            const [feedback, setFeedback] = useState(null);
+
+            const startGame = () => {
+                const randomGame = data[Math.floor(Math.random() * data.length)];
+                setCurrentGame(randomGame);
+                setGameState('playing');
+                setCurrentClueIdx(0);
+                setUserGuess("");
+                setFeedback(null);
+            };
+
+            const handleGuess = (e) => {
+                e.preventDefault();
+                if (!userGuess.trim()) return;
+
+                const guessClean = userGuess.toLowerCase().trim();
+                const answerClean = currentGame.item.toLowerCase().trim();
+
+                if (guessClean === answerClean) {
+                    setGameState('won');
+                } else {
+                    setFeedback({ type: 'error', text: `Nope! "${userGuess}" is incorrect.` });
+                    setUserGuess("");
+                    // Clear feedback after 2s
+                    setTimeout(() => setFeedback(null), 2000);
+                }
+            };
+
+            const nextClue = () => {
+                if (currentClueIdx < 4) {
+                    setCurrentClueIdx(prev => prev + 1);
+                } else {
+                    setGameState('lost');
+                }
+            };
+
+            const calculateWinnings = () => {
+                // If you win, you add +1 to the winner count.
+                // Prize / (RealWinners + 1)
+                const realWinners = currentGame.winnerCount || 0;
+                const newPayout = currentGame.prize / (realWinners + 1);
+                return formatCurrency(newPayout);
+            };
+
+            if (gameState === 'start') {
+                return (
+                    <div className="flex flex-col items-center justify-center h-full p-8 text-center animate-fade-in">
+                        <div className="bg-gradient-to-br from-purple-900 to-slate-900 p-1 rounded-full mb-8 shadow-[0_0_50px_rgba(147,51,234,0.3)]">
+                            <div className="bg-slate-900 rounded-full p-8">
+                                <i data-lucide="play-circle" className="w-24 h-24 text-purple-500"></i>
+                            </div>
+                        </div>
+                        <h2 className="text-4xl font-black text-white mb-4">RE-LIVE THE SHOW</h2>
+                        <p className="text-slate-400 max-w-md mb-8 text-lg">
+                            We'll pull a random game from the archive. You get clues one by one. 
+                            Guess correctly to see how much money you <em>would</em> have won that night.
+                        </p>
+                        <button 
+                            onClick={startGame}
+                            className="bg-purple-600 hover:bg-purple-500 text-white font-bold py-4 px-10 rounded-full text-xl shadow-lg hover:shadow-purple-500/50 transition-all transform hover:scale-105"
+                        >
+                            START ROUND
+                        </button>
+                    </div>
+                );
+            }
+
+            if (!currentGame) return null;
+
+            return (
+                <div className="h-full flex flex-col items-center justify-center p-4 max-w-4xl mx-auto animate-fade-in relative">
+                    {/* Header Info */}
+                    <div className="absolute top-6 left-0 right-0 flex justify-between px-6 text-slate-400">
+                        <span>{currentGame.date}</span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-green-400 font-bold">POT: {formatCurrency(currentGame.prize)}</span>
+                        </div>
+                    </div>
+
+                    {/* Game Area */}
+                    <div className="w-full max-w-2xl">
+                        
+                        {/* Clue Display */}
+                        <div className="mb-8 space-y-4">
+                            {currentGame.clues.map((clue, idx) => {
+                                if (idx > currentClueIdx && gameState === 'playing') return null;
+                                
+                                const isCurrent = idx === currentClueIdx && gameState === 'playing';
+                                
+                                return (
+                                    <div 
+                                        key={idx} 
+                                        className={`transition-all duration-500 ${isCurrent ? 'scale-105 z-10' : 'opacity-60 scale-95'}`}
+                                    >
+                                        <div className={`p-6 rounded-2xl border ${isCurrent ? 'bg-slate-800 border-purple-500 shadow-[0_0_20px_rgba(147,51,234,0.2)]' : 'bg-slate-900 border-slate-700'}`}>
+                                            <div className="flex justify-between mb-2">
+                                                <span className={`text-xs font-bold uppercase tracking-widest ${isCurrent ? 'text-purple-400' : 'text-slate-500'}`}>
+                                                    Clue {idx + 1}
+                                                </span>
+                                            </div>
+                                            <h3 className={`text-xl md:text-2xl font-bold ${isCurrent ? 'text-white' : 'text-slate-400'}`}>
+                                                {clue.text}
+                                            </h3>
+                                            {(gameState !== 'playing' || idx < currentClueIdx) && clue.explanation && (
+                                                <p className="mt-3 text-sm text-slate-500 italic border-l-2 border-slate-700 pl-3">
+                                                    Host: "{clue.explanation}"
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Input Area */}
+                        {gameState === 'playing' && (
+                            <div className="glass-panel p-6 rounded-2xl">
+                                <form onSubmit={handleGuess} className="flex gap-3">
+                                    <input 
+                                        type="text" 
+                                        autoFocus
+                                        value={userGuess}
+                                        onChange={(e) => setUserGuess(e.target.value)}
+                                        placeholder="Type your best guess..."
+                                        className="flex-1 bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-white text-lg focus:border-purple-500 focus:outline-none"
+                                    />
+                                    <button type="submit" className="bg-purple-600 hover:bg-purple-500 text-white font-bold px-6 rounded-xl">
+                                        SUBMIT
+                                    </button>
+                                </form>
+                                <div className="flex justify-between items-center mt-4">
+                                    <span className={`text-sm ${feedback ? 'text-red-400' : 'text-transparent'}`}>
+                                        {feedback ? feedback.text : "Placeholder"}
+                                    </span>
+                                    {currentClueIdx < 4 ? (
+                                        <button onClick={nextClue} className="text-slate-400 hover:text-white text-sm underline">
+                                            I don't know, give me the next clue
+                                        </button>
+                                    ) : (
+                                        <span className="text-red-500 text-sm font-bold">LAST CLUE!</span>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* WIN STATE */}
+                        {gameState === 'won' && (
+                            <div className="glass-panel p-8 rounded-2xl text-center border border-green-500/50 bg-green-900/10 animate-fade-in-up">
+                                <div className="inline-block p-4 bg-green-500 rounded-full mb-4">
+                                    <i data-lucide="check" className="w-8 h-8 text-white"></i>
+                                </div>
+                                <h2 className="text-4xl font-black text-white mb-2">CORRECT!</h2>
+                                <p className="text-xl text-slate-300 mb-6">The answer was <strong className="text-white">{currentGame.item}</strong></p>
+                                
+                                <div className="bg-slate-900 p-6 rounded-xl mb-6 inline-block min-w-[300px]">
+                                    <span className="text-slate-500 uppercase text-xs font-bold tracking-widest block mb-1">You would have won</span>
+                                    <span className="text-4xl font-mono text-green-400 font-bold">{calculateWinnings()}</span>
+                                    <span className="text-slate-600 text-xs block mt-2">({currentGame.winnerCount} actual winners + You)</span>
+                                </div>
+
+                                <div>
+                                    <button 
+                                        onClick={startGame}
+                                        className="bg-white text-slate-900 hover:bg-slate-200 font-bold py-3 px-8 rounded-full shadow-lg transition-colors"
+                                    >
+                                        Play Again
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* LOST STATE */}
+                        {gameState === 'lost' && (
+                            <div className="glass-panel p-8 rounded-2xl text-center border border-red-500/50 bg-red-900/10 animate-fade-in-up">
+                                <div className="inline-block p-4 bg-red-500 rounded-full mb-4">
+                                    <i data-lucide="x" className="w-8 h-8 text-white"></i>
+                                </div>
+                                <h2 className="text-4xl font-black text-white mb-2">GAME OVER</h2>
+                                <p className="text-xl text-slate-300 mb-6">The answer was <strong className="text-white">{currentGame.item}</strong></p>
+                                
+                                <button 
+                                    onClick={startGame}
+                                    className="bg-white text-slate-900 hover:bg-slate-200 font-bold py-3 px-8 rounded-full shadow-lg transition-colors"
+                                >
+                                    Try Another
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        // Data Management Settings
+        const Settings = ({ onDataUpdate }) => {
+            const handleFileUpload = (e, type) => {
+                const file = e.target.files[0];
+                if(file) {
+                    const reader = new FileReader();
+                    reader.onload = (evt) => {
+                        onDataUpdate(evt.target.result, type);
+                    };
+                    reader.readAsText(file);
+                }
+            };
+
+            return (
+                <div className="p-8">
+                    <header className="mb-8">
+                        <h2 className="text-3xl font-bold text-white mb-2">Data Management</h2>
+                        <p className="text-slate-400">Update the database with new CSV files.</p>
+                    </header>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="glass-panel p-6 rounded-2xl">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-3 bg-purple-600 rounded-lg">
+                                    <i data-lucide="upload" className="text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-white">Clues & Answers CSV</h3>
+                                    <p className="text-xs text-slate-400">Upload the main game history file.</p>
+                                </div>
+                            </div>
+                            <input 
+                                type="file" 
+                                accept=".csv"
+                                onChange={(e) => handleFileUpload(e, 'clues')}
+                                className="block w-full text-sm text-slate-400
+                                  file:mr-4 file:py-2 file:px-4
+                                  file:rounded-full file:border-0
+                                  file:text-sm file:font-semibold
+                                  file:bg-slate-700 file:text-white
+                                  hover:file:bg-slate-600 cursor-pointer"
+                            />
+                        </div>
+
+                        <div className="glass-panel p-6 rounded-2xl">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-3 bg-blue-600 rounded-lg">
+                                    <i data-lucide="upload" className="text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-white">Explanations CSV</h3>
+                                    <p className="text-xs text-slate-400">Upload host explanations & wrong guesses.</p>
+                                </div>
+                            </div>
+                            <input 
+                                type="file" 
+                                accept=".csv"
+                                onChange={(e) => handleFileUpload(e, 'explanations')}
+                                className="block w-full text-sm text-slate-400
+                                  file:mr-4 file:py-2 file:px-4
+                                  file:rounded-full file:border-0
+                                  file:text-sm file:font-semibold
+                                  file:bg-slate-700 file:text-white
+                                  hover:file:bg-slate-600 cursor-pointer"
+                            />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // --- MAIN APP ---
+
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('dashboard');
+            const [gamesData, setGamesData] = useState([]);
+            
+            // Raw string storage to allow re-parsing
+            const [cluesCsv, setCluesCsv] = useState(INITIAL_CLUES_CSV);
+            const [expCsv, setExpCsv] = useState(INITIAL_EXPLANATIONS_CSV);
+
+            useEffect(() => {
+                const parseData = () => {
+                    // Parse File 1
+                    Papa.parse(cluesCsv, {
+                        header: true,
+                        skipEmptyLines: true,
+                        complete: (res1) => {
+                            // Parse File 2
+                            Papa.parse(expCsv, {
+                                header: true,
+                                skipEmptyLines: true,
+                                complete: (res2) => {
+                                    mergeData(res1.data, res2.data);
+                                }
+                            });
+                        }
+                    });
+                };
+                parseData();
+            }, [cluesCsv, expCsv]);
+
+            const mergeData = (cluesData, expData) => {
+                const processed = cluesData.map((row, index) => {
+                    // Find matching explanation row by Date and Secret Item
+                    const date = row["Date (Day, Month DD, YYYY)"];
+                    const item = row["Secret Item"];
+                    
+                    const expRow = expData.find(e => e["Date"] === date && e["Secret Item"] === item) || {};
+
+                    // Extract clues and stats
+                    const clues = [];
+                    for(let i=1; i<=5; i++) {
+                        const rawClue = row[`Clue ${i} (Correct / Guesses)`];
+                        if (!rawClue) continue;
+
+                        // Regex to separate text from (stats)
+                        // Example: "THE NAME IS ADDICTIVE (72 / 1,880)"
+                        const match = rawClue.match(/(.*)\s\((.*)\)/);
+                        const text = match ? match[1] : rawClue;
+                        const stats = match ? match[2] : "";
+                        
+                        clues.push({
+                            text: cleanString(text),
+                            stats: stats,
+                            explanation: expRow[`Clue ${i} - Host's Explanation`] || ""
+                        });
+                    }
+
+                    return {
+                        id: index,
+                        date: date,
+                        prize: parseMoney(row["Prize Pot"]),
+                        item: item,
+                        clues: clues,
+                        winningClue: parseInt(row["Winning Clue"]),
+                        winnerCount: parseInt((row["Number of Winners"] || "0").replace(/,/g, "")),
+                        payout: parseMoney(row["Winner Payout"]),
+                        totalPlayers: row["Total Players (approx.)"],
+                        host: expRow["Host's Name"],
+                        wrongGuesses: expRow["Popular Wrong Guesses"]
+                    };
+                });
+                
+                // Filter out empty rows
+                setGamesData(processed.filter(g => g.item));
+            };
+
+            const handleDataUpdate = (csvContent, type) => {
+                if(type === 'clues') setCluesCsv(csvContent);
+                if(type === 'explanations') setExpCsv(csvContent);
+                alert("Data updated successfully!");
+            };
+
+            useEffect(() => {
+                lucide.createIcons();
+            }, [activeTab]); // Refresh icons on tab switch
+
+            return (
+                <div className="flex flex-col md:flex-row h-screen w-full bg-[#0f172a] overflow-hidden">
+                    <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+                    
+                    <main className="flex-1 overflow-hidden relative">
+                        {/* Background ambience */}
+                        <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+                            <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[100px]"></div>
+                            <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-900/20 rounded-full blur-[100px]"></div>
+                        </div>
+
+                        <div className="relative z-10 h-full overflow-y-auto">
+                            {activeTab === 'dashboard' && <Dashboard data={gamesData} />}
+                            {activeTab === 'archive' && <Archive data={gamesData} />}
+                            {activeTab === 'play' && <Game data={gamesData} />}
+                            {activeTab === 'settings' && <Settings onDataUpdate={handleDataUpdate} />}
+                        </div>
+                    </main>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
