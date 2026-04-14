@@ -263,7 +263,8 @@
     "winnerNames": "None/Not Listed",
     "wrongGuesses": "BAD TUXEDO, ANGRY BIRDS, ARIZONA CARDINALS, MOON, THE NEWSPAPER INDUSTRY, REF.",
     "winningClue": 1,
-    "winnerCount": 134
+    "winnerCount": 134,
+    "note": "Game was cancelled"
   },
   {
     "date": "Wednesday, April 8, 2026",
@@ -317,7 +318,8 @@
     "winnerNames": "None/Not Listed",
     "wrongGuesses": "PIGGYBACK RIDE, KITE, GRAFFITI, BABY, REPLACEMENT SURGERY, THE PINEAPPLE SHUFFLE",
     "winningClue": 1,
-    "winnerCount": 7
+    "winnerCount": 7,
+    "note": "Game was cancelled"
   },
   {
     "date": "Tuesday, April 7, 2026",

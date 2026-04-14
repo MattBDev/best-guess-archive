@@ -1195,7 +1195,10 @@ class App {
 
       return `<tr class="hover:bg-slate-800/40 transition border-b border-slate-800/60 last:border-0">
         <td class="px-4 py-3 text-slate-400 font-mono text-xs whitespace-nowrap align-top">${g.date}</td>
-        <td class="px-4 py-3 font-bold text-white whitespace-nowrap align-top">${g.secretItem}</td>
+        <td class="px-4 py-3 font-bold text-white whitespace-nowrap align-top">
+          ${g.secretItem}
+          ${g.note ? `<div class="mt-1"><span class="inline-flex items-center gap-1 text-[10px] font-bold bg-red-900/40 text-red-400 border border-red-600/40 px-2 py-0.5 rounded-full uppercase tracking-wide"><span class="material-symbols-outlined" style="font-size:11px">warning</span>${g.note}</span></div>` : ''}
+        </td>
         <td class="px-4 py-3 text-green-400 font-mono whitespace-nowrap align-top">$${g.pot.toLocaleString()}</td>
         ${clueCells}
         <td class="px-4 py-3 text-center align-top"><span class="font-mono text-blue-300">${totalPlayers.toLocaleString()}</span></td>
@@ -1247,7 +1250,10 @@ class App {
       const safeDate = g.date.replace(/'/g,"\\'");
       return `<tr class="hover:bg-slate-800/50 transition border-b border-slate-800 last:border-0">
         <td class="px-6 py-4 text-slate-400 font-mono text-xs whitespace-nowrap">${g.date}</td>
-        <td class="px-6 py-4 font-bold text-white">${g.secretItem}</td>
+        <td class="px-6 py-4 font-bold text-white">
+          ${g.secretItem}
+          ${g.note ? `<div class="mt-1"><span class="inline-flex items-center gap-1 text-[10px] font-bold bg-red-900/40 text-red-400 border border-red-600/40 px-2 py-0.5 rounded-full uppercase tracking-wide"><span class="material-symbols-outlined" style="font-size:11px">warning</span>${g.note}</span></div>` : ''}
+        </td>
         <td class="px-6 py-4 text-green-400 font-mono">$${g.pot.toLocaleString()}</td>
         <td class="px-6 py-4 text-center">${fmtBadge}</td>
         <td class="px-6 py-4 text-center">${medalCell}</td>
