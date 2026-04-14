@@ -276,8 +276,16 @@
   </div>
   <div class="glass-panel rounded-xl overflow-hidden shadow-xl border border-slate-700">
     <div class="relative">
-      <div id="db-scrollbar" class="sticky top-[56px] z-30 h-4 w-full bg-transparent" style="overflow-x:auto; pointer-events:auto;">
-        <div style="height:1px; width:2000px;"></div>
+      <div id="db-scrollbar" class="sticky top-[56px] z-30 w-full bg-slate-900/80 border-b border-slate-700 flex items-center" style="height:28px; min-height:28px;">
+        <button id="db-scroll-left" class="h-7 w-7 flex items-center justify-center text-slate-400 hover:text-blue-400 bg-slate-800/80 rounded-full shadow transition mr-2 ml-2" style="display:none; position:relative; z-index:2;">
+          <span class="material-symbols-outlined">arrow_back_ios_new</span>
+        </button>
+        <div id="db-scrollbar-inner" style="overflow-x:auto; width:100%; height:20px;" class="scrollbar-thin">
+          <div style="height:1px;"></div>
+        </div>
+        <button id="db-scroll-right" class="h-7 w-7 flex items-center justify-center text-slate-400 hover:text-blue-400 bg-slate-800/80 rounded-full shadow transition ml-2 mr-2" style="display:none; position:relative; z-index:2;">
+          <span class="material-symbols-outlined">arrow_forward_ios</span>
+        </button>
       </div>
       <div class="w-full max-w-full overflow-x-auto" id="db-table-scroll">
         <table class="w-full min-w-[1200px] text-left text-sm text-slate-300">
@@ -306,28 +314,52 @@
       <span id="db-count-display">Loading database...</span>
     </div>
     <script>
-    // Floating horizontal scrollbar for database table
+    // Improved sticky horizontal scrollbar with floating arrows for database table
     (function() {
       const tableScroll = document.getElementById('db-table-scroll');
-      const fakeScrollbar = document.getElementById('db-scrollbar');
-      if (tableScroll && fakeScrollbar) {
-        // Sync scroll positions
-        fakeScrollbar.onscroll = function() {
-          tableScroll.scrollLeft = fakeScrollbar.scrollLeft;
-        };
-        tableScroll.onscroll = function() {
-          fakeScrollbar.scrollLeft = tableScroll.scrollLeft;
-        };
-        // Resize fake scrollbar width to match table scroll width
-        const syncWidth = () => {
-          const table = tableScroll.querySelector('table');
-          if (table) {
-            fakeScrollbar.firstElementChild.style.width = table.scrollWidth + 'px';
-          }
-        };
+      const fakeScrollbar = document.getElementById('db-scrollbar-inner');
+      const leftBtn = document.getElementById('db-scroll-left');
+      const rightBtn = document.getElementById('db-scroll-right');
+      function syncWidth() {
+        const table = tableScroll.querySelector('table');
+        if (table) {
+          fakeScrollbar.firstElementChild.style.width = table.scrollWidth + 'px';
+        }
+      }
+      function syncScroll() {
+        fakeScrollbar.scrollLeft = tableScroll.scrollLeft;
+        updateArrows();
+      }
+      function syncFakeScroll() {
+        tableScroll.scrollLeft = fakeScrollbar.scrollLeft;
+        updateArrows();
+      }
+      function updateArrows() {
+        const maxScroll = tableScroll.scrollWidth - tableScroll.clientWidth;
+        if (maxScroll > 10) {
+          leftBtn.style.display = tableScroll.scrollLeft > 10 ? '' : 'none';
+          rightBtn.style.display = tableScroll.scrollLeft < maxScroll - 10 ? '' : 'none';
+        } else {
+          leftBtn.style.display = 'none';
+          rightBtn.style.display = 'none';
+        }
+      }
+      if (tableScroll && fakeScrollbar && leftBtn && rightBtn) {
+        fakeScrollbar.addEventListener('scroll', syncFakeScroll);
+        tableScroll.addEventListener('scroll', syncScroll);
+        leftBtn.addEventListener('click', function() {
+          tableScroll.scrollBy({ left: -300, behavior: 'smooth' });
+        });
+        rightBtn.addEventListener('click', function() {
+          tableScroll.scrollBy({ left: 300, behavior: 'smooth' });
+        });
         window.addEventListener('resize', syncWidth);
         setTimeout(syncWidth, 100);
         syncWidth();
+        setTimeout(updateArrows, 200);
+        setTimeout(updateArrows, 1000);
+        // Also update arrows on scroll
+        tableScroll.addEventListener('scroll', updateArrows);
       }
     })();
     </script>
