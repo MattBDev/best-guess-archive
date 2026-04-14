@@ -408,9 +408,10 @@
       const maxZoom = 2;
       const step = 0.1;
       function updateZoom() {
-        const scroll = document.getElementById('db-table-scroll');
+        const table = document.querySelector('#db-table-scroll table');
         const label = document.getElementById('db-zoom-label');
-        if (scroll) scroll.style.transform = `scale(${zoom})`;
+        if (table) table.style.transform = `scale(${zoom})`;
+        if (table) table.style.transformOrigin = 'left top';
         if (label) label.textContent = Math.round(zoom * 100) + '%';
       }
       function setupZoomButtons() {
