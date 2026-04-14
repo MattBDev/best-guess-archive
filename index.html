@@ -1141,7 +1141,8 @@ class App {
       const clueCells = Array.from({ length: 5 }, (_, index) => {
         const clue = g.clues[index];
         if (!clue) return '<td class="px-6 py-4 text-slate-600">-</td>';
-        return `<td class="px-6 py-4 align-top min-w-[220px]"><div class="font-medium text-slate-200">${clue.text}</div><div class="text-xs text-slate-500 mt-1">${Number(clue.correct || 0).toLocaleString()} correct / ${Number(clue.guesses || 0).toLocaleString()} guesses</div></td>`;
+        const parseN = s => parseInt(String(s || '0').replace(/[^0-9]/g, ''), 10) || 0;
+        return `<td class="px-6 py-4 align-top min-w-[220px]"><div class="font-medium text-slate-200">${clue.text}</div><div class="text-xs text-slate-500 mt-1">${parseN(clue.correct).toLocaleString()} correct / ${parseN(clue.guesses).toLocaleString()} guesses</div></td>`;
       }).join('');
       return `<tr class="hover:bg-slate-800/50 transition border-b border-slate-800 last:border-0">
         <td class="px-6 py-4 text-slate-400 font-mono text-xs whitespace-nowrap">${g.date}</td>
