@@ -1154,10 +1154,7 @@ class App {
         const guesses = parseN(clue.guesses);
         const pct = guesses > 0 ? ((correct / guesses) * 100).toFixed(1) : '0.0';
         return `<td class="px-4 py-3 align-top" style="min-width:200px">
-          <div class="flex items-start justify-between gap-1">
-            <span class="font-medium text-slate-200 leading-snug">${clue.text}</span>
-            ${medal ? `<span class="shrink-0 text-base leading-none mt-0.5">${medal}</span>` : ''}
-          </div>
+          <div class="font-medium text-slate-200 leading-snug">${clue.text}${medal ? `<span class="ml-1">${medal}</span>` : ''}</div>
           <div class="text-xs font-mono mt-1"><span class="text-green-500">${correct.toLocaleString()}</span><span class="text-slate-600"> / </span><span class="text-slate-400">${guesses.toLocaleString()}</span><span class="text-slate-600"> (${pct}%)</span></div>
         </td>`;
       }).join('');
