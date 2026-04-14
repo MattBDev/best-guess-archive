@@ -139,17 +139,6 @@
           BROWSE DATABASE
         </button>
       </div>
-      <!-- Timer Select -->
-      <div class="flex items-center justify-center gap-3 text-sm text-slate-400 mt-2 fade-in">
-        <span class="material-symbols-outlined text-[#FFA300] text-[18px]">timer</span>
-        <label for="clue-duration-select">Clue Display Time:</label>
-        <select id="clue-duration-select" class="bg-slate-800 border border-slate-600 focus:border-blue-500 text-white rounded px-2 py-1 outline-none transition" onchange="localStorage.setItem('clue_time', this.value)">
-          <option value="20">20 Seconds (Real Game)</option>
-          <option value="30">30 Seconds</option>
-          <option value="45">45 Seconds</option>
-          <option value="60">60 Seconds</option>
-        </select>
-      </div>
     </div>
 
     <!-- Tip Jar -->
@@ -221,7 +210,16 @@
         <span class="material-symbols-outlined" style="font-size:16px;line-height:1">check</span> LOCK IN
       </button>
     </div>
-    <div class="flex justify-end">
+    <div class="flex justify-between">
+      <div class="flex items-center gap-2 text-xs text-slate-400">
+        <span class="material-symbols-outlined text-[#FFA300] text-[16px]">timer</span>
+        <select id="clue-duration-select" class="bg-slate-800 border border-slate-600 focus:border-blue-500 text-white rounded px-1 py-0.5 outline-none transition" onchange="localStorage.setItem('clue_time', this.value); if(app.currentGame) app.renderGameLoop();">
+          <option value="20">20s (Real Game)</option>
+          <option value="30">30s</option>
+          <option value="45">45s</option>
+          <option value="60">60s</option>
+        </select>
+      </div>
       <button class="text-slate-400 hover:text-white flex items-center gap-1 text-xs transition" onclick="app.nextClue()">
         SKIP CLUE <span class="material-symbols-outlined" style="font-size:14px;line-height:1">skip_next</span>
       </button>
@@ -599,6 +597,8 @@ class App {
     if (name === 'home') {
       this.renderHomeStats(); 
       this._applyTipLinks();
+    }
+    if (name === 'play') {
       const durSel = document.getElementById('clue-duration-select');
       if (durSel) durSel.value = localStorage.getItem('clue_time') || '20';
     }
@@ -1326,7 +1326,11 @@ class App {
   }
 
   async publishImport() {
-    if (!this._pendingGames) return;
+    console.log("Publish import triggered", this._pendingGames);
+    if (!this._pendingGames) {
+      alert("No games to publish. Please preview the JSON first.");
+      return;
+    }
     const owner = localStorage.getItem('gh_owner');
     const repo  = localStorage.getItem('gh_repo');
     const pat   = localStorage.getItem('gh_pat');
@@ -1334,6 +1338,7 @@ class App {
     const btn    = document.getElementById('btn-publish');
 
     if (!owner || !repo || !pat) {
+      alert("Please save your GitHub Settings (Owner, Repo, PAT) first in the Admin Panel.");
       status.className = 'text-sm font-medium px-4 py-2 rounded bg-red-900/20 text-red-400';
       status.innerText = 'Save your GitHub settings first.';
       status.classList.remove('hidden');
