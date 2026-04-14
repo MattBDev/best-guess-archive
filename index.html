@@ -1404,12 +1404,12 @@ class App {
         const clue = g.clues[i];
         const medal = medalMap[i + 1] || '';
         const isWinning = (i + 1) === Number(winningClueNum);
-        if (!clue) return `<td class="px-4 py-3 text-slate-700 text-center align-top">—</td>`;
+        if (!clue) return `<td class="px-4 py-3 text-slate-700 text-center align-middle">—</td>`;
         const correct = parseN(clue.correct);
         const guesses = parseN(clue.guesses);
         const pct = guesses > 0 ? ((correct / guesses) * 100).toFixed(3) : '0.000';
         // For classic games (not v2), highlight only the clue text for the winning clue, no star or gold coloring on the clue number column
-        return `<td class="px-4 py-3 align-top" style="min-width:200px">
+        return `<td class="px-4 py-3 align-middle" style="min-width:200px">
           <div class="font-medium ${isWinning && !isV2 ? 'bg-yellow-900/30 border border-yellow-400/40 rounded px-1 py-0.5 shadow-sm text-yellow-300' : 'text-slate-200'} leading-snug">${clue.text}</div>
           <div class="text-xs font-mono mt-1"><span class="text-green-500">${correct.toLocaleString()}</span><span class="text-slate-600"> / </span><span class="text-slate-400">${guesses.toLocaleString()}</span><span class="text-slate-600"> (${pct}%)</span>${(isV2 && medal) ? `<span class=\"ml-1 text-sm\">${medal}</span>` : ''}</div>
         </td>`;
@@ -1445,18 +1445,18 @@ class App {
       // Winner names
 
       return `<tr class="hover:bg-slate-800/30 transition border-b border-slate-800/60 last:border-0">
-        <td class="px-1 py-1 text-slate-400 font-mono text-[11px] align-top" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;">${g.date}</td>
-        <td class="px-1 py-1 font-semibold text-white align-top" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">
+        <td class="px-1 py-1 text-slate-400 font-mono text-[11px] align-middle" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;">${g.date}</td>
+        <td class="px-1 py-1 font-semibold text-white align-middle" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">
           <span style="white-space:nowrap;">${g.secretItem}</span>
           ${g.note ? `<div class="mt-0.5"><span class="inline-flex items-center gap-1 text-[9px] font-bold bg-red-900/40 text-red-400 border border-red-600/40 px-1 py-0.5 rounded-full uppercase tracking-wide"><span class="material-symbols-outlined" style="font-size:10px">warning</span>${g.note}</span></div>` : ''}
         </td>
-        <td class="px-2 py-1 text-green-400 font-mono whitespace-nowrap align-top">$${g.pot.toLocaleString()}</td>
+        <td class="px-2 py-1 text-green-400 font-mono whitespace-nowrap align-middle">$${g.pot.toLocaleString()}</td>
         ${clueCells}
-        <td class="px-2 py-1 text-center font-bold text-slate-400 align-top">${winningClueNum || ''}</td>
-        <td class="px-2 py-1 text-center align-top"><span class="font-mono text-blue-300">${totalPlayers.toLocaleString()}</span></td>
-        <td class="px-2 py-1 align-top">${winnersHtml}</td>
-        <td class="px-2 py-1 align-top">${payoutsHtml}</td>
-        <td class="px-1 py-1 text-slate-400 align-top" style="max-width:90px;overflow:hidden;text-overflow:ellipsis;">${(g.host || '—').replace('Hunter/Anthony Anderson', 'Hunter/<br>Anthony Anderson')}</td>
+        <td class="px-2 py-1 text-center font-bold text-slate-400 align-middle">${winningClueNum || ''}</td>
+        <td class="px-2 py-1 text-center align-middle"><span class="font-mono text-blue-300">${totalPlayers.toLocaleString()}</span></td>
+        <td class="px-2 py-1 align-middle">${winnersHtml}</td>
+        <td class="px-2 py-1 align-middle">${payoutsHtml}</td>
+        <td class="px-1 py-1 text-slate-400 align-middle" style="max-width:90px;overflow:hidden;text-overflow:ellipsis;">${(g.host || '—').replace('Hunter/Anthony Anderson', 'Hunter/<br>Anthony Anderson')}</td>
         <td class="px-1 py-1 text-right align-top">
           <button onclick="app.showDetails('${g.date.replace(/'/g,"\\'")}', '${g.secretItem.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}")" class="text-blue-400 hover:text-blue-300" title="View details" style="padding:0 2px;">
             <span class="material-symbols-outlined" style="font-size:18px;">visibility</span>
