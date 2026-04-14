@@ -4,8 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Best Guess Archive - Interactive Game</title>
-<!-- Google Analytics — replace G-XXXXXXXXXX in Admin Panel, then it activates automatically -->
-<script id="ga-placeholder"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YYGK3MHH26"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YYGK3MHH26');
+</script>
 <!-- Supabase for real-time live viewer count -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -569,23 +575,8 @@ class App {
       document.getElementById('status-indicator').className = 'w-2 h-2 rounded-full bg-red-500';
       document.getElementById('data-source-status').innerText = 'Data load failed';
     }
-    this._initGA();
     this._initSupabase();
     this.setView('home');
-  }
-
-  // Google Analytics — loads if a measurement ID is saved in localStorage
-  _initGA() {
-    const id = localStorage.getItem('ga_measurement_id') || 'G-YYGK3MHH26';
-    if (!id || !id.startsWith('G-')) return;
-    const s = document.getElementById('ga-placeholder');
-    if (s) {
-      s.outerHTML = `<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"><\/script>`;
-    }
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ window.dataLayer.push(arguments); };
-    window.gtag('js', new Date());
-    window.gtag('config', id);
   }
 
   // Supabase Realtime Presence — shows live viewer count in nav
@@ -1136,14 +1127,8 @@ class App {
     const id = document.getElementById('ga-measurement-id').value.trim();
     localStorage.setItem('ga_measurement_id', id);
     const status = document.getElementById('ga-status');
-    if (id.startsWith('G-')) {
-      this._initGA();
-      status.className = 'text-xs text-green-400 mt-1';
-      status.innerText = `✓ Analytics enabled for ${id}. Tracking begins after your next page load.`;
-    } else {
-      status.className = 'text-xs text-red-400 mt-1';
-      status.innerText = id ? 'ID must start with G-. Check the GA steps above.' : 'ID cleared — analytics disabled.';
-    }
+    status.className = 'text-xs text-green-400 mt-1';
+    status.innerText = `GA ID saved. The hardcoded tag (G-YYGK3MHH26) is already active — this field is for reference only.`;
   }
 
   saveSupabaseSettings() {
