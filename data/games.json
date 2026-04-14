@@ -1,40 +1,40 @@
 [
   {
     "date": "Monday, April 13, 2026",
-    "pot": 7500.0,
+    "pot": 7500,
     "format": "v2",
     "host": "Hunter March",
     "secretItem": "LEMONADE",
     "clues": [
       {
-        "text": "3 TO 1",
+        "text": "3 TO ONE",
         "correct": "2",
         "guesses": "5,528",
-        "explanation": "Only three ingredients needed: lemons, water, and sugar to make one drink, lemonade.'"
+        "explanation": "Only three ingredients (lemons, water, and sugar) are needed to make one drink."
       },
       {
         "text": "A ROCKY START",
         "correct": "1",
         "guesses": "6,082",
-        "explanation": "Start enjoying your lemonade after you pour it over ice. A rocky start, that's fun to imagine.'"
+        "explanation": "Lemonade is commonly served 'on the rocks' over ice."
       },
       {
         "text": "SUMMER STREET SIGN",
         "correct": "157",
         "guesses": "6,285",
-        "explanation": "Kids put up signs that say lemonade along the street or their stands usually in the summer.'"
+        "explanation": "Kids often set up lemonade stands with signs along streets during the summer."
       },
       {
         "text": "HELP THE CITRUS DROP",
-        "correct": "1,005",
+        "correct": "1,050",
         "guesses": "5,066",
-        "explanation": "Citrus drop equals lemon drop. Citrus, lemon. Help equals aid. Lemonade.'"
+        "explanation": "Citrus drop refers to a lemon; 'help' is a synonym for 'aid' (Lemon-aid)."
       },
       {
         "text": "A LIQUID LIQUID FOR KIDS",
         "correct": "2,183",
         "guesses": "7,858",
-        "explanation": "Lemonade is a liquid that helps kids earn cash and become liquid themselves. Liquid is in financial terms.'"
+        "explanation": "Lemonade is a drink (liquid) that helps kids earn cash (liquid assets)."
       }
     ],
     "goldClue": 1,
@@ -44,18 +44,16 @@
     "silverWinners": 1,
     "bronzeWinners": 157,
     "totalWinners": 160,
-    "goldPayout": 1500.0,
-    "silverPayout": 2500.0,
+    "goldPayout": 1500,
+    "silverPayout": 2500,
     "bronzePayout": 12.74,
     "winnerPayout": "$7,500.00",
-    "winnerNames": "Champ Caesar, Psycho 812000",
-    "wrongGuesses": "triangle, rocket launch, toddler, Stallone, yield, Denver, Florida, earthquake",
-    "winningClue": 1,
-    "winnerCount": 160
+    "winnerNames": "Champ Caesar Psycho 812000",
+    "wrongGuesses": "LEMONADE STAND, ORANGE JUICE, COUNTDOWN, SUNNY D, ICE CREAM"
   },
   {
     "date": "Monday, April 13, 2026",
-    "pot": 7500.0,
+    "pot": 7500,
     "format": "v2",
     "host": "Hunter March",
     "secretItem": "BART SIMPSON",
@@ -64,31 +62,31 @@
         "text": "NEVER CHANGES WITH THE SEASONS",
         "correct": "0",
         "guesses": "5,512",
-        "explanation": "The show has been on for 37 seasons and Bart still looks the exact same.'"
+        "explanation": "The character has remained the same age throughout the show's 37 seasons."
       },
       {
         "text": "POPULAR H&M PRODUCT",
         "correct": "5",
         "guesses": "6,574",
-        "explanation": "He is the product of his parents, Homer and Marge, which is actually why they named that store H&M.'"
+        "explanation": "He is the product/child of Homer and Marge (H&M)."
       },
       {
         "text": "DISTINCT STYLE POINTS",
         "correct": "6",
         "guesses": "11,258",
-        "explanation": "His signature haircut features several spiky points. That's literally what makes him distinct.'"
+        "explanation": "His spiky haircut features several distinct, pointed tips."
       },
       {
         "text": "ON BOARD FOR SHENANIGANS",
         "correct": "4",
         "guesses": "3,691",
-        "explanation": "He loves to ride his skateboard and cause trouble, always doing shenanigans, always on board.'"
+        "explanation": "He is a skateboarder (on board) known for causing trouble (shenanigans)."
       },
       {
         "text": "TV'S ANIMATED MIXED UP BRAT",
         "correct": "1,179",
         "guesses": "3,967",
-        "explanation": "If you mix up the letters in brat, you actually get Bart. He's also animated and on TV.'"
+        "explanation": "Bart is an animated character and his name is an anagram of 'brat'."
       }
     ],
     "goldClue": 2,
@@ -98,18 +96,16 @@
     "silverWinners": 6,
     "bronzeWinners": 4,
     "totalWinners": 15,
-    "goldPayout": 600.0,
+    "goldPayout": 600,
     "silverPayout": 416.67,
-    "bronzePayout": 500.0,
+    "bronzePayout": 500,
     "winnerPayout": "$7,500.00",
-    "winnerNames": "Veritas California, 69420 Emperor Joe, Uneven Gangway",
-    "wrongGuesses": "cough cough, BTS, pine trees, hats, salt, plain white tee, disco dancing, mannequin",
-    "winningClue": 2,
-    "winnerCount": 15
+    "winnerNames": "Veritas California, 69420, emperor Joe, uneven gang way",
+    "wrongGuesses": "JEANS, UNDERWEAR, SOCKS, MANNEQUIN, SUN"
   },
   {
     "date": "Friday, April 10, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "HELICOPTER",
@@ -163,7 +159,7 @@
   },
   {
     "date": "Friday, April 10, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SHOWER",
@@ -217,7 +213,7 @@
   },
   {
     "date": "Wednesday, April 8, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Jade Catapa",
     "secretItem": "SKUNK",
@@ -271,7 +267,7 @@
   },
   {
     "date": "Wednesday, April 8, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Jade Catapa",
     "secretItem": "HULA HOOP",
@@ -325,7 +321,7 @@
   },
   {
     "date": "Tuesday, April 7, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Anthony Anderson",
     "secretItem": "BINGO",
@@ -379,7 +375,7 @@
   },
   {
     "date": "Tuesday, April 7, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Anthony Anderson",
     "secretItem": "OPRAH",
@@ -433,7 +429,7 @@
   },
   {
     "date": "Monday, April 6, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BURRITO",
@@ -487,7 +483,7 @@
   },
   {
     "date": "Monday, April 6, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "MOUTHWASH",
@@ -541,7 +537,7 @@
   },
   {
     "date": "Friday, April 3, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "DENTURES",
@@ -595,7 +591,7 @@
   },
   {
     "date": "Friday, April 3, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "PILLOW",
@@ -649,7 +645,7 @@
   },
   {
     "date": "Thursday, April 2, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "LICENSE PLATE",
@@ -703,7 +699,7 @@
   },
   {
     "date": "Thursday, April 2, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BANANA PEEL",
@@ -757,7 +753,7 @@
   },
   {
     "date": "Wednesday, April 1, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Karen Fox",
     "secretItem": "SUNGLASSES",
@@ -811,7 +807,7 @@
   },
   {
     "date": "Wednesday, April 1, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Karen Fox",
     "secretItem": "EMOJI",
@@ -865,7 +861,7 @@
   },
   {
     "date": "Tuesday, March 31, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "HIGH HEELS",
@@ -919,7 +915,7 @@
   },
   {
     "date": "Tuesday, March 31, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SNOOP DOGG",
@@ -973,7 +969,7 @@
   },
   {
     "date": "Monday, March 30, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "CLOUD",
@@ -1027,7 +1023,7 @@
   },
   {
     "date": "Monday, March 30, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SARCASM",
@@ -1081,7 +1077,7 @@
   },
   {
     "date": "Friday, March 27, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BRIDESMAIDS",
@@ -1135,7 +1131,7 @@
   },
   {
     "date": "Friday, March 27, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "MONSTER TRUCK",
@@ -1189,7 +1185,7 @@
   },
   {
     "date": "Thursday, March 26, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "CORKSCREW",
@@ -1243,7 +1239,7 @@
   },
   {
     "date": "Thursday, March 26, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "ZEBRA",
@@ -1297,7 +1293,7 @@
   },
   {
     "date": "Wednesday, March 25, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "QUICKSAND",
@@ -1351,7 +1347,7 @@
   },
   {
     "date": "Wednesday, March 25, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SURF AND TURF",
@@ -1405,7 +1401,7 @@
   },
   {
     "date": "Tuesday, March 24, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "NAP",
@@ -1459,7 +1455,7 @@
   },
   {
     "date": "Tuesday, March 24, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "VOLCANO",
@@ -1513,7 +1509,7 @@
   },
   {
     "date": "Monday, March 23, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "TRAMPOLINE",
@@ -1567,7 +1563,7 @@
   },
   {
     "date": "Monday, March 23, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "DRIVE-THRU",
@@ -1621,7 +1617,7 @@
   },
   {
     "date": "Friday, March 20, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BEEHIVE",
@@ -1675,7 +1671,7 @@
   },
   {
     "date": "Friday, March 20, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "FAMILY FEUD",
@@ -1684,7 +1680,7 @@
         "text": "MIND READERS UNITE",
         "correct": "0",
         "guesses": "?",
-        "explanation": "Mind Readers Unite - 'Because you’re trying to guess what America thinks!'"
+        "explanation": "Mind Readers Unite - 'Because youâre trying to guess what America thinks!'"
       },
       {
         "text": "RIVALRY FOR DNA",
@@ -1729,7 +1725,7 @@
   },
   {
     "date": "Thursday, March 19, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "JUNK MAIL",
@@ -1783,7 +1779,7 @@
   },
   {
     "date": "Thursday, March 19, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "PIZZA",
@@ -1837,7 +1833,7 @@
   },
   {
     "date": "Wednesday, March 18, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "MUSTACHE",
@@ -1846,7 +1842,7 @@
         "text": "TRENDY POPUP",
         "correct": "2",
         "guesses": "8948",
-        "explanation": "Trendy Popup - 'They pop up above your lip and lately they’ve been very trendy.'"
+        "explanation": "Trendy Popup - 'They pop up above your lip and lately theyâve been very trendy.'"
       },
       {
         "text": "MID COVER BAND",
@@ -1891,7 +1887,7 @@
   },
   {
     "date": "Wednesday, March 18, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "THE MALL",
@@ -1945,7 +1941,7 @@
   },
   {
     "date": "Tuesday, March 17, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "WIKIPEDIA",
@@ -1960,7 +1956,7 @@
         "text": "ALL FOR NOTHING",
         "correct": "5",
         "guesses": "5237",
-        "explanation": "All For Nothing - 'It’s all the information in the world almost all of it available at no cost.'"
+        "explanation": "All For Nothing - 'Itâs all the information in the world almost all of it available at no cost.'"
       },
       {
         "text": "GREAT WORK EVERYBODY",
@@ -1978,7 +1974,7 @@
         "text": "ONLINE BRATANNICA BUT EVEN MORE GIGANTICA",
         "correct": "3063",
         "guesses": "8361",
-        "explanation": "Online Bratannica But Even More Gigantica - 'It’s like the encyclopedia but with way more articles and it’s online.'"
+        "explanation": "Online Bratannica But Even More Gigantica - 'Itâs like the encyclopedia but with way more articles and itâs online.'"
       }
     ],
     "goldClue": 1,
@@ -1999,7 +1995,7 @@
   },
   {
     "date": "Tuesday, March 17, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "HANGOVER",
@@ -2020,7 +2016,7 @@
         "text": "A BLAST FROM THE PAST",
         "correct": "8",
         "guesses": "7604",
-        "explanation": "A Blast From The Past - 'You were having a good time last night and now you’re suffering the consequences.'"
+        "explanation": "A Blast From The Past - 'You were having a good time last night and now youâre suffering the consequences.'"
       },
       {
         "text": "CAN HAPPEN IN VEGAS JUST LIKE \"THE\" MOVIE",
@@ -2053,7 +2049,7 @@
   },
   {
     "date": "Monday, March 16, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "FINDING NEMO",
@@ -2062,7 +2058,7 @@
         "text": "MAKEUP WITH NO MAKEUP",
         "correct": "0",
         "guesses": "9408",
-        "explanation": "Makeup With No Makeup - 'The dad’s trying to make up with his son... and they’re both clown fish clowns that don’t wear makeup.'"
+        "explanation": "Makeup With No Makeup - 'The dadâs trying to make up with his son... and theyâre both clown fish clowns that donât wear makeup.'"
       },
       {
         "text": "A GUILT TRIP",
@@ -2107,7 +2103,7 @@
   },
   {
     "date": "Monday, March 16, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "EXIT SIGN",
@@ -2161,7 +2157,7 @@
   },
   {
     "date": "Friday, March 13, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "SELFIE",
@@ -2215,7 +2211,7 @@
   },
   {
     "date": "Friday, March 13, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "ENVELOPE",
@@ -2269,7 +2265,7 @@
   },
   {
     "date": "Thursday, March 12, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "UMBRELLA",
@@ -2323,7 +2319,7 @@
   },
   {
     "date": "Thursday, March 12, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "ELVIS PRESLEY",
@@ -2377,7 +2373,7 @@
   },
   {
     "date": "Wednesday, March 11, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "TAX REFUND",
@@ -2431,7 +2427,7 @@
   },
   {
     "date": "Wednesday, March 11, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "WORLD CUP",
@@ -2485,7 +2481,7 @@
   },
   {
     "date": "Tuesday, March 10, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SKATEBOARD",
@@ -2539,7 +2535,7 @@
   },
   {
     "date": "Tuesday, March 10, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "LOCKER",
@@ -2593,7 +2589,7 @@
   },
   {
     "date": "Monday, March 9, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "THUNDER",
@@ -2647,7 +2643,7 @@
   },
   {
     "date": "Monday, March 9, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "MICROWAVE",
@@ -2701,7 +2697,7 @@
   },
   {
     "date": "Friday, March 6, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "ELMO",
@@ -2755,7 +2751,7 @@
   },
   {
     "date": "Friday, March 6, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BELT",
@@ -2809,7 +2805,7 @@
   },
   {
     "date": "Thursday, March 5, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "BEACH",
@@ -2863,7 +2859,7 @@
   },
   {
     "date": "Thursday, March 5, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "TIP",
@@ -2917,7 +2913,7 @@
   },
   {
     "date": "Wednesday, March 4, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "FACEBOOK",
@@ -2971,7 +2967,7 @@
   },
   {
     "date": "Wednesday, March 4, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "FLAT TIRE",
@@ -3025,7 +3021,7 @@
   },
   {
     "date": "Tuesday, March 3, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel, Alexa Bliss",
     "secretItem": "REVENGE",
@@ -3079,7 +3075,7 @@
   },
   {
     "date": "Tuesday, March 3, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Unknown",
     "secretItem": "MADISON SQUARE GARDEN",
@@ -3133,7 +3129,7 @@
   },
   {
     "date": "Monday, March 2, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "TAYLOR SWIFT",
@@ -3187,7 +3183,7 @@
   },
   {
     "date": "Monday, March 2, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "PLEDGE OF ALLEGIANCE",
@@ -3241,7 +3237,7 @@
   },
   {
     "date": "Friday, February 27, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "GREAT BARRIER REEF",
@@ -3295,7 +3291,7 @@
   },
   {
     "date": "Friday, February 27, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BOX OF CHOCOLATES",
@@ -3349,7 +3345,7 @@
   },
   {
     "date": "Thursday, February 26, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SNEEZE",
@@ -3403,7 +3399,7 @@
   },
   {
     "date": "Thursday, February 26, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "TABLE LEAF",
@@ -3457,7 +3453,7 @@
   },
   {
     "date": "Wednesday, February 25, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "LEAP YEAR",
@@ -3511,7 +3507,7 @@
   },
   {
     "date": "Wednesday, February 25, 2026",
-    "pot": 20000.0,
+    "pot": 20000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "DMV",
@@ -3565,7 +3561,7 @@
   },
   {
     "date": "Tuesday, February 24, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "FINGERPRINT",
@@ -3619,7 +3615,7 @@
   },
   {
     "date": "Tuesday, February 24, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "ROLLER COASTER",
@@ -3673,7 +3669,7 @@
   },
   {
     "date": "Monday, February 23, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "BACK TO THE FUTURE",
@@ -3727,7 +3723,7 @@
   },
   {
     "date": "Monday, February 23, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SHOE HORN",
@@ -3781,7 +3777,7 @@
   },
   {
     "date": "Friday, February 20, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "WINK",
@@ -3835,7 +3831,7 @@
   },
   {
     "date": "Friday, February 20, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "BEYONCE",
@@ -3889,7 +3885,7 @@
   },
   {
     "date": "Thursday, February 19, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "RANCH",
@@ -3916,7 +3912,7 @@
         "text": "MIX DILL HERBS AND MAYO AND VEGGIES SAY HEYO",
         "correct": "6320",
         "guesses": "10439",
-        "explanation": "Mix Dill Herbs And Mayo And Veggies Say Heyo - 'That's the recipe. And many people use ranch on a crudité platter.'"
+        "explanation": "Mix Dill Herbs And Mayo And Veggies Say Heyo - 'That's the recipe. And many people use ranch on a cruditÃ© platter.'"
       },
       {
         "text": "HIDDEN VALLEY MADE VALID TO POUR ON YOUR SALAD",
@@ -3943,7 +3939,7 @@
   },
   {
     "date": "Thursday, February 19, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BABYSITTER",
@@ -3997,7 +3993,7 @@
   },
   {
     "date": "Wednesday, February 18, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "THE TOOTH FAIRY",
@@ -4051,7 +4047,7 @@
   },
   {
     "date": "Wednesday, February 18, 2026",
-    "pot": 20000.0,
+    "pot": 20000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "BELLY BUTTON",
@@ -4105,7 +4101,7 @@
   },
   {
     "date": "Tuesday, February 17, 2026",
-    "pot": 8888.0,
+    "pot": 8888,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "A PARADE",
@@ -4159,7 +4155,7 @@
   },
   {
     "date": "Tuesday, February 17, 2026",
-    "pot": 18888.0,
+    "pot": 18888,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "THE MOON",
@@ -4213,7 +4209,7 @@
   },
   {
     "date": "Monday, February 16, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "MONA LISA",
@@ -4267,7 +4263,7 @@
   },
   {
     "date": "Monday, February 16, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "HITCHHIKING",
@@ -4321,7 +4317,7 @@
   },
   {
     "date": "Friday, February 13, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "GRANDPARENTS",
@@ -4375,7 +4371,7 @@
   },
   {
     "date": "Friday, February 13, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "VOICEMAIL",
@@ -4429,7 +4425,7 @@
   },
   {
     "date": "Thursday, February 12, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "PICKUP LINE",
@@ -4483,7 +4479,7 @@
   },
   {
     "date": "Thursday, February 12, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "PENCIL SHARPENER",
@@ -4537,7 +4533,7 @@
   },
   {
     "date": "Wednesday, February 11, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "SHOELACE",
@@ -4591,7 +4587,7 @@
   },
   {
     "date": "Wednesday, February 11, 2026",
-    "pot": 20000.0,
+    "pot": 20000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "PETTING ZOO",
@@ -4645,7 +4641,7 @@
   },
   {
     "date": "Tuesday, February 10, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "SOULMATE",
@@ -4699,7 +4695,7 @@
   },
   {
     "date": "Tuesday, February 10, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "SIGNATURE",
@@ -4753,7 +4749,7 @@
   },
   {
     "date": "Monday, February 9, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "FIRST DATE",
@@ -4807,7 +4803,7 @@
   },
   {
     "date": "Monday, February 9, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SUSPENDERS",
@@ -4861,7 +4857,7 @@
   },
   {
     "date": "Friday, February 6, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "CUTTING BOARD",
@@ -4915,7 +4911,7 @@
   },
   {
     "date": "Friday, February 6, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "SCARECROW",
@@ -4969,7 +4965,7 @@
   },
   {
     "date": "Thursday, February 5, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "MANICURE",
@@ -5023,7 +5019,7 @@
   },
   {
     "date": "Thursday, February 5, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "COASTER",
@@ -5077,7 +5073,7 @@
   },
   {
     "date": "Wednesday, February 4, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "FAST FORWARD",
@@ -5131,7 +5127,7 @@
   },
   {
     "date": "Wednesday, February 4, 2026",
-    "pot": 20000.0,
+    "pot": 20000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "KFC",
@@ -5185,7 +5181,7 @@
   },
   {
     "date": "Tuesday, February 3, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "GOLDEN GATE BRIDGE",
@@ -5239,7 +5235,7 @@
   },
   {
     "date": "Tuesday, February 3, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "HOLE IN ONE",
@@ -5293,7 +5289,7 @@
   },
   {
     "date": "Monday, February 2, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "PARACHUTE",
@@ -5347,7 +5343,7 @@
   },
   {
     "date": "Monday, February 2, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "X-RAY",
@@ -5401,7 +5397,7 @@
   },
   {
     "date": "Friday, January 30, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "GRAND CANYON",
@@ -5455,7 +5451,7 @@
   },
   {
     "date": "Friday, January 30, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "MOUSE PAD",
@@ -5509,7 +5505,7 @@
   },
   {
     "date": "Thursday, January 29, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "ROSE",
@@ -5563,7 +5559,7 @@
   },
   {
     "date": "Thursday, January 29, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "REFEREE",
@@ -5617,7 +5613,7 @@
   },
   {
     "date": "Wednesday, January 28, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BOBBING FOR APPLES",
@@ -5671,7 +5667,7 @@
   },
   {
     "date": "Wednesday, January 28, 2026",
-    "pot": 20000.0,
+    "pot": 20000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "WET WILLIE",
@@ -5725,7 +5721,7 @@
   },
   {
     "date": "Tuesday, January 27, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "ODOMETER",
@@ -5779,7 +5775,7 @@
   },
   {
     "date": "Tuesday, January 27, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "EGGNOG",
@@ -5833,7 +5829,7 @@
   },
   {
     "date": "Monday, January 26, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March, Anthony Anderson",
     "secretItem": "LOS ANGELES DODGERS",
@@ -5887,7 +5883,7 @@
   },
   {
     "date": "Monday, January 26, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March, Anthony Anderson",
     "secretItem": "TELESCOPE",
@@ -5941,7 +5937,7 @@
   },
   {
     "date": "Friday, January 23, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "YAWN",
@@ -5995,7 +5991,7 @@
   },
   {
     "date": "Friday, January 23, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BOOKMARK",
@@ -6049,7 +6045,7 @@
   },
   {
     "date": "Thursday, January 22, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "TIMES SQUARE",
@@ -6103,7 +6099,7 @@
   },
   {
     "date": "Thursday, January 22, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "SPEEDING TICKET",
@@ -6151,13 +6147,13 @@
     "bronzePayout": 0,
     "winnerPayout": "$769.23",
     "winnerNames": "Names not read",
-    "wrongGuesses": "piñata, Beethoven's fifth, ink, gift, salmonella, debt, ticket, advice, time, money, speeding",
+    "wrongGuesses": "piÃ±ata, Beethoven's fifth, ink, gift, salmonella, debt, ticket, advice, time, money, speeding",
     "winningClue": 1,
     "winnerCount": 13
   },
   {
     "date": "Wednesday, January 21, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "SIMON SAYS",
@@ -6211,7 +6207,7 @@
   },
   {
     "date": "Wednesday, January 21, 2026",
-    "pot": 20000.0,
+    "pot": 20000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "APRIL FOOL'S DAY",
@@ -6265,7 +6261,7 @@
   },
   {
     "date": "Tuesday, January 20, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SCUBA DIVING",
@@ -6319,7 +6315,7 @@
   },
   {
     "date": "Tuesday, January 20, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "AVOCADO",
@@ -6373,7 +6369,7 @@
   },
   {
     "date": "Monday, January 19, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "WATERFALL",
@@ -6427,7 +6423,7 @@
   },
   {
     "date": "Monday, January 19, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "LAWNMOWER",
@@ -6481,7 +6477,7 @@
   },
   {
     "date": "Friday, January 16, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Unknown",
     "secretItem": "EIFFEL TOWER",
@@ -6535,7 +6531,7 @@
   },
   {
     "date": "Friday, January 16, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SNOOZE BUTTON",
@@ -6589,7 +6585,7 @@
   },
   {
     "date": "Thursday, January 15, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "COSTCO",
@@ -6643,7 +6639,7 @@
   },
   {
     "date": "Thursday, January 15, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "HARMONICA",
@@ -6697,7 +6693,7 @@
   },
   {
     "date": "Wednesday, January 14, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "PAC-MAN",
@@ -6718,7 +6714,7 @@
         "text": "ALL THE RIGHT MOVES",
         "correct": "53",
         "guesses": "16,000",
-        "explanation": "All the right moves - \"Pac-man is a 90° right angles it's always right you It's always a right angle a 90° angle is all the moves are right angles\""
+        "explanation": "All the right moves - \"Pac-man is a 90Â° right angles it's always right you It's always a right angle a 90Â° angle is all the moves are right angles\""
       },
       {
         "text": "HIS WIFE TOOK HIS NAME",
@@ -6751,7 +6747,7 @@
   },
   {
     "date": "Wednesday, January 14, 2026",
-    "pot": 20000.0,
+    "pot": 20000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "TOUPEE",
@@ -6805,7 +6801,7 @@
   },
   {
     "date": "Tuesday, January 13, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "ENGAGEMENT RING",
@@ -6859,7 +6855,7 @@
   },
   {
     "date": "Tuesday, January 13, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "PEPPERONI",
@@ -6913,7 +6909,7 @@
   },
   {
     "date": "Monday, January 12, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "WHISPER",
@@ -6967,7 +6963,7 @@
   },
   {
     "date": "Monday, January 12, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "AMAZON",
@@ -7021,7 +7017,7 @@
   },
   {
     "date": "Friday, January 9, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "ICE CREAM TRUCK",
@@ -7075,7 +7071,7 @@
   },
   {
     "date": "Friday, January 9, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "MIRAGE",
@@ -7129,7 +7125,7 @@
   },
   {
     "date": "Thursday, January 8, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Unknown",
     "secretItem": "THE EIFFEL TOWER",
@@ -7183,7 +7179,7 @@
   },
   {
     "date": "Thursday, January 8, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "UNICYCLE",
@@ -7237,7 +7233,7 @@
   },
   {
     "date": "Wednesday, January 7, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "LADY GAGA",
@@ -7291,7 +7287,7 @@
   },
   {
     "date": "Wednesday, January 7, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "HORSE SHOE",
@@ -7345,7 +7341,7 @@
   },
   {
     "date": "Tuesday, January 6, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "THE MACARENA",
@@ -7399,7 +7395,7 @@
   },
   {
     "date": "Tuesday, January 6, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "MIDNIGHT",
@@ -7453,7 +7449,7 @@
   },
   {
     "date": "Monday, January 5, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BUGS BUNNY",
@@ -7507,7 +7503,7 @@
   },
   {
     "date": "Monday, January 5, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "CACTUS",
@@ -7561,7 +7557,7 @@
   },
   {
     "date": "Friday, January 2, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SALT AND PEPPER",
@@ -7615,7 +7611,7 @@
   },
   {
     "date": "Friday, January 2, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "6 7",
@@ -7669,7 +7665,7 @@
   },
   {
     "date": "Thursday, January 1, 2026",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "KENTUCKY DERBY",
@@ -7723,7 +7719,7 @@
   },
   {
     "date": "Thursday, January 1, 2026",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "JOKE",
@@ -7777,7 +7773,7 @@
   },
   {
     "date": "Wednesday, December 31, 2025",
-    "pot": 11111.0,
+    "pot": 11111,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BUZZ LIGHTYEAR",
@@ -7831,7 +7827,7 @@
   },
   {
     "date": "Wednesday, December 31, 2025",
-    "pot": 111111.0,
+    "pot": 111111,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "7-ELEVEN",
@@ -7885,7 +7881,7 @@
   },
   {
     "date": "Tuesday, December 30, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "MCDONALD'S",
@@ -7939,7 +7935,7 @@
   },
   {
     "date": "Tuesday, December 30, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "SANDCASTLE",
@@ -7993,7 +7989,7 @@
   },
   {
     "date": "Monday, December 29, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "WONDER WOMAN",
@@ -8047,7 +8043,7 @@
   },
   {
     "date": "Monday, December 29, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "CAVITY",
@@ -8101,7 +8097,7 @@
   },
   {
     "date": "Friday, December 26, 2025",
-    "pot": 200000.0,
+    "pot": 200000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BAGGAGE CLAIM",
@@ -8155,7 +8151,7 @@
   },
   {
     "date": "Friday, December 26, 2025",
-    "pot": 300000.0,
+    "pot": 300000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "ICE CUBE TRAY",
@@ -8209,7 +8205,7 @@
   },
   {
     "date": "Thursday, December 25, 2025",
-    "pot": 70000.0,
+    "pot": 70000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "GARBAGE TRUCK",
@@ -8263,7 +8259,7 @@
   },
   {
     "date": "Thursday, December 25, 2025",
-    "pot": 130000.0,
+    "pot": 130000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "CRUTCHES",
@@ -8317,7 +8313,7 @@
   },
   {
     "date": "Wednesday, December 24, 2025",
-    "pot": 50000.0,
+    "pot": 50000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "CURLING IRON",
@@ -8371,7 +8367,7 @@
   },
   {
     "date": "Wednesday, December 24, 2025",
-    "pot": 100000.0,
+    "pot": 100000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "SPEED BUMP",
@@ -8425,7 +8421,7 @@
   },
   {
     "date": "Tuesday, December 23, 2025",
-    "pot": 35000.0,
+    "pot": 35000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "SEINFELD",
@@ -8479,7 +8475,7 @@
   },
   {
     "date": "Tuesday, December 23, 2025",
-    "pot": 65000.0,
+    "pot": 65000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "PIGGY BANK",
@@ -8533,7 +8529,7 @@
   },
   {
     "date": "Monday, December 22, 2025",
-    "pot": 20000.0,
+    "pot": 20000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "PINOCCHIO",
@@ -8587,7 +8583,7 @@
   },
   {
     "date": "Monday, December 22, 2025",
-    "pot": 30000.0,
+    "pot": 30000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "WILL FERRELL",
@@ -8641,7 +8637,7 @@
   },
   {
     "date": "Friday, December 19, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "UGLY SWEATER",
@@ -8695,7 +8691,7 @@
   },
   {
     "date": "Friday, December 19, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "MR. T",
@@ -8749,7 +8745,7 @@
   },
   {
     "date": "Thursday, December 18, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "KING KONG",
@@ -8803,7 +8799,7 @@
   },
   {
     "date": "Thursday, December 18, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "FRENCH FRIES",
@@ -8833,10 +8829,10 @@
         "explanation": "Arrives orderly in many shapes and sizes - \"arrives orderly in many shapes and sizes.\""
       },
       {
-        "text": "PASS THE KETCHUP S'IL VOUS PLAÎT",
+        "text": "PASS THE KETCHUP S'IL VOUS PLAÃT",
         "correct": "1,800",
         "guesses": "N/A",
-        "explanation": "Pass the ketchup s'il vous plaît - \"well pass the ketchup see play French and fries.\""
+        "explanation": "Pass the ketchup s'il vous plaÃ®t - \"well pass the ketchup see play French and fries.\""
       }
     ],
     "goldClue": 3,
@@ -8857,7 +8853,7 @@
   },
   {
     "date": "Wednesday, December 17, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "RUDOLPH THE RED-NOSED REINDEER",
@@ -8911,7 +8907,7 @@
   },
   {
     "date": "Wednesday, December 17, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "OREO",
@@ -8965,7 +8961,7 @@
   },
   {
     "date": "Tuesday, December 16, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "THE GRINCH",
@@ -9019,7 +9015,7 @@
   },
   {
     "date": "Tuesday, December 16, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BOWLING",
@@ -9073,7 +9069,7 @@
   },
   {
     "date": "Monday, December 15, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "PARIS HILTON",
@@ -9127,7 +9123,7 @@
   },
   {
     "date": "Monday, December 15, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "MONOPOLY",
@@ -9181,7 +9177,7 @@
   },
   {
     "date": "Friday, December 12, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "GOODYEAR BLIMP",
@@ -9235,7 +9231,7 @@
   },
   {
     "date": "Friday, December 12, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BIRTHDAY CAKE",
@@ -9289,7 +9285,7 @@
   },
   {
     "date": "Thursday, December 11, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "M&MS",
@@ -9343,7 +9339,7 @@
   },
   {
     "date": "Thursday, December 11, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "TITANIC",
@@ -9397,7 +9393,7 @@
   },
   {
     "date": "Wednesday, December 10, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "JAMES BOND",
@@ -9451,7 +9447,7 @@
   },
   {
     "date": "Wednesday, December 10, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "S'MORES",
@@ -9505,7 +9501,7 @@
   },
   {
     "date": "Tuesday, December 9, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "CHATGPT",
@@ -9559,7 +9555,7 @@
   },
   {
     "date": "Tuesday, December 9, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "MOUNT RUSHMORE",
@@ -9613,7 +9609,7 @@
   },
   {
     "date": "Monday, December 8, 2025",
-    "pot": 5000.0,
+    "pot": 5000,
     "format": "v1",
     "host": "Hunter March",
     "secretItem": "BARBIE",
@@ -9667,7 +9663,7 @@
   },
   {
     "date": "Monday, December 8, 2025",
-    "pot": 10000.0,
+    "pot": 10000,
     "format": "v1",
     "host": "Howie Mandel",
     "secretItem": "PICKLEBALL",
