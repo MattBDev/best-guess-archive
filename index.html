@@ -451,69 +451,25 @@ FORMATTING RULES:
     <!-- Manage Archive -->
     <div class="glass-panel p-6 rounded-xl space-y-4">
       <h3 class="font-bold text-white flex items-center gap-2">
-        <span class="material-symbols-outlined text-red-500">delete</span> Delete by Date
+        <span class="material-symbols-outlined text-red-500">delete</span> Replace/Delete by Date
       </h3>
-      <p class="text-sm text-slate-400">Remove all games matching a specific date from the archive. Use this to clean up bad imports before re-importing.</p>
+      <p class="text-sm text-slate-400">Select a date from the archive below. You can either completely remove all games on that date, or replace them by selecting the date here and publishing a new JSON import in the panel above.</p>
       
       <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-        <select id="delete-date-select" class="w-full sm:w-64 bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-red-500">
+        <select id="delete-date-select" class="w-full sm:w-80 bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-red-500" onchange="app.renderSelectedDatePreview()">
           <option value="">Loading dates...</option>
         </select>
         <button class="bg-red-700 hover:bg-red-600 text-white font-bold px-4 py-2 rounded text-sm shrink-0" onclick="app.deleteDate()">
           Delete Selected Date
         </button>
       </div>
+      
+      <!-- Date Output Preview -->
+      <div id="date-preview-container" class="hidden mt-3 p-3 bg-slate-900 border border-slate-700 rounded-lg max-h-40 overflow-y-auto text-xs text-slate-300">
+      </div>
+
       <!-- Delete Status -->
       <div id="delete-status" class="hidden text-sm font-medium px-4 py-2 rounded"></div>
-    </div>
-
-    <!-- Tip Jar Links -->
-    <div class="glass-panel p-6 rounded-xl space-y-4 border-t-2 border-pink-500/40">
-      <h3 class="font-bold text-white flex items-center gap-2">
-        <span class="material-symbols-outlined text-pink-400">volunteer_activism</span> Tip Jar Links
-        <span class="text-xs text-slate-500 font-normal ml-2">(stored in localStorage)</span>
-      </h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Cash App URL</label>
-          <input id="tip-cashapp-url" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-pink-500" placeholder="https://cash.app/$YourName">
-        </div>
-        <div>
-          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">PayPal URL</label>
-          <input id="tip-paypal-url" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-pink-500" placeholder="https://paypal.me/YourName">
-        </div>
-      </div>
-      <div class="flex items-center gap-3">
-        <button class="text-sm bg-pink-700 hover:bg-pink-600 text-white font-bold px-4 py-2 rounded" onclick="app.saveTipLinks()">Save Links</button>
-        <span class="text-green-400 text-xs hidden" id="tip-save-ok">Saved!</span>
-      </div>
-    </div>
-
-    <!-- Google Analytics -->
-    <div class="glass-panel p-6 rounded-xl space-y-4 border-t-2 border-orange-500/40">
-      <h3 class="font-bold text-white flex items-center gap-2">
-        <span class="material-symbols-outlined text-orange-400">analytics</span> Google Analytics
-        <span class="text-xs text-slate-500 font-normal ml-2">(stored in localStorage)</span>
-      </h3>
-      <details class="text-xs text-slate-400 cursor-pointer">
-        <summary class="hover:text-slate-300 transition select-none font-semibold">▶ How to get your Measurement ID (step-by-step)</summary>
-        <ol class="mt-3 space-y-2 text-slate-300 list-decimal list-inside leading-relaxed">
-          <li>Go to <strong>analytics.google.com</strong> and sign in.</li>
-          <li>In the left sidebar, click <strong>Admin</strong> (gear icon, bottom left).</li>
-          <li>Under <em>Property</em>, click <strong>Data Streams</strong>.</li>
-          <li>Click your web stream (or create one — choose <em>Web</em>, enter your GitHub Pages URL like <code class="bg-slate-800 px-1 rounded">https://jeremydbean.github.io/best-guess-archive</code>).</li>
-          <li>Your <strong>Measurement ID</strong> starts with <code class="bg-slate-800 px-1 rounded">G-</code> and looks like <code class="bg-slate-800 px-1 rounded">G-ABC123XYZ</code>. Copy it.</li>
-          <li>Paste it below and click Save. The GA script activates automatically on the next page load — no code editing needed.</li>
-        </ol>
-      </details>
-      <div class="flex gap-3 items-end">
-        <div class="flex-grow">
-          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Measurement ID</label>
-          <input id="ga-measurement-id" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm font-mono focus:outline-none focus:border-orange-500" placeholder="G-XXXXXXXXXX">
-        </div>
-        <button class="text-sm bg-orange-700 hover:bg-orange-600 text-white font-bold px-4 py-2 rounded shrink-0" onclick="app.saveGaId()">Save &amp; Activate</button>
-      </div>
-      <div id="ga-status" class="text-xs text-slate-500"></div>
     </div>
 
   </div>
@@ -1094,9 +1050,6 @@ class App {
       const o  = document.getElementById('gh-owner');          if (o)  o.value  = localStorage.getItem('gh_owner')          || '';
       const r  = document.getElementById('gh-repo');           if (r)  r.value  = localStorage.getItem('gh_repo')           || '';
       const p  = document.getElementById('gh-pat');            if (p)  p.value  = localStorage.getItem('gh_pat')            || '';
-      const tc = document.getElementById('tip-cashapp-url');   if (tc) tc.value = localStorage.getItem('tip_cashapp')       || 'https://cash.app/$JeremyBean';
-      const tp = document.getElementById('tip-paypal-url');    if (tp) tp.value = localStorage.getItem('tip_paypal')        || 'https://paypal.me/KindaCharming';
-      const gi = document.getElementById('ga-measurement-id'); if (gi) gi.value = localStorage.getItem('ga_measurement_id') || 'G-YYGK3MHH26';
       this.populateDeleteDates();
     }, 50);
   }
@@ -1113,11 +1066,25 @@ class App {
       return;
     }
     
-    sel.innerHTML = '<option value="">Select a date to delete...</option>' + 
+    sel.innerHTML = '<option value="">(None selected)</option>' + 
       dates.map(d => {
         const gamesOnDate = this.games.filter(g => g.date === d);
         return `<option value="${d}">${d} (${gamesOnDate.length} game${gamesOnDate.length>1?'s':''})</option>`;
       }).join('');
+  }
+
+  renderSelectedDatePreview() {
+    const date = document.getElementById('delete-date-select').value;
+    const container = document.getElementById('date-preview-container');
+    if (!date) {
+      container.classList.add('hidden');
+      return;
+    }
+    
+    const games = this.games.filter(g => g.date === date);
+    container.innerHTML = `<div class="font-bold text-white mb-2">Existing items for ${date}:</div>` + 
+      games.map((g, i) => `<div><span class="text-blue-400">Game ${i+1}:</span> <strong>${g.secretItem}</strong> <span class="opacity-50 mx-1">|</span> Hosted by ${g.host || '?'}</div>`).join('');
+    container.classList.remove('hidden');
   }
 
   async deleteDate() {
@@ -1191,24 +1158,6 @@ class App {
       status.className = 'text-sm font-medium px-4 py-2 rounded bg-red-900/20 text-red-400 mt-2';
       status.innerText = `Error: ${e.message}`;
     }
-  }
-
-  saveTipLinks() {
-    const cashApp = document.getElementById('tip-cashapp-url').value.trim();
-    const paypal  = document.getElementById('tip-paypal-url').value.trim();
-    localStorage.setItem('tip_cashapp', cashApp);
-    localStorage.setItem('tip_paypal',  paypal);
-    const ok = document.getElementById('tip-save-ok');
-    ok.classList.remove('hidden');
-    setTimeout(() => ok.classList.add('hidden'), 2500);
-  }
-
-  saveGaId() {
-    const id = document.getElementById('ga-measurement-id').value.trim();
-    localStorage.setItem('ga_measurement_id', id);
-    const status = document.getElementById('ga-status');
-    status.className = 'text-xs text-green-400 mt-1';
-    status.innerText = `GA ID saved. The hardcoded tag (G-YYGK3MHH26) is already active — this field is for reference only.`;
   }
 
   async checkPin() {
@@ -1361,19 +1310,35 @@ class App {
 
       // 2. Decode, overwrite existing, merge
       const existing = JSON.parse(atob(fileData.content.replace(/\n/g, '')));
-      const pendingKeys = new Set(this._pendingGames.map(g => g.date + '||' + g.secretItem));
-      const filteredExisting = existing.filter(g => !pendingKeys.has(g.date + '||' + g.secretItem));
+      const targetReplaceDate = document.getElementById('delete-date-select').value;
+      
+      let filteredExisting = [];
+      if (targetReplaceDate) {
+         // If user specifically selected a date to replace, completely remove all games from that date
+         filteredExisting = existing.filter(g => g.date !== targetReplaceDate);
+      } else {
+         // Otherwise, just auto-overwrite games with exact matching date + secret Item
+         const pendingKeys = new Set(this._pendingGames.map(g => g.date + '||' + g.secretItem));
+         filteredExisting = existing.filter(g => !pendingKeys.has(g.date + '||' + g.secretItem));
+      }
 
       // 3. Prepend and commit
       const merged  = [...this._pendingGames, ...filteredExisting];
       const content = btoa(unescape(encodeURIComponent(JSON.stringify(merged, null, 2))));
 
-      status.innerText = `Committing ${this._pendingGames.length} game${this._pendingGames.length>1?'s':''} (overwriting duplicates if any)...`;
+      let commitMsg = `Import ${this._pendingGames.length} game${this._pendingGames.length>1?'s':''}: ${this._pendingGames.map(g=>g.secretItem).join(', ')}`;
+      if (targetReplaceDate) {
+        status.innerText = `Replacing all games on target date (${targetReplaceDate}) with new import...`;
+        commitMsg += ` (Replacing Date: ${targetReplaceDate})`;
+      } else {
+        status.innerText = `Committing ${this._pendingGames.length} game${this._pendingGames.length>1?'s':''} (overwriting duplicates if any)...`;
+      }
+      
       const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/data/games.json`, {
         method: 'PUT',
         headers: { Authorization: `token ${pat}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: `Import ${this._pendingGames.length} game${this._pendingGames.length>1?'s':''}: ${this._pendingGames.map(g=>g.secretItem).join(', ')}`,
+          message: commitMsg,
           content,
           sha: fileData.sha
         })
@@ -1383,6 +1348,8 @@ class App {
       // 4. Update local state
       const publishedCount = this._pendingGames.length;
       this.games = merged;
+      this.populateDeleteDates();
+      this.renderSelectedDatePreview();
       this._pendingGames = null;
       document.getElementById('import-json').value = '';
       document.getElementById('import-preview').classList.add('hidden');
