@@ -313,18 +313,30 @@
     </div>
     <div class="glass-panel p-8 rounded-xl md:col-span-2">
       <h3 class="text-xl font-bold text-white mb-6 border-b border-white/10 pb-2">Breakdown</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
         <div class="text-center p-4 bg-slate-800/50 rounded-lg">
-          <div class="text-4xl font-bold text-blue-400 mb-1" id="stat-hunter-games">0</div>
-          <div class="text-sm text-slate-400 uppercase tracking-widest">Hunter March</div>
+          <div class="text-3xl md:text-4xl font-bold text-blue-400 mb-1" id="stat-hunter-games">0</div>
+          <div class="text-xs md:text-sm text-slate-400 uppercase tracking-widest">Hunter March</div>
         </div>
         <div class="text-center p-4 bg-slate-800/50 rounded-lg">
-          <div class="text-4xl font-bold text-purple-400 mb-1" id="stat-howie-games">0</div>
-          <div class="text-sm text-slate-400 uppercase tracking-widest">Howie Mandel</div>
+          <div class="text-3xl md:text-4xl font-bold text-purple-400 mb-1" id="stat-howie-games">0</div>
+          <div class="text-xs md:text-sm text-slate-400 uppercase tracking-widest">Howie Mandel</div>
         </div>
         <div class="text-center p-4 bg-slate-800/50 rounded-lg">
-          <div class="text-4xl font-bold text-yellow-400 mb-1" id="stat-v2-games">0</div>
-          <div class="text-sm text-slate-400 uppercase tracking-widest">New Format (v2)</div>
+          <div class="text-3xl md:text-4xl font-bold text-yellow-400 mb-1" id="stat-v2-games">0</div>
+          <div class="text-xs md:text-sm text-slate-400 uppercase tracking-widest">v2 Games</div>
+        </div>
+        <div class="text-center p-4 bg-slate-800/50 rounded-lg">
+          <div class="text-3xl md:text-4xl font-bold text-green-400 mb-1" id="stat-total-pot">$0</div>
+          <div class="text-xs md:text-sm text-slate-400 uppercase tracking-widest">Total Payouts</div>
+        </div>
+        <div class="text-center p-4 bg-slate-800/50 rounded-lg">
+          <div class="text-3xl md:text-4xl font-bold text-pink-400 mb-1" id="stat-avg-winners">0</div>
+          <div class="text-xs md:text-sm text-slate-400 uppercase tracking-widest">Avg Winners</div>
+        </div>
+        <div class="text-center p-4 bg-slate-800/50 rounded-lg">
+          <div class="text-3xl md:text-4xl font-bold text-orange-400 mb-1" id="stat-avg-clue">C0</div>
+          <div class="text-xs md:text-sm text-slate-400 uppercase tracking-widest">Avg Final Clue</div>
         </div>
       </div>
     </div>
@@ -1092,6 +1104,22 @@ class App {
     document.getElementById('stat-hunter-games').innerText = this.games.filter(g => g.host === 'Hunter March').length;
     document.getElementById('stat-howie-games').innerText  = this.games.filter(g => g.host === 'Howie Mandel').length;
     document.getElementById('stat-v2-games').innerText     = this.games.filter(g => g.format === 'v2').length;
+
+    const totalPot = this.games.reduce((a, g) => a + g.pot, 0);
+    document.getElementById('stat-total-pot').innerText = '$' + totalPot.toLocaleString();
+
+    const totalWinners = this.games.reduce((a, g) => a + (g.totalWinners || g.winnerCount || 0), 0);
+    const avgWinners = this.games.length ? Math.round(totalWinners / this.games.length) : 0;
+    document.getElementById('stat-avg-winners').innerText = avgWinners.toLocaleString();
+
+    let totalClue = 0;
+    let gamesWithClue = 0;
+    this.games.forEach(g => {
+      const c = g.format === 'v2' ? (g.bronzeClue || g.silverClue || g.goldClue) : (g.winningClue || g.goldClue);
+      if (c) { totalClue += Number(c); gamesWithClue++; }
+    });
+    const avgClue = gamesWithClue ? (totalClue / gamesWithClue).toFixed(1) : 0;
+    document.getElementById('stat-avg-clue').innerText = 'C' + avgClue;
   }
 
   // ==================== ADMIN ====================
