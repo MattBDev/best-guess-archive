@@ -1185,7 +1185,6 @@ class App {
         <td class="px-4 py-3 align-top">${payoutsHtml}</td>
         <td class="px-4 py-3 align-top" style="min-width:140px">${namesHtml}</td>
         <td class="px-4 py-3 text-slate-400 whitespace-nowrap align-top">${g.host || '—'}</td>
-        <td class="px-4 py-3 text-xs text-slate-500 align-top" style="min-width:180px">${g.wrongGuesses || '—'}</td>
         <td class="px-4 py-3 text-right align-top">
           <button onclick="app.showDetails('${g.date.replace(/'/g,"\\'")}', '${g.secretItem.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" class="text-blue-400 hover:text-blue-300" title="View details">
             <span class="material-symbols-outlined">visibility</span>
