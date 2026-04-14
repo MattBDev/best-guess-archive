@@ -557,6 +557,9 @@
 <!-- STATS -->
 <template id="view-stats">
 <div class="fade-in space-y-8 pb-20">
+  <div class="flex justify-end">
+    <button id="refresh-stats-btn" class="btn-primary px-4 py-2 rounded font-bold text-sm shadow hover:shadow-blue-500/20 transition">Refresh Stats</button>
+  </div>
   <div>
     <h2 class="text-3xl font-display font-bold">Archive <span class="text-yellow-500">Statistics</span></h2>
     <p class="text-slate-400 text-sm mt-1">Deep dive into all the data across every episode in the archive.</p>
@@ -888,6 +891,17 @@ async function sha256hex(str) {
 
 // ============================================================
 class App {
+    // Reload games from database and re-render stats
+    async refreshStats() {
+      try {
+        const res = await fetch('data/games.json?_=' + Date.now());
+        if (!res.ok) throw new Error('Failed to fetch games.json');
+        this.games = await res.json();
+        this.renderStats();
+      } catch (e) {
+        alert('Error refreshing stats: ' + e.message);
+      }
+    }
   constructor() {
     this.games = [];
     this.currentGame = null;
@@ -1556,6 +1570,11 @@ class App {
   // ==================== STATS ====================
   renderStats() {
     // Exclude cancelled/unplayed games (note && clues.length === 0)
+    // Attach refresh button event
+    setTimeout(() => {
+      const btn = document.getElementById('refresh-stats-btn');
+      if (btn) btn.onclick = () => this.refreshStats();
+    }, 0);
     const games = this.games.filter(g => !(g.note && g.clues.length === 0));
     // Unique days
     const uniqueDates = [...new Set(games.map(g => g.date))];
