@@ -404,12 +404,13 @@
           padding: 12px 18px;
           vertical-align: middle;
           white-space: nowrap;
+          word-break: keep-all;
         }
         .db-table td {
           padding: 12px 18px;
           vertical-align: middle;
           white-space: normal;
-          word-break: break-word;
+          word-break: keep-all;
         }
         /* Never wrap for Date, Pot, Winning Clue, Total Players, Winners, Details columns */
         .db-table td:first-child,
@@ -425,7 +426,7 @@
         .db-table td:last-child,
         .db-table th:last-child {
           white-space: nowrap;
-          word-break: normal;
+          word-break: keep-all;
         }
       </style>
     </div>
