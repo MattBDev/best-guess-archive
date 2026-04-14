@@ -472,10 +472,8 @@
       // Show/hide floating scrollbar based on table visibility
       function updateFloatBarVisibility() {
         if (!floatBar) return;
-        const rect = tableScroll.getBoundingClientRect();
-        const inView = rect.bottom > 60 && rect.top < window.innerHeight - 40;
         const needsScroll = tableScroll.scrollWidth > tableScroll.clientWidth + 10;
-        floatBar.style.display = (inView && needsScroll) ? 'flex' : 'none';
+        floatBar.style.display = needsScroll ? 'flex' : 'none';
       }
       if (tableScroll && fakeScrollbar && floatBar && floatInner && floatLeft && floatRight) {
         fakeScrollbar.addEventListener('scroll', syncFakeScroll);
