@@ -1256,17 +1256,18 @@ class App {
       const isGold   = g.format === 'v2' && n === g.goldClue;
       const isSilver = g.format === 'v2' && n === g.silverClue;
       const isBronze = g.format === 'v2' && n === g.bronzeClue;
+      const isClassicWin = g.format !== 'v2' && n === Number(g.winningClue || g.goldClue);
       const badge = isGold   ? '<span class="text-xs font-bold text-yellow-400 bg-yellow-900/30 px-2 py-1 rounded">🥇 Gold Winner Clue</span>'
                   : isSilver ? '<span class="text-xs font-bold text-slate-300 bg-slate-700/50 px-2 py-1 rounded">🥈 Silver Winner Clue</span>'
                   : isBronze ? '<span class="text-xs font-bold text-orange-400 bg-orange-900/30 px-2 py-1 rounded">🥉 Bronze Winner Clue</span>'
-                  : '';
-      return `<div class="mb-6 pb-6 border-b border-slate-700 last:border-0">
+                  : isClassicWin ? '<span class="text-xs font-bold text-yellow-400 bg-yellow-900/30 px-2 py-1 rounded">★ Winning Clue</span>' : '';
+      return `<div class="mb-6 pb-6 border-b border-slate-700 last:border-0 ${isClassicWin ? 'bg-yellow-900/10 border-yellow-400/30' : ''}">
         <div class="flex flex-wrap justify-between items-center mb-2 gap-2">
-          <span class="text-xs font-bold text-blue-400 bg-blue-900/30 px-2 py-1 rounded">Clue ${n}</span>
+          <span class="text-xs font-bold ${isClassicWin ? 'text-yellow-400 bg-yellow-900/30 border border-yellow-400/40' : 'text-blue-400 bg-blue-900/30'} px-2 py-1 rounded">Clue ${n}</span>
           ${badge}
           <span class="text-xs text-slate-500 ml-auto">${c.correct} correct / ${c.guesses} guesses</span>
         </div>
-        <p class="text-xl text-white font-medium mb-3">"${c.text}"</p>
+        <p class="text-xl font-medium mb-3 ${isClassicWin ? 'text-yellow-200' : 'text-white'}">"${c.text}"</p>
         <div class="bg-slate-800 p-3 rounded-lg"><p class="text-sm text-slate-400 italic">"${e || 'No explanation recorded.'}"</p></div>
       </div>`;
     }).join('');
