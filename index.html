@@ -1152,9 +1152,10 @@ class App {
         const correct = parseN(clue.correct);
         const guesses = parseN(clue.guesses);
         const pct = guesses > 0 ? ((correct / guesses) * 100).toFixed(1) : '0.0';
+        // For classic games (not v2), do NOT show medal emoji on the winning clue, just the highlight and star
         return `<td class="px-4 py-3 align-top" style="min-width:200px">
           <div class="font-medium ${isWinning && !isV2 ? 'text-yellow-300 bg-yellow-900/30 border border-yellow-400/40 rounded px-1 py-0.5 shadow-sm' : 'text-slate-200'} leading-snug">${clue.text}${isWinning && !isV2 ? ' <span class=\"font-bold text-yellow-400 ml-1\">★</span>' : ''}</div>
-          <div class="text-xs font-mono mt-1"><span class="text-green-500">${correct.toLocaleString()}</span><span class="text-slate-600"> / </span><span class="text-slate-400">${guesses.toLocaleString()}</span><span class="text-slate-600"> (${pct}%)</span>${medal ? `<span class=\"ml-1 text-sm\">${medal}</span>` : ''}</div>
+          <div class="text-xs font-mono mt-1"><span class="text-green-500">${correct.toLocaleString()}</span><span class="text-slate-600"> / </span><span class="text-slate-400">${guesses.toLocaleString()}</span><span class="text-slate-600"> (${pct}%)</span>${(isV2 && medal) ? `<span class=\"ml-1 text-sm\">${medal}</span>` : ''}</div>
         </td>`;
       }).join('');
 
@@ -1218,15 +1219,8 @@ class App {
     if (key === 'pot') {
       this.games.sort((a, b) => dir * (a.pot - b.pot));
     } else if (key === 'date') {
-      // Fix: Always sort cancelled games strictly by date, never group with other dates
+      // Sort ALL games (including cancelled) by actual date value for consistent order
       this.games.sort((a, b) => {
-        // If either is a cancelled game, just compare date strings
-        const aCancelled = a.note && a.clues.length === 0;
-        const bCancelled = b.note && b.clues.length === 0;
-        if (aCancelled || bCancelled) {
-          return dir * (a.date.localeCompare(b.date));
-        }
-        // Otherwise, use Date objects
         return dir * (new Date(a.date) - new Date(b.date));
       });
     } else if (key === 'players') {
@@ -1403,13 +1397,13 @@ class App {
           // Already filtered above
           // Already filtered above
         if (g.format === 'v2') {
-          if (g.goldClue && g.goldWinners != null) wcWinnersMap[Number(g.goldClue)].push(Number(g.goldWinners));
-          if (g.silverClue && g.silverWinners != null) wcWinnersMap[Number(g.silverClue)].push(Number(g.silverWinners));
-          if (g.bronzeClue && g.bronzeWinners != null) wcWinnersMap[Number(g.bronzeClue)].push(Number(g.bronzeWinners));
+          if (g.goldClue && g.goldWinners != null && Number(g.goldWinners) > 0) wcWinnersMap[Number(g.goldClue)].push(Number(g.goldWinners));
+          if (g.silverClue && g.silverWinners != null && Number(g.silverWinners) > 0) wcWinnersMap[Number(g.silverClue)].push(Number(g.silverWinners));
+          if (g.bronzeClue && g.bronzeWinners != null && Number(g.bronzeWinners) > 0) wcWinnersMap[Number(g.bronzeClue)].push(Number(g.bronzeWinners));
         } else {
           const wc = Number(g.winningClue||g.goldClue);
           const w = g.totalWinners||g.winnerCount||0;
-          if (wc>=1&&wc<=5) wcWinnersMap[wc].push(w);
+          if (wc>=1&&wc<=5 && w > 0) wcWinnersMap[wc].push(w);
         }
       });
       const avgWinnersByClue = [1,2,3,4,5].map(n => {
