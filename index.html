@@ -1420,9 +1420,25 @@ class App {
           datasets:[{label:'Avg Winners', data: avgWinnersByClue,
             backgroundColor: clueColors.map(c=>c+'bb'), borderColor: clueColors, borderWidth:2, borderRadius:6}]
         },
-        options:{ responsive:true, maintainAspectRatio:false,
+        options:{
+          responsive:true, maintainAspectRatio:false,
           plugins:{legend:{display:false}, tooltip:{callbacks:{label: ctx => ctx.parsed.y.toLocaleString() + ' avg winners'}}},
-          scales:{x:{ticks:{color:'#94a3b8'}}, y:{ticks:{color:'#94a3b8', callback: v => v.toLocaleString()}}}
+          scales:{
+            x:{ticks:{color:'#94a3b8'}},
+            y:{
+              type:'logarithmic',
+              min: 1,
+              ticks:{color:'#94a3b8', callback: v => v.toLocaleString(),
+                // Only show integer powers of 10 for clarity
+                stepSize: 1,
+                autoSkip: true
+              },
+              afterBuildTicks: axis => {
+                // Only show ticks at powers of 10
+                axis.ticks = axis.ticks.filter(t => [1,10,100,1000,10000].includes(t.value));
+              }
+            }
+          }
         }
       });
 
