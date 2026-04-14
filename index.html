@@ -1566,15 +1566,25 @@ class App {
 
   // Archive filter/sort removed
 
+  // Completely rewritten Details modal logic for reliability
   showDetails(date, item) {
-    console.log('showDetails called with:', date, item);
-    const g = this.games.find(x => x.date === date && x.secretItem === item);
+    // Defensive: ensure modal exists
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalContent = document.getElementById('modal-content');
+    if (!modalBackdrop || !modalContent) return;
+
+    // Find the game robustly (case-insensitive, trimmed)
+    const g = this.games.find(x =>
+      String(x.date).trim() === String(date).trim() &&
+      String(x.secretItem).trim().toLowerCase() === String(item).trim().toLowerCase()
+    );
     if (!g) {
-      console.warn('No game found for', date, item);
+      modalContent.innerHTML = `<div class="text-red-400 font-bold text-lg">Game not found for details.<br>Date: ${date}<br>Item: ${item}</div>`;
+      modalBackdrop.classList.remove('hidden');
       return;
     }
-    document.getElementById('modal-backdrop').classList.remove('hidden');
 
+    // Build clues HTML
     const cluesHtml = g.clues.map((c, i) => {
       let e = c.explanation || '';
       if (e.includes(' - "')) e = e.split(' - "')[1].slice(0,-1);
@@ -1598,6 +1608,7 @@ class App {
       </div>`;
     }).join('');
 
+    // Medal summary
     const fmt2 = n => Number(n).toFixed(2);
     const medalSummary = g.format === 'v2'
       ? `<div class="flex justify-center gap-2 mt-4 flex-wrap">
@@ -1609,7 +1620,8 @@ class App {
           <span class="bg-blue-900/30 text-blue-400 border border-blue-600/30 px-3 py-1 rounded-full text-sm font-bold">Won on Clue ${g.winningClue || g.goldClue} · ${(g.totalWinners||g.winnerCount||0).toLocaleString()} winners · ${g.winnerPayout}</span>
         </div>`;
 
-    document.getElementById('modal-content').innerHTML = `
+    // Render modal
+    modalContent.innerHTML = `
       <div class="text-center mb-8">
         <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">${g.date}</div>
         <h2 class="text-4xl font-display font-bold text-white">${g.secretItem}</h2>
@@ -1626,6 +1638,7 @@ class App {
       <div class="text-sm text-slate-400 bg-red-900/10 border border-red-500/20 p-4 rounded-lg">
         <span class="font-bold text-red-400 block mb-1">Common Wrong Guesses:</span> ${g.wrongGuesses || 'N/A'}
       </div>`;
+    modalBackdrop.classList.remove('hidden');
   }
 
   closeModal() { document.getElementById('modal-backdrop').classList.add('hidden'); }
