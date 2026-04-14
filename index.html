@@ -12,8 +12,6 @@
   gtag('js', new Date());
   gtag('config', 'G-YYGK3MHH26');
 </script>
-<!-- Supabase for real-time live viewer count -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
@@ -53,12 +51,6 @@
         <button class="ml-2 flex items-center gap-1.5 bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-500 hover:to-rose-400 text-white text-xs font-bold px-3 py-1.5 rounded-full transition shadow-lg shadow-pink-900/30" onclick="app.openTipJar()">
           <span class="material-symbols-outlined" style="font-size:14px;line-height:1">volunteer_activism</span> TIP JAR
         </button>
-      </div>
-      <!-- Live viewer pill -->
-      <div id="live-pill" class="hidden items-center gap-1.5 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-full">
-        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse inline-block"></span>
-        <span class="text-xs text-slate-300 font-mono" id="live-count">1</span>
-        <span class="text-xs text-slate-500">live</span>
       </div>
       <button class="md:hidden p-2 text-slate-400 hover:text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
         <span class="material-symbols-outlined">menu</span>
@@ -494,39 +486,6 @@ FORMATTING RULES:
       <div id="ga-status" class="text-xs text-slate-500"></div>
     </div>
 
-    <!-- Supabase Live Counter -->
-    <div class="glass-panel p-6 rounded-xl space-y-4 border-t-2 border-cyan-500/40">
-      <h3 class="font-bold text-white flex items-center gap-2">
-        <span class="material-symbols-outlined text-cyan-400">sensors</span> Live Viewer Counter
-        <span class="text-xs text-slate-500 font-normal ml-2">(Supabase Realtime — stored in localStorage)</span>
-      </h3>
-      <details class="text-xs text-slate-400 cursor-pointer">
-        <summary class="hover:text-slate-300 transition select-none font-semibold">▶ How to set up Supabase (free, 5 minutes)</summary>
-        <ol class="mt-3 space-y-2 text-slate-300 list-decimal list-inside leading-relaxed">
-          <li>Go to <strong>supabase.com</strong> → click <em>Start for Free</em> → sign in with GitHub.</li>
-          <li>Click <strong>New Project</strong>. Name it anything (e.g. <em>best-guess</em>). Choose a region close to your audience. Click <em>Create</em>. Wait ~1 min for it to provision.</li>
-          <li>In your project, go to <strong>Settings → API</strong>.</li>
-          <li>Copy the <strong>Project URL</strong> (looks like <code class="bg-slate-800 px-1 rounded">https://xxxx.supabase.co</code>) and the <strong>anon public key</strong> (a long JWT string).</li>
-          <li>Paste both below and click Save. The live counter pill will appear in the top-right nav automatically — no deploy needed.</li>
-          <li><em>Note: Supabase free tier allows up to 500 concurrent connections. More than enough for this site.</em></li>
-        </ol>
-      </details>
-      <div class="grid grid-cols-1 gap-3">
-        <div>
-          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Supabase Project URL</label>
-          <input id="sb-url" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm font-mono focus:outline-none focus:border-cyan-500" placeholder="https://xxxxxxxxxxxx.supabase.co">
-        </div>
-        <div>
-          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Supabase Anon Public Key</label>
-          <input id="sb-key" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm font-mono focus:outline-none focus:border-cyan-500" placeholder="eyJhbGci...">
-        </div>
-      </div>
-      <div class="flex items-center gap-3">
-        <button class="text-sm bg-cyan-700 hover:bg-cyan-600 text-white font-bold px-4 py-2 rounded" onclick="app.saveSupabaseSettings()">Save &amp; Connect</button>
-        <span id="sb-status" class="text-xs text-slate-500"></span>
-      </div>
-    </div>
-
   </div>
 </div>
 </template>
@@ -580,40 +539,7 @@ class App {
       document.getElementById('status-indicator').className = 'w-2 h-2 rounded-full bg-red-500';
       document.getElementById('data-source-status').innerText = 'Data load failed';
     }
-    this._initSupabase();
     this.setView('home');
-  }
-
-  // Supabase Realtime Presence — shows live viewer count in nav
-  _initSupabase() {
-    const url = localStorage.getItem('sb_url');
-    const key = localStorage.getItem('sb_key');
-    if (!url || !key || typeof window.supabase === 'undefined') return;
-    try {
-      const client = window.supabase.createClient(url, key);
-      const uid = Math.random().toString(36).slice(2);
-      const channel = client.channel('site-presence', { config: { presence: { key: uid } } });
-      channel
-        .on('presence', { event: 'sync' }, () => {
-          const state = channel.presenceState();
-          const count = Object.keys(state).length;
-          const pill = document.getElementById('live-pill');
-          const ct = document.getElementById('live-count');
-          if (pill && ct) {
-            ct.innerText = count;
-            pill.classList.remove('hidden');
-            pill.classList.add('flex');
-          }
-        })
-        .subscribe(async (status) => {
-          if (status === 'SUBSCRIBED') {
-            await channel.track({ online_at: new Date().toISOString() });
-          }
-        });
-      this._sbChannel = channel;
-    } catch(e) {
-      console.warn('Supabase presence failed:', e);
-    }
   }
 
   // ==================== VIEWS ====================
@@ -1113,8 +1039,6 @@ class App {
       const tc = document.getElementById('tip-cashapp-url');   if (tc) tc.value = localStorage.getItem('tip_cashapp')       || 'https://cash.app/$JeremyBean';
       const tp = document.getElementById('tip-paypal-url');    if (tp) tp.value = localStorage.getItem('tip_paypal')        || 'https://paypal.me/KindaCharming';
       const gi = document.getElementById('ga-measurement-id'); if (gi) gi.value = localStorage.getItem('ga_measurement_id') || 'G-YYGK3MHH26';
-      const su = document.getElementById('sb-url');            if (su) su.value = localStorage.getItem('sb_url')            || '';
-      const sk = document.getElementById('sb-key');            if (sk) sk.value = localStorage.getItem('sb_key')            || '';
     }, 50);
   }
 
@@ -1134,27 +1058,6 @@ class App {
     const status = document.getElementById('ga-status');
     status.className = 'text-xs text-green-400 mt-1';
     status.innerText = `GA ID saved. The hardcoded tag (G-YYGK3MHH26) is already active — this field is for reference only.`;
-  }
-
-  saveSupabaseSettings() {
-    const url = document.getElementById('sb-url').value.trim();
-    const key = document.getElementById('sb-key').value.trim();
-    localStorage.setItem('sb_url', url);
-    localStorage.setItem('sb_key', key);
-    const status = document.getElementById('sb-status');
-    status.className = 'text-xs text-blue-400 mt-1';
-    status.innerText = 'Connecting…';
-    this._initSupabase();
-    setTimeout(() => {
-      const pill = document.getElementById('live-pill');
-      if (pill && pill.style.display !== 'none' && !pill.classList.contains('hidden')) {
-        status.className = 'text-xs text-green-400 mt-1';
-        status.innerText = '✓ Connected! The live viewer counter is now active in the nav.';
-      } else {
-        status.className = 'text-xs text-yellow-400 mt-1';
-        status.innerText = 'Settings saved. Reload the page to activate — if the pill doesn\'t appear, double-check your URL and anon key.';
-      }
-    }, 3500);
   }
 
   async checkPin() {
