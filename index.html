@@ -293,6 +293,35 @@
       min-width: 1200px;
       width: 100%;
       max-width: none;
+      /* Revert to default table layout */
+        }
+        .db-table th, .db-table td {
+          /* Revert to default padding and spacing */
+        }
+        .db-table th {
+          /* Revert to default header style */
+        }
+        .db-table tbody tr:hover {
+          /* Remove row hover effect */
+        }
+        .db-table td {
+          /* Revert to default cell style */
+        }
+        .db-table td.text-right {
+          /* Remove forced right alignment */
+        }
+        .db-table td.text-center, .db-table th.text-center {
+          /* Remove forced center alignment */
+        }
+        .db-table th[onclick]::after {
+          /* Remove sorting indicator arrows */
+        }
+        .db-table th.sorted-asc::after {
+          /* Remove sorting indicator arrows */
+        }
+        .db-table th.sorted-desc::after {
+          /* Remove sorting indicator arrows */
+        }
     }
     /* Removed max-width on containers to allow horizontal overflow for floating scrollbar */
 
