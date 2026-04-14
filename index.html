@@ -1567,8 +1567,12 @@ class App {
   // Archive filter/sort removed
 
   showDetails(date, item) {
+    console.log('showDetails called with:', date, item);
     const g = this.games.find(x => x.date === date && x.secretItem === item);
-    if (!g) return;
+    if (!g) {
+      console.warn('No game found for', date, item);
+      return;
+    }
     document.getElementById('modal-backdrop').classList.remove('hidden');
 
     const cluesHtml = g.clues.map((c, i) => {
