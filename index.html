@@ -50,7 +50,7 @@
         <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('database')">Database</button>
         <!-- <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('archive')">Archive</button> -->
         <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('stats')">Stats</button>
-        <a href="https://docs.google.com/document/d/e/2PACX-1vS6Kj-p7cbTFpAqz5lObSYrme4O7nepE5tXARyj6YQmHYH44G9PfmSmvX67O0YHGfkPm-RG1xaSZCJg/pub" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition text-blue-400 font-bold">Transcript</a>
+        <a href="https://docs.google.com/document/d/e/2PACX-1vS6Kj-p7cbTFpAqz5lObSYrme4O7nepE5tXARyj6YQmHYH44G9PfmSmvX67O0YHGfkPm-RG1xaSZCJg/pub" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition text-blue-400 font-bold">Transcripts</a>
         <button class="ml-2 flex items-center gap-1.5 bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-500 hover:to-rose-400 text-white text-xs font-bold px-3 py-1.5 rounded-full transition shadow-lg shadow-pink-900/30" onclick="app.openTipJar()">
           <span class="material-symbols-outlined" style="font-size:14px;line-height:1">volunteer_activism</span> TIP JAR
         </button>
@@ -290,7 +290,6 @@
             <th class="px-4 py-3 text-center cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('players')">Total Players ↕</th>
             <th class="px-4 py-3 text-center cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('winners')">Winners ↕</th>
             <th class="px-4 py-3 whitespace-nowrap">Payouts</th>
-            <th class="px-4 py-3 whitespace-nowrap">Winner Names</th>
             <th class="px-4 py-3 whitespace-nowrap">Host</th>
             <th class="px-4 py-3 whitespace-nowrap">Wrong Guesses</th>
             <th class="px-4 py-3 text-right">Details</th>
@@ -657,7 +656,7 @@ class App {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       this.games = await res.json();
       document.getElementById('status-indicator').className = 'w-2 h-2 rounded-full bg-green-500';
-      document.getElementById('data-source-status').innerText = `${this.games.length} games loaded`;
+      document.getElementById('data-source-status').innerText = `${this.games.length} rounds loaded`;
     } catch (err) {
       console.error('Could not load games.json:', err);
       document.getElementById('status-indicator').className = 'w-2 h-2 rounded-full bg-red-500';
@@ -1280,7 +1279,7 @@ class App {
         </div>
         ${medalSummary}
         <div class="mt-4 text-xs text-slate-400 border-t border-slate-700 pt-3">
-          <span class="font-bold text-white">Winners:</span> ${g.winnerNames || 'None listed'}
+          <span class="font-bold text-white">Winners:</span> ${(g.winnerNames || 'None listed').toUpperCase()}
         </div>
       </div>
       <div class="bg-slate-900/50 rounded-xl p-2 mb-6 border border-white/5">${cluesHtml}</div>
