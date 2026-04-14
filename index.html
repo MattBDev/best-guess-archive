@@ -241,9 +241,9 @@
   <div class="glass-panel p-6 rounded-xl text-left text-sm text-slate-300 space-y-4">
     <h3 class="font-bold text-white border-b border-white/10 pb-2 flex items-center gap-2">
       <span class="material-symbols-outlined text-yellow-500 text-sm">lightbulb</span>
-      Host's Explanation
+      Clues & Explanations
     </h3>
-    <p class="italic text-lg text-slate-200 leading-relaxed" id="result-explanation">...</p>
+    <div id="result-explanations" class="space-y-4"></div>
     <div class="mt-4 pt-4 border-t border-white/5">
       <span class="text-xs text-slate-500 uppercase tracking-widest block mb-1">Host</span>
       <span class="text-white font-medium" id="result-host">Loading...</span>
@@ -924,9 +924,28 @@ class App {
     }
 
     document.getElementById('result-host').innerText = g.host || 'Unknown';
-    let expl = (g.clues[Math.min(this.currentClueIndex, 4)] || {}).explanation || '';
-    if (expl.includes(' - "')) expl = expl.split(' - "')[1].slice(0,-1);
-    document.getElementById('result-explanation').innerText = expl ? `"${expl}"` : 'No explanation recorded.';
+    let explHTML = '';
+    g.clues.forEach((c, i) => {
+      let e = c.explanation || '';
+      if (e.includes(' - "')) {
+        let parts = e.split(' - "');
+        parts.shift();
+        e = parts.join(' - "');
+        if (e.endsWith('"')) e = e.slice(0, -1);
+      }
+      explHTML += `
+        <div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
+          <div class="flex items-start gap-2 mb-2">
+            <span class="text-[10px] font-bold text-slate-400 bg-slate-700 px-1.5 py-0.5 rounded flex-shrink-0 mt-0.5">Clue ${i+1}</span>
+            <span class="text-sm font-medium text-slate-200">"${c.text}"</span>
+          </div>
+          <div class="text-sm text-yellow-500/90 italic pl-10">
+            ${e ? `"${e}"` : 'No explanation recorded.'}
+          </div>
+        </div>
+      `;
+    });
+    document.getElementById('result-explanations').innerHTML = explHTML;
   }
 
   // ==================== DATABASE ====================
