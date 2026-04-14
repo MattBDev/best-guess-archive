@@ -1486,7 +1486,7 @@ class App {
         <td class="px-2 py-1 text-center align-top"><span class="font-mono text-blue-300">${totalPlayers.toLocaleString()}</span></td>
         <td class="px-2 py-1 align-top">${winnersHtml}</td>
         <td class="px-2 py-1 align-top">${payoutsHtml}</td>
-        <td class="px-1 py-1 text-slate-400 align-top" style="max-width:90px;overflow:hidden;text-overflow:ellipsis;">${(g.host || '—').replace('Hunter/Anthony Anderson', 'Hunter/<br>Anthony Anderson')}</td>
+        <td class="px-1 py-1 text-slate-400 align-top" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;">${(g.host || '—')}</td>
         <td class="px-1 py-1 text-right align-top">
           <button onclick="app.showDetails('${g.date.replace(/'/g,"\\'")}', '${g.secretItem.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}")" class="text-blue-400 hover:text-blue-300" title="View details" style="padding:0 2px;">
             <span class="material-symbols-outlined" style="font-size:18px;">visibility</span>
@@ -1518,8 +1518,7 @@ class App {
     const updateZoom = () => {
       table.style.transform = `scale(${this._dbZoom})`;
       table.style.transformOrigin = 'left top';
-      // Adjust min-width so the scroll area matches the scaled table
-      table.parentElement.style.height = (table.offsetHeight * this._dbZoom) + 'px';
+      table.parentElement.style.height = '';
       table.parentElement.style.overflowX = 'auto';
       zoomLabel.innerText = Math.round(this._dbZoom * 100) + '%';
     };
