@@ -1166,11 +1166,6 @@ class App {
           </div>`;
 
       // Winner names
-      const names = (g.winnerNames || '').trim();
-      const nameBlank = !names || /^none|not listed$/i.test(names);
-      const namesHtml = nameBlank
-        ? `<span class="text-slate-600 italic text-xs">—</span>`
-        : `<span class="text-slate-300 text-xs">${names}</span>`;
 
       return `<tr class="hover:bg-slate-800/40 transition border-b border-slate-800/60 last:border-0">
         <td class="px-4 py-3 text-slate-400 font-mono text-xs whitespace-nowrap align-top">${g.date}</td>
