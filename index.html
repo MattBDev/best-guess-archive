@@ -406,6 +406,11 @@
           white-space: normal;
           word-break: break-word;
         }
+        /* Prevent word-wrap for the Date column */
+        .db-table td:first-child, .db-table th:first-child {
+          white-space: nowrap;
+          word-break: normal;
+        }
       </style>
     </div>
     <div id="db-scrollbar" class="sticky top-[calc(56px+40px)] z-30 w-full bg-slate-900/90 border-b border-slate-700 flex items-center" style="height:28px; min-height:28px;">
