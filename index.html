@@ -311,8 +311,61 @@
         max-width: 100vw;
       }
     }
+
+    /* Floating horizontal scrollbar */
+    #db-floating-scrollbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 24px;
+      background: rgba(30,41,59,0.95);
+      border-top: 1px solid #334155;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      padding: 0 16px;
+      box-shadow: 0 -2px 8px 0 rgba(0,0,0,0.12);
+    }
+    #db-floating-scrollbar-inner {
+      overflow-x: auto;
+      width: 100%;
+      height: 16px;
+    }
+    #db-floating-scrollbar .db-float-arrow {
+      height: 20px;
+      width: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #cbd5e1;
+      background: #1e293b;
+      border-radius: 6px;
+      margin: 0 4px;
+      cursor: pointer;
+      border: 1px solid #334155;
+      opacity: 0.9;
+      transition: background 0.2s, color 0.2s;
+    }
+    #db-floating-scrollbar .db-float-arrow:hover {
+      color: #60a5fa;
+      background: #334155;
+    }
+    @media (max-width: 600px) {
+      #db-floating-scrollbar { display: none !important; }
+    }
   </style>
   <div class="glass-panel rounded-xl overflow-hidden shadow-xl border border-slate-700 db-responsive-container">
+    <!-- Floating horizontal scrollbar for database table -->
+    <div id="db-floating-scrollbar">
+      <span class="db-float-arrow" id="db-float-left" title="Scroll left">
+        <span class="material-symbols-outlined">arrow_back_ios_new</span>
+      </span>
+      <div id="db-floating-scrollbar-inner"><div style="height:1px;"></div></div>
+      <span class="db-float-arrow" id="db-float-right" title="Scroll right">
+        <span class="material-symbols-outlined">arrow_forward_ios</span>
+      </span>
+    </div>
     <div class="relative db-responsive-inner">
       <div class="db-table-scroll" id="db-table-scroll">
         <table class="db-table w-full text-left text-sm text-slate-300">
@@ -352,56 +405,109 @@
       <span id="db-count-display">Loading database...</span>
     </div>
     <script>
-    // Improved sticky horizontal scrollbar with floating arrows for database table
+    // Floating horizontal scrollbar for database table
     (function() {
       const tableScroll = document.getElementById('db-table-scroll');
+      const table = tableScroll.querySelector('table');
+      // Sticky (in-table) scrollbar
       const fakeScrollbar = document.getElementById('db-scrollbar-inner');
       const leftBtn = document.getElementById('db-scroll-left');
       const rightBtn = document.getElementById('db-scroll-right');
+      // Floating (viewport) scrollbar
+      const floatBar = document.getElementById('db-floating-scrollbar');
+      const floatInner = document.getElementById('db-floating-scrollbar-inner');
+      const floatLeft = document.getElementById('db-float-left');
+      const floatRight = document.getElementById('db-float-right');
+
       function syncWidth() {
-        const table = tableScroll.querySelector('table');
         if (table) {
           fakeScrollbar.firstElementChild.style.width = table.scrollWidth + 'px';
+          floatInner.firstElementChild.style.width = table.scrollWidth + 'px';
         }
       }
       function syncScroll() {
         fakeScrollbar.scrollLeft = tableScroll.scrollLeft;
+        floatInner.scrollLeft = tableScroll.scrollLeft;
         updateArrows();
       }
       function syncFakeScroll() {
         tableScroll.scrollLeft = fakeScrollbar.scrollLeft;
+        floatInner.scrollLeft = fakeScrollbar.scrollLeft;
+        updateArrows();
+      }
+      function syncFloatScroll() {
+        tableScroll.scrollLeft = floatInner.scrollLeft;
+        fakeScrollbar.scrollLeft = floatInner.scrollLeft;
         updateArrows();
       }
       function updateArrows() {
         const maxScroll = tableScroll.scrollWidth - tableScroll.clientWidth;
-        if (maxScroll > 10) {
-          leftBtn.style.display = '';
-          rightBtn.style.display = '';
-          leftBtn.disabled = tableScroll.scrollLeft <= 10;
-          rightBtn.disabled = tableScroll.scrollLeft >= maxScroll - 10;
-          leftBtn.style.opacity = leftBtn.disabled ? 0.4 : 0.95;
-          rightBtn.style.opacity = rightBtn.disabled ? 0.4 : 0.95;
-        } else {
-          leftBtn.style.display = 'none';
-          rightBtn.style.display = 'none';
+        // In-table arrows
+        if (leftBtn && rightBtn) {
+          if (maxScroll > 10) {
+            leftBtn.style.display = '';
+            rightBtn.style.display = '';
+            leftBtn.disabled = tableScroll.scrollLeft <= 10;
+            rightBtn.disabled = tableScroll.scrollLeft >= maxScroll - 10;
+            leftBtn.style.opacity = leftBtn.disabled ? 0.4 : 0.95;
+            rightBtn.style.opacity = rightBtn.disabled ? 0.4 : 0.95;
+          } else {
+            leftBtn.style.display = 'none';
+            rightBtn.style.display = 'none';
+          }
+        }
+        // Floating arrows
+        if (floatLeft && floatRight) {
+          if (maxScroll > 10) {
+            floatLeft.style.display = '';
+            floatRight.style.display = '';
+            floatLeft.style.opacity = tableScroll.scrollLeft <= 10 ? 0.4 : 0.95;
+            floatRight.style.opacity = tableScroll.scrollLeft >= maxScroll - 10 ? 0.4 : 0.95;
+          } else {
+            floatLeft.style.display = 'none';
+            floatRight.style.display = 'none';
+          }
         }
       }
-      if (tableScroll && fakeScrollbar && leftBtn && rightBtn) {
+      // Show/hide floating scrollbar based on table visibility
+      function updateFloatBarVisibility() {
+        if (!floatBar) return;
+        const rect = tableScroll.getBoundingClientRect();
+        const inView = rect.bottom > 60 && rect.top < window.innerHeight - 40;
+        const needsScroll = tableScroll.scrollWidth > tableScroll.clientWidth + 10;
+        floatBar.style.display = (inView && needsScroll) ? 'flex' : 'none';
+      }
+      if (tableScroll && fakeScrollbar && floatBar && floatInner && floatLeft && floatRight) {
         fakeScrollbar.addEventListener('scroll', syncFakeScroll);
+        floatInner.addEventListener('scroll', syncFloatScroll);
         tableScroll.addEventListener('scroll', syncScroll);
-        leftBtn.addEventListener('click', function() {
+        leftBtn && leftBtn.addEventListener('click', function() {
           tableScroll.scrollBy({ left: -300, behavior: 'smooth' });
         });
-        rightBtn.addEventListener('click', function() {
+        rightBtn && rightBtn.addEventListener('click', function() {
           tableScroll.scrollBy({ left: 300, behavior: 'smooth' });
         });
-        window.addEventListener('resize', syncWidth);
+        floatLeft.addEventListener('click', function() {
+          tableScroll.scrollBy({ left: -300, behavior: 'smooth' });
+        });
+        floatRight.addEventListener('click', function() {
+          tableScroll.scrollBy({ left: 300, behavior: 'smooth' });
+        });
+        window.addEventListener('resize', function() {
+          syncWidth();
+          updateFloatBarVisibility();
+        });
+        document.addEventListener('scroll', updateFloatBarVisibility, true);
         setTimeout(syncWidth, 100);
         syncWidth();
         setTimeout(updateArrows, 200);
         setTimeout(updateArrows, 1000);
-        // Also update arrows on scroll
-        tableScroll.addEventListener('scroll', updateArrows);
+        setTimeout(updateFloatBarVisibility, 200);
+        setTimeout(updateFloatBarVisibility, 1000);
+        tableScroll.addEventListener('scroll', function() {
+          updateArrows();
+          updateFloatBarVisibility();
+        });
       }
     })();
     </script>
