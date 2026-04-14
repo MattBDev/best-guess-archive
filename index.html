@@ -401,53 +401,6 @@
       <span id="db-count-display">Loading database...</span>
     </div>
     <script>
-    // Zoom controls for database table
-    (function() {
-      let zoom = 1;
-      const minZoom = 0.5;
-      const maxZoom = 2;
-      const step = 0.1;
-      function updateZoom() {
-        const table = document.querySelector('#db-table-scroll table');
-        const label = document.getElementById('db-zoom-label');
-        if (table) table.style.transform = `scale(${zoom})`;
-        if (table) table.style.transformOrigin = 'left top';
-        if (label) label.textContent = Math.round(zoom * 100) + '%';
-      }
-      function setupZoomButtons() {
-        const btnIn = document.getElementById('db-zoom-in');
-        const btnOut = document.getElementById('db-zoom-out');
-        const btnReset = document.getElementById('db-zoom-reset');
-        btnIn && btnIn.addEventListener('click', function() {
-          zoom = Math.min(maxZoom, zoom + step);
-          updateZoom();
-        });
-        btnOut && btnOut.addEventListener('click', function() {
-          zoom = Math.max(minZoom, zoom - step);
-          updateZoom();
-        });
-        btnReset && btnReset.addEventListener('click', function() {
-          zoom = 1;
-          updateZoom();
-        });
-        updateZoom();
-      }
-      // Setup on database view
-      const origSetView = app.setView.bind(app);
-      app.setView = function(name) {
-        origSetView(name);
-        if (name === 'database') {
-          setTimeout(setupZoomButtons, 200);
-        } else {
-          zoom = 1;
-          updateZoom();
-        }
-      };
-      // If already on database view, setup immediately
-      if (document.getElementById('db-table-scroll')) {
-        setTimeout(setupZoomButtons, 200);
-      }
-    })();
 
     // Move floating horizontal scrollbar to <body> and control its visibility globally
     (function() {
@@ -1497,6 +1450,47 @@ class App {
         </td>
       </tr>`;
     }).join('');
+    // After rendering, set up zoom controls
+    this._setupDatabaseZoom();
+  }
+
+  // Setup zoom controls for the database table
+  _setupDatabaseZoom() {
+    const zoomInBtn = document.getElementById('db-zoom-in');
+    const zoomOutBtn = document.getElementById('db-zoom-out');
+    const zoomResetBtn = document.getElementById('db-zoom-reset');
+    const zoomLabel = document.getElementById('db-zoom-label');
+    const tableScroll = document.getElementById('db-table-scroll');
+    if (!zoomInBtn || !zoomOutBtn || !zoomResetBtn || !zoomLabel || !tableScroll) return;
+
+    // Use a property to store zoom level
+    if (typeof this._dbZoom === 'undefined') this._dbZoom = 1;
+
+    // Remove previous listeners to avoid stacking
+    zoomInBtn.onclick = null;
+    zoomOutBtn.onclick = null;
+    zoomResetBtn.onclick = null;
+
+    // Update zoom label and table scale
+    const updateZoom = () => {
+      tableScroll.style.transform = `scale(${this._dbZoom})`;
+      tableScroll.style.transformOrigin = 'left top';
+      zoomLabel.innerText = Math.round(this._dbZoom * 100) + '%';
+    };
+    updateZoom();
+
+    zoomInBtn.onclick = () => {
+      this._dbZoom = Math.min(2, this._dbZoom + 0.1);
+      updateZoom();
+    };
+    zoomOutBtn.onclick = () => {
+      this._dbZoom = Math.max(0.5, this._dbZoom - 0.1);
+      updateZoom();
+    };
+    zoomResetBtn.onclick = () => {
+      this._dbZoom = 1;
+      updateZoom();
+    };
   }
 
   filterDatabase() { this.renderDatabase(); }
