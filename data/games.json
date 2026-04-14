@@ -1680,7 +1680,7 @@
         "text": "MIND READERS UNITE",
         "correct": "0",
         "guesses": "?",
-        "explanation": "Mind Readers Unite - 'Because youâre trying to guess what America thinks!'"
+        "explanation": "Mind Readers Unite - 'Because youÃ¢ÂÂre trying to guess what America thinks!'"
       },
       {
         "text": "RIVALRY FOR DNA",
@@ -1842,7 +1842,7 @@
         "text": "TRENDY POPUP",
         "correct": "2",
         "guesses": "8948",
-        "explanation": "Trendy Popup - 'They pop up above your lip and lately theyâve been very trendy.'"
+        "explanation": "Trendy Popup - 'They pop up above your lip and lately theyÃ¢ÂÂve been very trendy.'"
       },
       {
         "text": "MID COVER BAND",
@@ -1956,7 +1956,7 @@
         "text": "ALL FOR NOTHING",
         "correct": "5",
         "guesses": "5237",
-        "explanation": "All For Nothing - 'Itâs all the information in the world almost all of it available at no cost.'"
+        "explanation": "All For Nothing - 'ItÃ¢ÂÂs all the information in the world almost all of it available at no cost.'"
       },
       {
         "text": "GREAT WORK EVERYBODY",
@@ -1974,7 +1974,7 @@
         "text": "ONLINE BRATANNICA BUT EVEN MORE GIGANTICA",
         "correct": "3063",
         "guesses": "8361",
-        "explanation": "Online Bratannica But Even More Gigantica - 'Itâs like the encyclopedia but with way more articles and itâs online.'"
+        "explanation": "Online Bratannica But Even More Gigantica - 'ItÃ¢ÂÂs like the encyclopedia but with way more articles and itÃ¢ÂÂs online.'"
       }
     ],
     "goldClue": 1,
@@ -2016,7 +2016,7 @@
         "text": "A BLAST FROM THE PAST",
         "correct": "8",
         "guesses": "7604",
-        "explanation": "A Blast From The Past - 'You were having a good time last night and now youâre suffering the consequences.'"
+        "explanation": "A Blast From The Past - 'You were having a good time last night and now youÃ¢ÂÂre suffering the consequences.'"
       },
       {
         "text": "CAN HAPPEN IN VEGAS JUST LIKE \"THE\" MOVIE",
@@ -2058,7 +2058,7 @@
         "text": "MAKEUP WITH NO MAKEUP",
         "correct": "0",
         "guesses": "9408",
-        "explanation": "Makeup With No Makeup - 'The dadâs trying to make up with his son... and theyâre both clown fish clowns that donât wear makeup.'"
+        "explanation": "Makeup With No Makeup - 'The dadÃ¢ÂÂs trying to make up with his son... and theyÃ¢ÂÂre both clown fish clowns that donÃ¢ÂÂt wear makeup.'"
       },
       {
         "text": "A GUILT TRIP",
@@ -3912,7 +3912,7 @@
         "text": "MIX DILL HERBS AND MAYO AND VEGGIES SAY HEYO",
         "correct": "6320",
         "guesses": "10439",
-        "explanation": "Mix Dill Herbs And Mayo And Veggies Say Heyo - 'That's the recipe. And many people use ranch on a cruditÃ© platter.'"
+        "explanation": "Mix Dill Herbs And Mayo And Veggies Say Heyo - 'That's the recipe. And many people use ranch on a cruditÃÂ© platter.'"
       },
       {
         "text": "HIDDEN VALLEY MADE VALID TO POUR ON YOUR SALAD",
@@ -6147,7 +6147,7 @@
     "bronzePayout": 0,
     "winnerPayout": "$769.23",
     "winnerNames": "Names not read",
-    "wrongGuesses": "piÃ±ata, Beethoven's fifth, ink, gift, salmonella, debt, ticket, advice, time, money, speeding",
+    "wrongGuesses": "piÃÂ±ata, Beethoven's fifth, ink, gift, salmonella, debt, ticket, advice, time, money, speeding",
     "winningClue": 1,
     "winnerCount": 13
   },
@@ -6714,7 +6714,7 @@
         "text": "ALL THE RIGHT MOVES",
         "correct": "53",
         "guesses": "16,000",
-        "explanation": "All the right moves - \"Pac-man is a 90Â° right angles it's always right you It's always a right angle a 90Â° angle is all the moves are right angles\""
+        "explanation": "All the right moves - \"Pac-man is a 90ÃÂ° right angles it's always right you It's always a right angle a 90ÃÂ° angle is all the moves are right angles\""
       },
       {
         "text": "HIS WIFE TOOK HIS NAME",
@@ -8829,10 +8829,10 @@
         "explanation": "Arrives orderly in many shapes and sizes - \"arrives orderly in many shapes and sizes.\""
       },
       {
-        "text": "PASS THE KETCHUP S'IL VOUS PLAÃT",
+        "text": "PASS THE KETCHUP S'IL VOUS PLAÃÂT",
         "correct": "1,800",
         "guesses": "N/A",
-        "explanation": "Pass the ketchup s'il vous plaÃ®t - \"well pass the ketchup see play French and fries.\""
+        "explanation": "Pass the ketchup s'il vous plaÃÂ®t - \"well pass the ketchup see play French and fries.\""
       }
     ],
     "goldClue": 3,
