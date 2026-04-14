@@ -364,23 +364,23 @@
   <div class="glass-panel rounded-xl overflow-hidden shadow-xl border border-slate-700 db-responsive-container">
     <div class="relative db-responsive-inner">
       <div class="db-table-scroll" id="db-table-scroll" style="transition: transform 0.2s;">
-        <table class="db-table w-full text-left text-sm text-slate-300">
-        <thead class="bg-slate-900/80 text-xs uppercase font-medium text-slate-400 sticky top-0 z-20">
+        <table class="db-table w-full text-left text-xs text-slate-300 leading-tight">
+        <thead class="bg-slate-900/80 text-[11px] uppercase font-semibold text-slate-400 sticky top-0 z-20">
           <tr>
-            <th class="px-4 py-3 cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('date')">Date ↕</th>
-            <th class="px-4 py-3 whitespace-nowrap">Secret Item</th>
-            <th class="px-4 py-3 cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('pot')">Pot ↕</th>
-            <th class="px-4 py-3">Clue 1</th>
-            <th class="px-4 py-3">Clue 2</th>
-            <th class="px-4 py-3">Clue 3</th>
-            <th class="px-4 py-3">Clue 4</th>
-            <th class="px-4 py-3">Clue 5</th>
-            <th class="px-4 py-3 text-center">Winning Clue</th>
-            <th class="px-4 py-3 text-center cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('players')">Total Players ↕</th>
-            <th class="px-4 py-3 text-center cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('winners')">Winners ↕</th>
-            <th class="px-4 py-3 whitespace-nowrap">Payouts</th>
-            <th class="px-4 py-3 whitespace-nowrap">Host</th>
-            <th class="px-4 py-3 text-right">Details</th>
+            <th class="px-2 py-1 cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('date')">Date ↕</th>
+            <th class="px-2 py-1 whitespace-nowrap">Secret Item</th>
+            <th class="px-2 py-1 cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('pot')">Pot ↕</th>
+            <th class="px-2 py-1">Clue 1</th>
+            <th class="px-2 py-1">Clue 2</th>
+            <th class="px-2 py-1">Clue 3</th>
+            <th class="px-2 py-1">Clue 4</th>
+            <th class="px-2 py-1">Clue 5</th>
+            <th class="px-2 py-1 text-center">Winning Clue</th>
+            <th class="px-2 py-1 text-center cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('players')">Total Players ↕</th>
+            <th class="px-2 py-1 text-center cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('winners')">Winners ↕</th>
+            <th class="px-2 py-1 whitespace-nowrap">Payouts</th>
+            <th class="px-2 py-1 whitespace-nowrap">Host</th>
+            <th class="px-2 py-1 text-right">Details</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-700/50" id="db-table-body"></tbody>
@@ -1430,22 +1430,22 @@ class App {
 
       // Winner names
 
-      return `<tr class="hover:bg-slate-800/40 transition border-b border-slate-800/60 last:border-0">
-        <td class="px-4 py-3 text-slate-400 font-mono text-xs whitespace-nowrap align-top">${g.date}</td>
-        <td class="px-4 py-3 font-bold text-white whitespace-nowrap align-top">
+      return `<tr class="hover:bg-slate-800/30 transition border-b border-slate-800/60 last:border-0">
+        <td class="px-2 py-1 text-slate-400 font-mono text-[11px] whitespace-nowrap align-top">${g.date}</td>
+        <td class="px-2 py-1 font-semibold text-white whitespace-nowrap align-top">
           ${g.secretItem}
-          ${g.note ? `<div class="mt-1"><span class="inline-flex items-center gap-1 text-[10px] font-bold bg-red-900/40 text-red-400 border border-red-600/40 px-2 py-0.5 rounded-full uppercase tracking-wide"><span class="material-symbols-outlined" style="font-size:11px">warning</span>${g.note}</span></div>` : ''}
+          ${g.note ? `<div class="mt-0.5"><span class="inline-flex items-center gap-1 text-[9px] font-bold bg-red-900/40 text-red-400 border border-red-600/40 px-1.5 py-0.5 rounded-full uppercase tracking-wide"><span class="material-symbols-outlined" style="font-size:10px">warning</span>${g.note}</span></div>` : ''}
         </td>
-        <td class="px-4 py-3 text-green-400 font-mono whitespace-nowrap align-top">$${g.pot.toLocaleString()}</td>
+        <td class="px-2 py-1 text-green-400 font-mono whitespace-nowrap align-top">$${g.pot.toLocaleString()}</td>
         ${clueCells}
-        <td class="px-4 py-3 text-center font-bold text-slate-400 align-top">${winningClueNum || ''}</td>
-        <td class="px-4 py-3 text-center align-top"><span class="font-mono text-blue-300">${totalPlayers.toLocaleString()}</span></td>
-        <td class="px-4 py-3 align-top">${winnersHtml}</td>
-        <td class="px-4 py-3 align-top">${payoutsHtml}</td>
-        <td class="px-4 py-3 text-slate-400 whitespace-nowrap align-top">${g.host || '—'}</td>
-        <td class="px-4 py-3 text-right align-top">
-          <button onclick="app.showDetails('${g.date.replace(/'/g,"\\'")}', '${g.secretItem.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" class="text-blue-400 hover:text-blue-300" title="View details">
-            <span class="material-symbols-outlined">visibility</span>
+        <td class="px-2 py-1 text-center font-bold text-slate-400 align-top">${winningClueNum || ''}</td>
+        <td class="px-2 py-1 text-center align-top"><span class="font-mono text-blue-300">${totalPlayers.toLocaleString()}</span></td>
+        <td class="px-2 py-1 align-top">${winnersHtml}</td>
+        <td class="px-2 py-1 align-top">${payoutsHtml}</td>
+        <td class="px-2 py-1 text-slate-400 whitespace-nowrap align-top">${g.host || '—'}</td>
+        <td class="px-2 py-1 text-right align-top">
+          <button onclick="app.showDetails('${g.date.replace(/'/g,"\\'")}', '${g.secretItem.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}")" class="text-blue-400 hover:text-blue-300" title="View details" style="padding:0 2px;">
+            <span class="material-symbols-outlined" style="font-size:18px;">visibility</span>
           </button>
         </td>
       </tr>`;
