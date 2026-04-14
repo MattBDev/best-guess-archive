@@ -1540,9 +1540,48 @@ class App {
     const dateSorted = [...games].sort((a,b)=>new Date(a.date)-new Date(b.date)).filter(g=>!isNaN(new Date(g.date)));
     const c1games = clueDist[1]; const c1pct = Math.round(c1games/games.length*100);
     const totalCorrect = games.reduce((a,g) => a+g.clues.reduce((b,c)=>b+parseNum(c.correct),0), 0);
+
+    // Hardest clue: lowest % correct/guesses for any clue (exclude clues with 0 guesses or cancelled games)
+    let hardestClue = null, hardestCluePct = 1;
+    games.forEach(g => {
+      g.clues.forEach((c, i) => {
+        const guesses = parseNum(c.guesses);
+        const correct = parseNum(c.correct);
+        if (guesses > 0) {
+          const pct = correct / guesses;
+          if (pct < hardestCluePct) {
+            hardestCluePct = pct;
+            hardestClue = { game: g, clue: c, clueNum: i+1, pct };
+          }
+        }
+      });
+    });
+
+    // Hardest secret item: lowest % total correct/total guesses for a game
+    let hardestGame = null, hardestGamePct = 1;
+    games.forEach(g => {
+      const totalGuesses = g.clues.reduce((a,c)=>a+parseNum(c.guesses),0);
+      const totalCorrect = g.clues.reduce((a,c)=>a+parseNum(c.correct),0);
+      if (totalGuesses > 0) {
+        const pct = totalCorrect / totalGuesses;
+        if (pct < hardestGamePct) {
+          hardestGamePct = pct;
+          hardestGame = { game: g, pct };
+        }
+      }
+    });
+
     const records = [
       {icon:'monetization_on', color:'text-yellow-400', label:'Biggest Single Pot', val:'$'+biggestPot.pot.toLocaleString(), sub: biggestPot.secretItem+' · '+biggestPot.date},
       {icon:'people', color:'text-green-400', label:'Most Winners in One Game', val:(mostWinnersGame.totalWinners||mostWinnersGame.winnerCount||0).toLocaleString(), sub: mostWinnersGame.secretItem+' · '+mostWinnersGame.date},
+      {icon:'dangerous', color:'text-red-400', label:'Hardest Clue (Lowest %)',
+        val: hardestClue ? `${hardestClue.clue.text}` : 'N/A',
+        sub: hardestClue ? `Clue ${hardestClue.clueNum} · ${hardestClue.game.secretItem} · ${hardestClue.game.date} · ${(hardestClue.pct*100).toFixed(3)}% correct (${parseNum(hardestClue.clue.correct)}/${parseNum(hardestClue.clue.guesses)})` : ''
+      },
+      {icon:'lock', color:'text-blue-400', label:'Hardest Secret Item',
+        val: hardestGame ? hardestGame.game.secretItem : 'N/A',
+        sub: hardestGame ? `${hardestGame.game.date} · ${(hardestGame.pct*100).toFixed(3)}% correct overall (${hardestGame.game.clues.reduce((a,c)=>a+parseNum(c.correct),0)}/${hardestGame.game.clues.reduce((a,c)=>a+parseNum(c.guesses),0)})` : ''
+      },
       {icon:'person', color:'text-red-400', label:'Solo Wins', val: soloWins+' games ('+soloWinPct+'%)', sub:'Exactly 1 winner took the whole pot'},
       {icon:'casino', color:'text-blue-400', label:'Most Guessed Episode', val: mostGuessesGame.t.toLocaleString()+' guesses', sub: mostGuessesGame.g?.secretItem+' · '+mostGuessesGame.g?.date},
       {icon:'bolt', color:'text-yellow-300', label:'Clue 1 Wins', val: c1games+' games ('+c1pct+'%)', sub:'More than half of all games are decided on the very first clue'},
