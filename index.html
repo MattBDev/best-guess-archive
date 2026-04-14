@@ -945,12 +945,17 @@ class App {
 
     submitGuess() {
       if (!this.gameStarted) return;
-    if (!input) return;
+      const inputEl = document.getElementById('guess-input');
+      if (!inputEl) return;
+      const input = inputEl.value.trim();
+      if (!input) return;
 
-    const guess  = input.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const answer = this.currentGame.secretItem.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const guess  = input.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const answer = this.currentGame.secretItem.toLowerCase().replace(/[^a-z0-9]/g, '');
+      inputEl.disabled = true;
+      inputEl.value = '';
 
-    if (guess === answer) {
+      if (guess === answer) {
       this.clearTimers();
       const n = this.currentClueIndex + 1;
       const g = this.currentGame;
@@ -1021,6 +1026,14 @@ class App {
     const g = this.currentGame;
     const fmt = s => Number(s).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
     const statsEl = document.getElementById('result-stats-table');
+    // --- Cool stats for win/lose ---
+    const clueNum = (this.currentClueIndex || 0) + 1;
+    const totalPlayers = g.clues.reduce((a, c) => a + (parseInt(String(c.guesses).replace(/[^0-9]/g, '')) || 0), 0);
+    const totalCorrect = g.clues.reduce((a, c) => a + (parseInt(String(c.correct).replace(/[^0-9]/g, '')) || 0), 0);
+    const clueStats = g.clues.map((c, i) => `<div class="flex justify-between text-xs"><span>Clue ${i+1}:</span><span>${c.correct} correct / ${c.guesses} guesses</span></div>`).join('');
+    let extraStats = `<div class="mt-2 text-xs text-slate-400">Total guesses: <span class="text-white font-bold">${totalPlayers.toLocaleString()}</span> &nbsp;|&nbsp; Total correct: <span class="text-white font-bold">${totalCorrect.toLocaleString()}</span></div>`;
+    extraStats += `<div class="mt-2 text-xs text-slate-400">Your guess: <span class="text-white font-bold">${this.lastGuess || '(none)'}</span> &nbsp;|&nbsp; Clue guessed: <span class="text-white font-bold">${clueNum}</span></div>`;
+    extraStats += `<div class="mt-2 text-xs text-slate-400">Breakdown by clue:</div>${clueStats}`;
     if (g.format === 'v2') {
       statsEl.innerHTML = `
         <div class="flex justify-between border-b border-white/5 pb-2">
@@ -1042,7 +1055,9 @@ class App {
         <div class="pt-1">
           <span class="text-slate-400 block text-xs mb-1">Winner Names</span>
           <span class="text-slate-300 italic">${g.winnerNames || 'None listed'}</span>
-        </div>`;
+        </div>
+        ${extraStats}
+      `;
     } else {
       statsEl.innerHTML = `
         <div class="flex justify-between border-b border-white/5 pb-2">
@@ -1060,7 +1075,9 @@ class App {
         <div class="pt-1">
           <span class="text-slate-400 block text-xs mb-1">Winner Names</span>
           <span class="text-slate-300 italic">${g.winnerNames || 'None listed'}</span>
-        </div>`;
+        </div>
+        ${extraStats}
+      `;
     }
 
     document.getElementById('result-host').innerText = g.host || 'Unknown';
