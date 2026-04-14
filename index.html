@@ -48,7 +48,7 @@
         <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('home')">Home</button>
         <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.startRandomGame()">Play</button>
         <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('database')">Database</button>
-        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('archive')">Archive</button>
+        <!-- <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('archive')">Archive</button> -->
         <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('stats')">Stats</button>
         <button class="ml-2 flex items-center gap-1.5 bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-500 hover:to-rose-400 text-white text-xs font-bold px-3 py-1.5 rounded-full transition shadow-lg shadow-pink-900/30" onclick="app.openTipJar()">
           <span class="material-symbols-outlined" style="font-size:14px;line-height:1">volunteer_activism</span> TIP JAR
@@ -64,7 +64,7 @@
       <button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.setView('home'); document.getElementById('mobile-menu').classList.add('hidden')">Home</button>
       <button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.startRandomGame(); document.getElementById('mobile-menu').classList.add('hidden')">Play</button>
       <button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.setView('database'); document.getElementById('mobile-menu').classList.add('hidden')">Database</button>
-      <button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.setView('archive'); document.getElementById('mobile-menu').classList.add('hidden')">Archive</button>
+      <!-- <button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.setView('archive'); document.getElementById('mobile-menu').classList.add('hidden')">Archive</button> -->
       <button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.setView('stats'); document.getElementById('mobile-menu').classList.add('hidden')">Stats</button>
       <button class="flex items-center gap-2 px-3 py-2 text-left rounded-md bg-gradient-to-r from-pink-900/40 to-rose-900/40 hover:from-pink-900/60 text-pink-300 font-bold" onclick="app.openTipJar(); document.getElementById('mobile-menu').classList.add('hidden')">
         <span class="material-symbols-outlined text-sm">volunteer_activism</span> KindaCharming's Tip Jar
@@ -292,6 +292,7 @@
             <th class="px-4 py-3 whitespace-nowrap">Winner Names</th>
             <th class="px-4 py-3 whitespace-nowrap">Host</th>
             <th class="px-4 py-3 whitespace-nowrap">Wrong Guesses</th>
+            <th class="px-4 py-3 text-right">Details</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-700/50" id="db-table-body"></tbody>
@@ -304,44 +305,7 @@
 </div>
 </template>
 
-<template id="view-archive">
-<div class="space-y-6 fade-in pb-20">
-  <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-    <div>
-      <h2 class="text-3xl font-display font-bold">Game <span class="text-blue-500">Archive</span></h2>
-      <p class="text-sm text-slate-400 mt-1">Curated browser view with quick comparisons and full drill-down details for each game.</p>
-    </div>
-    <div class="relative w-full md:w-96">
-      <span class="material-symbols-outlined absolute left-3 top-3 text-slate-400">search</span>
-      <input id="archive-search" type="text" onkeyup="app.filterArchive()"
-        class="w-full bg-slate-800 border border-slate-700 rounded-full py-2 pl-10 pr-4 text-white focus:outline-none focus:border-blue-500"
-        placeholder="Search item, date, or host...">
-    </div>
-  </div>
-  <div class="glass-panel rounded-xl overflow-hidden shadow-xl border border-slate-700">
-    <div class="overflow-x-auto">
-      <table class="w-full text-left text-sm text-slate-300">
-        <thead class="bg-slate-900/80 text-xs uppercase font-medium text-slate-400 sticky top-0">
-          <tr>
-            <th class="px-6 py-4 cursor-pointer hover:text-white" onclick="app.sortArchive('date')">Date ↕</th>
-            <th class="px-6 py-4">Secret Item</th>
-            <th class="px-6 py-4 cursor-pointer hover:text-white" onclick="app.sortArchive('pot')">Pot ↕</th>
-            <th class="px-6 py-4 text-center">Format</th>
-            <th class="px-6 py-4 text-center">Medal Clues</th>
-            <th class="px-6 py-4 text-center">Winners</th>
-            <th class="px-6 py-4">Host</th>
-            <th class="px-6 py-4 text-right">Details</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-700/50" id="archive-table-body"></tbody>
-      </table>
-    </div>
-    <div class="bg-slate-900/50 px-6 py-3 text-xs text-slate-500 flex justify-between items-center">
-      <span id="archive-count-display">Loading archive...</span>
-    </div>
-  </div>
-</div>
-</template>
+<!-- Archive view removed: all features merged into database view -->
 
 <!-- STATS -->
 <template id="view-stats">
@@ -732,7 +696,7 @@ class App {
       if (durSel) durSel.value = localStorage.getItem('clue_time') || '20';
     }
     if (name === 'database') this.renderDatabase();
-    if (name === 'archive')  this.renderArchive();
+    // if (name === 'archive')  this.renderArchive();
     if (name === 'stats')    this.renderStats();
     if (name === 'admin')    this.initAdmin();
   }
@@ -747,7 +711,11 @@ class App {
       const g = document.getElementById('total-games-display');
       const w = document.getElementById('total-winners-display');
       if (m) m.innerText = '$' + totalPot.toLocaleString();
-      if (g) g.innerText = this.games.length;
+      if (g) {
+        // Count unique dates (games played per day)
+        const uniqueDates = new Set(this.games.map(game => game.date));
+        g.innerText = uniqueDates.size;
+      }
       if (w) w.innerText = totalWinners.toLocaleString();
     }, 50);
   }
@@ -1219,6 +1187,11 @@ class App {
         <td class="px-4 py-3 align-top" style="min-width:140px">${namesHtml}</td>
         <td class="px-4 py-3 text-slate-400 whitespace-nowrap align-top">${g.host || '—'}</td>
         <td class="px-4 py-3 text-xs text-slate-500 align-top" style="min-width:180px">${g.wrongGuesses || '—'}</td>
+        <td class="px-4 py-3 text-right align-top">
+          <button onclick="app.showDetails('${g.date.replace(/'/g,"\\'")}', '${g.secretItem.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" class="text-blue-400 hover:text-blue-300" title="View details">
+            <span class="material-symbols-outlined">visibility</span>
+          </button>
+        </td>
       </tr>`;
     }).join('');
   }
@@ -1232,7 +1205,17 @@ class App {
     if (key === 'pot') {
       this.games.sort((a, b) => dir * (a.pot - b.pot));
     } else if (key === 'date') {
-      this.games.sort((a, b) => dir * (new Date(a.date) - new Date(b.date)));
+      // Fix: Always sort cancelled games strictly by date, never group with other dates
+      this.games.sort((a, b) => {
+        // If either is a cancelled game, just compare date strings
+        const aCancelled = a.note && a.clues.length === 0;
+        const bCancelled = b.note && b.clues.length === 0;
+        if (aCancelled || bCancelled) {
+          return dir * (a.date.localeCompare(b.date));
+        }
+        // Otherwise, use Date objects
+        return dir * (new Date(a.date) - new Date(b.date));
+      });
     } else if (key === 'players') {
       const tot = g => g.clues.reduce((a,c) => { const n=s=>parseInt(String(s||'0').replace(/[^0-9]/g,''),10)||0; return a+n(c.guesses); }, 0);
       this.games.sort((a, b) => dir * (tot(a) - tot(b)));
@@ -1242,69 +1225,11 @@ class App {
     this.renderDatabase();
   }
 
-  renderArchive() {
-    const filter = (document.getElementById('archive-search')?.value || '').toLowerCase();
-    const filtered = this.games.filter(g =>
-      g.secretItem.toLowerCase().includes(filter) ||
-      g.date.toLowerCase().includes(filter) ||
-      (g.host && g.host.toLowerCase().includes(filter))
-    );
-    document.getElementById('archive-count-display').innerText = `Showing ${filtered.length} of ${this.games.length} games`;
 
-    document.getElementById('archive-table-body').innerHTML = filtered.map(g => {
-      // Cancelled / stub entry
-      if (g.note && g.clues.length === 0) {
-        return `<tr class="border-b border-red-900/40 bg-red-950/20">
-          <td class="px-6 py-4 text-slate-400 font-mono text-xs whitespace-nowrap">${g.date}</td>
-          <td colspan="7" class="px-6 py-4">
-            <span class="inline-flex items-center gap-2 text-sm font-bold text-red-400">
-              <span class="material-symbols-outlined" style="font-size:18px">cancel</span>
-              ${g.note} — no episode aired
-            </span>
-          </td>
-        </tr>`;
-      }
-      const medalCell = g.format === 'v2'
-        ? `<span class="text-[10px] bg-yellow-900/30 text-yellow-400 px-1 rounded mr-1">🥇${g.goldClue}</span><span class="text-[10px] bg-slate-700/50 text-slate-300 px-1 rounded mr-1">🥈${g.silverClue}</span><span class="text-[10px] bg-orange-900/30 text-orange-400 px-1 rounded">🥉${g.bronzeClue}</span>`
-        : `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-900 text-blue-300 text-xs font-bold">${g.goldClue || g.winningClue}</span>`;
-      const fmtBadge = g.format === 'v2'
-        ? '<span class="text-[10px] bg-yellow-900/40 text-yellow-400 border border-yellow-600/30 px-2 py-0.5 rounded-full font-bold">NEW</span>'
-        : '<span class="text-[10px] bg-slate-700/40 text-slate-400 border border-slate-600/30 px-2 py-0.5 rounded-full">CLASSIC</span>';
-      const safeItem = g.secretItem.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-      const safeDate = g.date.replace(/'/g,"\\'");
-      return `<tr class="hover:bg-slate-800/50 transition border-b border-slate-800 last:border-0">
-        <td class="px-6 py-4 text-slate-400 font-mono text-xs whitespace-nowrap">${g.date}</td>
-        <td class="px-6 py-4 font-bold text-white">
-          ${g.secretItem}
-          ${g.note ? `<div class="mt-1"><span class="inline-flex items-center gap-1 text-[10px] font-bold bg-red-900/40 text-red-400 border border-red-600/40 px-2 py-0.5 rounded-full uppercase tracking-wide"><span class="material-symbols-outlined" style="font-size:11px">warning</span>${g.note}</span></div>` : ''}
-        </td>
-        <td class="px-6 py-4 text-green-400 font-mono">$${g.pot.toLocaleString()}</td>
-        <td class="px-6 py-4 text-center">${fmtBadge}</td>
-        <td class="px-6 py-4 text-center">${medalCell}</td>
-        <td class="px-6 py-4 text-center text-slate-400">${(g.totalWinners || g.winnerCount || 0).toLocaleString()}</td>
-        <td class="px-6 py-4 text-slate-400">${g.host}</td>
-        <td class="px-6 py-4 text-right">
-          <button onclick="app.showDetails('${safeDate}','${safeItem}')" class="text-blue-400 hover:text-blue-300" title="View details">
-            <span class="material-symbols-outlined">visibility</span>
-          </button>
-        </td>
-      </tr>`;
-    }).join('');
-  }
+  // Archive view removed: all features merged into database view
 
-  filterArchive() { this.renderArchive(); }
 
-  sortArchive(key) {
-    if (!this._sortDir) this._sortDir = {};
-    this._sortDir[`archive_${key}`] = this._sortDir[`archive_${key}`] === 'asc' ? 'desc' : 'asc';
-    const dir = this._sortDir[`archive_${key}`] === 'asc' ? 1 : -1;
-    if (key === 'pot') {
-      this.games.sort((a, b) => dir * (a.pot - b.pot));
-    } else if (key === 'date') {
-      this.games.sort((a, b) => dir * (new Date(a.date) - new Date(b.date)));
-    }
-    this.renderArchive();
-  }
+  // Archive filter/sort removed
 
   showDetails(date, item) {
     const g = this.games.find(x => x.date === date && x.secretItem === item);
