@@ -275,8 +275,12 @@
     </div>
   </div>
   <div class="glass-panel rounded-xl overflow-hidden shadow-xl border border-slate-700">
-    <div class="w-full max-w-full overflow-x-auto">
-      <table class="w-full min-w-[1200px] text-left text-sm text-slate-300">
+    <div class="relative">
+      <div id="db-scrollbar" class="sticky top-[56px] z-30 h-4 w-full bg-transparent" style="overflow-x:auto; pointer-events:auto;">
+        <div style="height:1px; width:2000px;"></div>
+      </div>
+      <div class="w-full max-w-full overflow-x-auto" id="db-table-scroll">
+        <table class="w-full min-w-[1200px] text-left text-sm text-slate-300">
         <thead class="bg-slate-900/80 text-xs uppercase font-medium text-slate-400 sticky top-0 z-10">
           <tr>
             <th class="px-4 py-3 cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('date')">Date ↕</th>
@@ -301,6 +305,32 @@
     <div class="bg-slate-900/50 px-6 py-3 text-xs text-slate-500 flex justify-between items-center">
       <span id="db-count-display">Loading database...</span>
     </div>
+    <script>
+    // Floating horizontal scrollbar for database table
+    (function() {
+      const tableScroll = document.getElementById('db-table-scroll');
+      const fakeScrollbar = document.getElementById('db-scrollbar');
+      if (tableScroll && fakeScrollbar) {
+        // Sync scroll positions
+        fakeScrollbar.onscroll = function() {
+          tableScroll.scrollLeft = fakeScrollbar.scrollLeft;
+        };
+        tableScroll.onscroll = function() {
+          fakeScrollbar.scrollLeft = tableScroll.scrollLeft;
+        };
+        // Resize fake scrollbar width to match table scroll width
+        const syncWidth = () => {
+          const table = tableScroll.querySelector('table');
+          if (table) {
+            fakeScrollbar.firstElementChild.style.width = table.scrollWidth + 'px';
+          }
+        };
+        window.addEventListener('resize', syncWidth);
+        setTimeout(syncWidth, 100);
+        syncWidth();
+      }
+    })();
+    </script>
   </div>
 </div>
 </template>
