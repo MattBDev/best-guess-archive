@@ -1453,7 +1453,7 @@ class App {
         <td class="px-2 py-1 align-middle">${payoutsHtml}</td>
         <td class="px-1 py-1 text-slate-400 align-middle" style="max-width:90px;overflow:hidden;text-overflow:ellipsis;">${(g.host || '—').replace('Hunter/Anthony Anderson', 'Hunter/<br>Anthony Anderson')}</td>
         <td class="px-1 py-1 text-right align-middle">
-          <button onclick="app.showDetails('${g.date.replace(/'/g,"\\'")}', '${g.secretItem.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}")" class="text-blue-400 hover:text-blue-300" title="View details" style="padding:0 2px;">
+          <button onclick="console.log('Details button clicked:', '${g.date.replace(/'/g,"\\'")}', '${g.secretItem.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}'); app.showDetails('${g.date.replace(/'/g,"\\'")}', '${g.secretItem.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}")" class="text-blue-400 hover:text-blue-300" title="View details" style="padding:0 2px;">
             <span class="material-symbols-outlined" style="font-size:18px;">visibility</span>
           </button>
         </td>
@@ -1493,6 +1493,7 @@ class App {
   // Archive filter/sort removed
 
   showDetails(date, item) {
+    console.log('showDetails called with:', date, item);
     const g = this.games.find(x => x.date === date && x.secretItem === item);
     if (!g) return;
     document.getElementById('modal-backdrop').classList.remove('hidden');
