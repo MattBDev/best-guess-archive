@@ -1,826 +1,1316 @@
-<html lang="en"><head>
-
-<script class="injected-ffc2e83d85">
-(function(){'use strict';function q(b){var c=0;return function(){return c<b.length?{done:!1,value:b[c++]}:{done:!0}}}function t(b){var c=typeof Symbol!="undefined"&&Symbol.iterator&&b[Symbol.iterator];if(c)return c.call(b);if(typeof b.length=="number")return{next:q(b)};throw Error(String(b)+" is not an iterable or ArrayLike");}var u=typeof Object.defineProperties=="function"?Object.defineProperty:function(b,c,g){if(b==Array.prototype||b==Object.prototype)return b;b[c]=g.value;return b};
-function v(b){b=["object"==typeof globalThis&&globalThis,b,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var c=0;c<b.length;++c){var g=b[c];if(g&&g.Math==Math)return g}throw Error("Cannot find global object");}var w=v(this);function x(b,c){if(c)a:{var g=w;b=b.split(".");for(var h=0;h<b.length-1;h++){var l=b[h];if(!(l in g))break a;g=g[l]}b=b[b.length-1];h=g[b];c=c(h);c!=h&&c!=null&&u(g,b,{configurable:!0,writable:!0,value:c})}}
-function y(){this.j=!1;this.g=null;this.u=void 0;this.h=1;this.v=this.l=0;this.i=null}function z(b){if(b.j)throw new TypeError("Generator is already running");b.j=!0}y.prototype.o=function(b){this.u=b};function A(b,c){b.i={I:c,J:!0};b.h=b.l||b.v}y.prototype.return=function(b){this.i={return:b};this.h=this.v};function B(b){this.g=new y;this.h=b}function E(b,c){z(b.g);var g=b.g.g;if(g)return F(b,"return"in g?g["return"]:function(h){return{value:h,done:!0}},c,b.g.return);b.g.return(c);return G(b)}
-function F(b,c,g,h){try{var l=c.call(b.g.g,g);if(!(l instanceof Object))throw new TypeError("Iterator result "+l+" is not an object");if(!l.done)return b.g.j=!1,l;var m=l.value}catch(f){return b.g.g=null,A(b.g,f),G(b)}b.g.g=null;h.call(b.g,m);return G(b)}function G(b){for(;b.g.h;)try{var c=b.h(b.g);if(c)return b.g.j=!1,{value:c.value,done:!1}}catch(g){b.g.u=void 0,A(b.g,g)}b.g.j=!1;if(b.g.i){c=b.g.i;b.g.i=null;if(c.J)throw c.I;return{value:c.return,done:!0}}return{value:void 0,done:!0}}
-function H(b){this.next=function(c){z(b.g);b.g.g?c=F(b,b.g.g.next,c,b.g.o):(b.g.o(c),c=G(b));return c};this.throw=function(c){z(b.g);b.g.g?c=F(b,b.g.g["throw"],c,b.g.o):(A(b.g,c),c=G(b));return c};this.return=function(c){return E(b,c)};this[Symbol.iterator]=function(){return this}}function I(b){function c(h){return b.next(h)}function g(h){return b.throw(h)}return new Promise(function(h,l){function m(f){f.done?h(f.value):Promise.resolve(f.value).then(c,g).then(m,l)}m(b.next())})}
-x("Symbol",function(b){function c(m){if(this instanceof c)throw new TypeError("Symbol is not a constructor");return new g(h+(m||"")+"_"+l++,m)}function g(m,f){this.g=m;u(this,"description",{configurable:!0,writable:!0,value:f})}if(b)return b;g.prototype.toString=function(){return this.g};var h="jscomp_symbol_"+(Math.random()*1E9>>>0)+"_",l=0;return c});
-x("Symbol.iterator",function(b){if(b)return b;b=Symbol("Symbol.iterator");u(Array.prototype,b,{configurable:!0,writable:!0,value:function(){return J(q(this))}});return b});function J(b){b={next:b};b[Symbol.iterator]=function(){return this};return b}
-x("Promise",function(b){function c(f){this.h=0;this.i=void 0;this.g=[];this.u=!1;var a=this.j();try{f(a.resolve,a.reject)}catch(d){a.reject(d)}}function g(){this.g=null}function h(f){return f instanceof c?f:new c(function(a){a(f)})}if(b)return b;g.prototype.h=function(f){if(this.g==null){this.g=[];var a=this;this.i(function(){a.l()})}this.g.push(f)};var l=w.setTimeout;g.prototype.i=function(f){l(f,0)};g.prototype.l=function(){for(;this.g&&this.g.length;){var f=this.g;this.g=[];for(var a=0;a<f.length;++a){var d=
-f[a];f[a]=null;try{d()}catch(e){this.j(e)}}}this.g=null};g.prototype.j=function(f){this.i(function(){throw f;})};c.prototype.j=function(){function f(e){return function(k){d||(d=!0,e.call(a,k))}}var a=this,d=!1;return{resolve:f(this.D),reject:f(this.l)}};c.prototype.D=function(f){if(f===this)this.l(new TypeError("A Promise cannot resolve to itself"));else if(f instanceof c)this.G(f);else{a:switch(typeof f){case "object":var a=f!=null;break a;case "function":a=!0;break a;default:a=!1}a?this.C(f):this.o(f)}};
-c.prototype.C=function(f){var a=void 0;try{a=f.then}catch(d){this.l(d);return}typeof a=="function"?this.H(a,f):this.o(f)};c.prototype.l=function(f){this.v(2,f)};c.prototype.o=function(f){this.v(1,f)};c.prototype.v=function(f,a){if(this.h!=0)throw Error("Cannot settle("+f+", "+a+"): Promise already settled in state"+this.h);this.h=f;this.i=a;this.h===2&&this.F();this.K()};c.prototype.F=function(){var f=this;l(function(){if(f.B()){var a=w.console;typeof a!=="undefined"&&a.error(f.i)}},1)};c.prototype.B=
-function(){if(this.u)return!1;var f=w.CustomEvent,a=w.Event,d=w.dispatchEvent;if(typeof d==="undefined")return!0;typeof f==="function"?f=new f("unhandledrejection",{cancelable:!0}):typeof a==="function"?f=new a("unhandledrejection",{cancelable:!0}):(f=w.document.createEvent("CustomEvent"),f.initCustomEvent("unhandledrejection",!1,!0,f));f.promise=this;f.reason=this.i;return d(f)};c.prototype.K=function(){if(this.g!=null){for(var f=0;f<this.g.length;++f)m.h(this.g[f]);this.g=null}};var m=new g;c.prototype.G=
-function(f){var a=this.j();f.A(a.resolve,a.reject)};c.prototype.H=function(f,a){var d=this.j();try{f.call(a,d.resolve,d.reject)}catch(e){d.reject(e)}};c.prototype.then=function(f,a){function d(n,r){return typeof n=="function"?function(C){try{e(n(C))}catch(D){k(D)}}:r}var e,k,p=new c(function(n,r){e=n;k=r});this.A(d(f,e),d(a,k));return p};c.prototype.catch=function(f){return this.then(void 0,f)};c.prototype.A=function(f,a){function d(){switch(e.h){case 1:f(e.i);break;case 2:a(e.i);break;default:throw Error("Unexpected state: "+
-e.h);}}var e=this;this.g==null?m.h(d):this.g.push(d);this.u=!0};c.resolve=h;c.reject=function(f){return new c(function(a,d){d(f)})};c.race=function(f){return new c(function(a,d){for(var e=t(f),k=e.next();!k.done;k=e.next())h(k.value).A(a,d)})};c.all=function(f){var a=t(f),d=a.next();return d.done?h([]):new c(function(e,k){function p(C){return function(D){n[C]=D;r--;r==0&&e(n)}}var n=[],r=0;do n.push(void 0),r++,h(d.value).A(p(n.length-1),k),d=a.next();while(!d.done)})};return c});
-function K(b,c){return Object.prototype.hasOwnProperty.call(b,c)}x("Object.is",function(b){return b?b:function(c,g){return c===g?c!==0||1/c===1/g:c!==c&&g!==g}});x("Array.prototype.includes",function(b){return b?b:function(c,g){var h=this;h instanceof String&&(h=String(h));var l=h.length;g=g||0;for(g<0&&(g=Math.max(g+l,0));g<l;g++){var m=h[g];if(m===c||Object.is(m,c))return!0}return!1}});
-x("String.prototype.includes",function(b){return b?b:function(c,g){if(this==null)throw new TypeError("The 'this' value for String.prototype.includes must not be null or undefined");if(c instanceof RegExp)throw new TypeError("First argument to String.prototype.includes must not be a regular expression");return this.indexOf(c,g||0)!==-1}});
-x("WeakMap",function(b){function c(d){this.g=(a+=Math.random()+1).toString();if(d){d=t(d);for(var e;!(e=d.next()).done;)e=e.value,this.set(e[0],e[1])}}function g(){}function h(d){var e=typeof d;return e==="object"&&d!==null||e==="function"}function l(d){if(!K(d,f)){var e=new g;u(d,f,{value:e})}}function m(d){var e=Object[d];e&&(Object[d]=function(k){if(k instanceof g)return k;Object.isExtensible(k)&&l(k);return e(k)})}if(function(){if(!b||!Object.seal)return!1;try{var d=Object.seal({}),e=Object.seal({}),
-k=new b([[d,2],[e,3]]);if(k.get(d)!=2||k.get(e)!=3)return!1;k.delete(d);k.set(e,4);return!k.has(d)&&k.get(e)==4}catch(p){return!1}}())return b;var f="$jscomp_hidden_"+Math.random();m("freeze");m("preventExtensions");m("seal");var a=0;c.prototype.set=function(d,e){if(!h(d))throw Error("Invalid WeakMap key");l(d);if(!K(d,f))throw Error("WeakMap key fail: "+d);d[f][this.g]=e;return this};c.prototype.get=function(d){return h(d)&&K(d,f)?d[f][this.g]:void 0};c.prototype.has=function(d){return h(d)&&K(d,
-f)&&K(d[f],this.g)};c.prototype.delete=function(d){return h(d)&&K(d,f)&&K(d[f],this.g)?delete d[f][this.g]:!1};return c});
-x("Map",function(b){function c(){var a={};return a.m=a.next=a.head=a}function g(a,d){var e=a[1];return J(function(){if(e){for(;e.head!=a[1];)e=e.m;for(;e.next!=e.head;)return e=e.next,{done:!1,value:d(e)};e=null}return{done:!0,value:void 0}})}function h(a,d){var e=d&&typeof d;e=="object"||e=="function"?m.has(d)?e=m.get(d):(e=""+ ++f,m.set(d,e)):e="p_"+d;var k=a[0][e];if(k&&K(a[0],e))for(a=0;a<k.length;a++){var p=k[a];if(d!==d&&p.key!==p.key||d===p.key)return{id:e,list:k,index:a,entry:p}}return{id:e,
-list:k,index:-1,entry:void 0}}function l(a){this[0]={};this[1]=c();this.size=0;if(a){a=t(a);for(var d;!(d=a.next()).done;)d=d.value,this.set(d[0],d[1])}}if(function(){if(!b||typeof b!="function"||!b.prototype.entries||typeof Object.seal!="function")return!1;try{var a=Object.seal({x:4}),d=new b(t([[a,"s"]]));if(d.get(a)!="s"||d.size!=1||d.get({x:4})||d.set({x:4},"t")!=d||d.size!=2)return!1;var e=d.entries(),k=e.next();if(k.done||k.value[0]!=a||k.value[1]!="s")return!1;k=e.next();return k.done||k.value[0].x!=
-4||k.value[1]!="t"||!e.next().done?!1:!0}catch(p){return!1}}())return b;var m=new WeakMap;l.prototype.set=function(a,d){a=a===0?0:a;var e=h(this,a);e.list||(e.list=this[0][e.id]=[]);e.entry?e.entry.value=d:(e.entry={next:this[1],m:this[1].m,head:this[1],key:a,value:d},e.list.push(e.entry),this[1].m.next=e.entry,this[1].m=e.entry,this.size++);return this};l.prototype.delete=function(a){a=h(this,a);return a.entry&&a.list?(a.list.splice(a.index,1),a.list.length||delete this[0][a.id],a.entry.m.next=a.entry.next,
-a.entry.next.m=a.entry.m,a.entry.head=null,this.size--,!0):!1};l.prototype.clear=function(){this[0]={};this[1]=this[1].m=c();this.size=0};l.prototype.has=function(a){return!!h(this,a).entry};l.prototype.get=function(a){return(a=h(this,a).entry)&&a.value};l.prototype.entries=function(){return g(this,function(a){return[a.key,a.value]})};l.prototype.keys=function(){return g(this,function(a){return a.key})};l.prototype.values=function(){return g(this,function(a){return a.value})};l.prototype.forEach=
-function(a,d){for(var e=this.entries(),k;!(k=e.next()).done;)k=k.value,a.call(d,k[1],k[0],this)};l.prototype[Symbol.iterator]=l.prototype.entries;var f=0;return l});
-x("Set",function(b){function c(g){this.g=new Map;if(g){g=t(g);for(var h;!(h=g.next()).done;)this.add(h.value)}this.size=this.g.size}if(function(){if(!b||typeof b!="function"||!b.prototype.entries||typeof Object.seal!="function")return!1;try{var g=Object.seal({x:4}),h=new b(t([g]));if(!h.has(g)||h.size!=1||h.add(g)!=h||h.size!=1||h.add({x:4})!=h||h.size!=2)return!1;var l=h.entries(),m=l.next();if(m.done||m.value[0]!=g||m.value[1]!=g)return!1;m=l.next();return m.done||m.value[0]==g||m.value[0].x!=4||
-m.value[1]!=m.value[0]?!1:l.next().done}catch(f){return!1}}())return b;c.prototype.add=function(g){g=g===0?0:g;this.g.set(g,g);this.size=this.g.size;return this};c.prototype.delete=function(g){g=this.g.delete(g);this.size=this.g.size;return g};c.prototype.clear=function(){this.g.clear();this.size=0};c.prototype.has=function(g){return this.g.has(g)};c.prototype.entries=function(){return this.g.entries()};c.prototype.values=function(){return this.g.values()};c.prototype.keys=c.prototype.values;c.prototype[Symbol.iterator]=
-c.prototype.values;c.prototype.forEach=function(g,h){var l=this;this.g.forEach(function(m){return g.call(h,m,m,l)})};return c});(function(){function b(){return m?Promise.resolve(m):f?f:f=fetch("https://www.gstatic.com/bard-maui/resources/material-design-icon-names.804824289.json").then(function(a){if(!a.ok)throw Error("HTTP error! status: "+a.status+" fetching https://www.gstatic.com/bard-maui/resources/material-design-icon-names.804824289.json");return a.json()}).then(function(a){if(!Array.isArray(a))throw new TypeError("Fetched icon names from https://www.gstatic.com/bard-maui/resources/material-design-icon-names.804824289.json is not an array.");
-return m=a}).catch(function(a){console.error("IconChecker: Failed to load valid icon names from https://www.gstatic.com/bard-maui/resources/material-design-icon-names.804824289.json.",a);f=null;throw a;})}function c(a){var d,e,k,p;return I(new H(new B(function(n){switch(n.h){case 1:d=(a.textContent||"").trim();if(!d||a.classList.contains("js-replaced-missing-icon")&&d==="radio_button_unchecked")return n.return();e=window.getComputedStyle(a);if(e.display==="none"||e.visibility==="hidden")return n.return();
-n.l=2;var r=b();n.h=4;return{value:r};case 4:k=n.u;n.h=3;n.l=0;break;case 2:return n.l=0,n.i=null,console.warn('IconChecker: Skipping check for icon "'+d+'" as valid names could not be loaded.'),n.return();case 3:(p=k.includes(d))?a.classList.contains("js-replaced-missing-icon")&&a.classList.remove("js-replaced-missing-icon"):d==="radio_button_unchecked"&&a.classList.contains("js-replaced-missing-icon")||(a.textContent="radio_button_unchecked",a.classList.add("js-replaced-missing-icon")),n.h=0}})))}
-function g(a){a=a===void 0?document.body:a;a.querySelectorAll(l).forEach(function(d){c(d)})}function h(){b().catch(function(){});document.fonts.ready.then(function(){requestAnimationFrame(function(){g(document.body);(new MutationObserver(function(a){var d=new Set;a=t(a);for(var e=a.next();!e.done;e=a.next())if(e=e.value,e.type==="childList")e.addedNodes.forEach(function(p){p.nodeType===Node.ELEMENT_NODE&&(p.matches(l)&&d.add(p),p.querySelectorAll(l).forEach(function(n){d.add(n)}))});else if(e.type===
-"attributes"&&e.attributeName==="class"){var k=e.target;e.target.nodeType===Node.ELEMENT_NODE&&k.matches(l)&&d.add(k)}else e.type==="characterData"&&e.target.parentNode&&(e=e.target.parentNode,e.nodeType===Node.ELEMENT_NODE&&e.matches(l)&&d.add(e));d.size>0&&setTimeout(function(){d.forEach(function(p){c(p)})},500)})).observe(document.body,{childList:!0,subtree:!0,attributes:!0,attributeFilter:["class"],characterData:!0})})}).catch(function(a){console.error("IconChecker: Font loading error. Scanning icons anyway.",
-a);requestAnimationFrame(function(){g(document.body)})})}var l=["material-icons","material-symbols-outlined","material-symbols-rounded","material-symbols-sharp"].map(function(a){return"."+a}).join(","),m=null,f=null;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",function(){h()}):h()})();}).call(this);
-
-</script>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Best Guess Archive - Interactive Game</title>
+<!-- Google Analytics — replace G-XXXXXXXXXX in Admin Panel, then it activates automatically -->
+<script id="ga-placeholder"></script>
+<!-- Supabase for real-time live viewer count -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            color: #ffffff;
-            background-image: radial-gradient(circle at 50% 0%, #1e1b4b, #0f172a);
-            min-height: 100vh;
-        }
-        .font-display { font-family: 'Oswald', sans-serif; }
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .gold-gradient-text {
-            background: linear-gradient(to bottom, #fde68a, #d97706);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            transition: all 0.2s;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.5);
-        }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #1e293b; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
-        .fade-in { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .timer-bar {
-            height: 4px;
-            background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
-            width: 100%;
-            transform-origin: left;
-        }
-        .clue-stack-enter {
-            animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
-    </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.-inset-1{inset:-0.25rem}.right-4{right:1rem}.top-0{top:0px}.top-4{top:1rem}.z-50{z-index:50}.z-\[60\]{z-index:60}.mx-auto{margin-left:auto;margin-right:auto}.mt-auto{margin-top:auto}.mb-1{margin-bottom:0.25rem}.mt-10{margin-top:2.5rem}.mt-8{margin-top:2rem}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-48{height:12rem}.max-h-\[90vh\]{max-height:90vh}.w-10{width:2.5rem}.w-2{width:0.5rem}.w-full{width:100%}.w-48{width:12rem}.max-w-3xl{max-width:48rem}.max-w-7xl{max-width:80rem}.max-w-2xl{max-width:42rem}.flex-grow{flex-grow:1}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-12 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(3rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(3rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-y-auto{overflow-y:auto}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-md{border-radius:0.375rem}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-4{border-width:4px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.border-yellow-500{--tw-border-opacity:1;border-color:rgb(234 179 8 / var(--tw-border-opacity, 1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-yellow-400{--tw-gradient-from:#facc15 var(--tw-gradient-from-position);--tw-gradient-to:rgb(250 204 21 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.object-cover{object-fit:cover}.p-2{padding:0.5rem}.p-4{padding:1rem}.p-8{padding:2rem}.p-6{padding:1.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.px-8{padding-left:2rem;padding-right:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.text-left{text-align:left}.text-center{text-align:center}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-5xl{font-size:3rem;line-height:1}.text-lg{font-size:1.125rem;line-height:1.75rem}.font-medium{font-weight:500}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.tracking-wider{letter-spacing:0.05em}.tracking-tight{letter-spacing:-0.025em}.tracking-widest{letter-spacing:0.1em}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-500{--tw-text-opacity:1;color:rgb(234 179 8 / var(--tw-text-opacity, 1))}.text-blue-400{--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}.text-green-400{--tw-text-opacity:1;color:rgb(74 222 128 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-yellow-400{--tw-text-opacity:1;color:rgb(250 204 21 / var(--tw-text-opacity, 1))}.opacity-10{opacity:0.1}.opacity-25{opacity:0.25}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.blur{--tw-blur:blur(8px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-1000{transition-duration:1000ms}.duration-300{transition-duration:300ms}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:bg-white\/10:hover{background-color:rgb(255 255 255 / 0.1)}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:opacity-100:hover{opacity:1}.group:hover .group-hover\:rotate-12{--tw-rotate:12deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:opacity-75{opacity:0.75}.group:hover .group-hover\:duration-200{transition-duration:200ms}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}}@media (min-width: 768px){.md\:flex{display:flex}.md\:hidden{display:none}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:text-7xl{font-size:4.5rem;line-height:1}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style></head>
+  body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #fff; background-image: radial-gradient(circle at 50% 0%, #1e1b4b, #0f172a); min-height: 100vh; }
+  .font-display { font-family: 'Oswald', sans-serif; }
+  .glass-panel { background: rgba(30,41,59,.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.1); }
+  .gold-gradient-text { background: linear-gradient(to bottom,#fde68a,#d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .btn-primary { background: linear-gradient(135deg,#3b82f6,#2563eb); transition: all .2s; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,.5); }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #1e293b; }
+  ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+  .fade-in { animation: fadeIn .5s ease-out; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  .timer-bar { height:4px; background:linear-gradient(90deg,#22c55e,#eab308,#ef4444); width:100%; transform-origin:left; }
+  .clue-stack-enter { animation: slideIn .4s cubic-bezier(.16,1,.3,1); }
+  @keyframes slideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+</style>
+</head>
 <body class="flex flex-col">
+
 <!-- Navigation -->
 <nav class="glass-panel sticky top-0 z-50 border-b border-white/10">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex items-center justify-between h-16">
-<div class="flex items-center gap-3 cursor-pointer" onclick="app.setView('home')">
-<img alt="Best Guess Archive Logo" class="h-10 w-10 rounded-full border-2 border-yellow-500 object-cover" src="bestguessarchive.png">
-<span class="font-display text-xl tracking-wider text-white">BEST GUESS <span class="text-yellow-500">ARCHIVE</span></span>
-</div>
-<div class="hidden md:flex space-x-4">
-<button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('home')">Home</button>
-<button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.startRandomGame()">Play</button>
-<button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('database')">Database</button>
-<button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('stats')">Stats</button>
-</div>
-<!-- Mobile Menu Toggle -->
-<button class="md:hidden p-2 text-slate-400 hover:text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
-<span class="material-symbols-outlined">menu</span>
-</button>
-</div>
-</div>
-<!-- Mobile Menu -->
-<div class="hidden md:hidden bg-slate-800 border-t border-slate-700" id="mobile-menu">
-<div class="flex flex-col p-2 space-y-1">
-<button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.setView('home'); document.getElementById('mobile-menu').classList.add('hidden')">Home</button>
-<button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.startRandomGame(); document.getElementById('mobile-menu').classList.add('hidden')">Play</button>
-<button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.setView('database'); document.getElementById('mobile-menu').classList.add('hidden')">Database</button>
-<button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.setView('stats'); document.getElementById('mobile-menu').classList.add('hidden')">Stats</button>
-</div>
-</div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="app.setView('home')">
+        <img src="bestguessarchive.png" alt="Best Guess Archive Logo" class="h-10 w-10 rounded-full border-2 border-yellow-500 object-cover">
+        <span class="font-display text-xl tracking-wider text-white">BEST GUESS <span class="text-yellow-500">ARCHIVE</span></span>
+      </div>
+      <div class="hidden md:flex items-center space-x-1">
+        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('home')">Home</button>
+        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.startRandomGame()">Play</button>
+        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('database')">Database</button>
+        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('stats')">Stats</button>
+        <button class="ml-2 flex items-center gap-1.5 bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-500 hover:to-rose-400 text-white text-xs font-bold px-3 py-1.5 rounded-full transition shadow-lg shadow-pink-900/30" onclick="app.openTipJar()">
+          <span class="material-symbols-outlined" style="font-size:14px;line-height:1">volunteer_activism</span> TIP JAR
+        </button>
+      </div>
+      <!-- Live viewer pill -->
+      <div id="live-pill" class="hidden items-center gap-1.5 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-full">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse inline-block"></span>
+        <span class="text-xs text-slate-300 font-mono" id="live-count">1</span>
+        <span class="text-xs text-slate-500">live</span>
+      </div>
+      <button class="md:hidden p-2 text-slate-400 hover:text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
+  </div>
+  <div class="hidden md:hidden bg-slate-800 border-t border-slate-700" id="mobile-menu">
+    <div class="flex flex-col p-2 space-y-1">
+      <button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.setView('home'); document.getElementById('mobile-menu').classList.add('hidden')">Home</button>
+      <button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.startRandomGame(); document.getElementById('mobile-menu').classList.add('hidden')">Play</button>
+      <button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.setView('database'); document.getElementById('mobile-menu').classList.add('hidden')">Database</button>
+      <button class="px-3 py-2 text-left rounded-md hover:bg-white/10" onclick="app.setView('stats'); document.getElementById('mobile-menu').classList.add('hidden')">Stats</button>
+      <button class="flex items-center gap-2 px-3 py-2 text-left rounded-md bg-gradient-to-r from-pink-900/40 to-rose-900/40 hover:from-pink-900/60 text-pink-300 font-bold" onclick="app.openTipJar(); document.getElementById('mobile-menu').classList.add('hidden')">
+        <span class="material-symbols-outlined text-sm">volunteer_activism</span> KindaCharming's Tip Jar
+      </button>
+    </div>
+  </div>
 </nav>
+
 <!-- Main App Container -->
 <main class="flex-grow container mx-auto px-4 py-8" id="app-container">
-<div class="flex flex-col items-center justify-center space-y-12 fade-in py-10">
-<div class="text-center space-y-6 max-w-3xl">
-<div class="relative inline-block group cursor-pointer" onclick="app.startRandomGame()">
-<div class="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-blue-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-<img alt="Best Guess Logo" class="relative w-48 h-48 mx-auto rounded-full border-4 border-slate-800 shadow-2xl hover:scale-105 transition transform duration-300 object-cover" src="bestguessarchive.png">
-</div>
-<h1 class="text-5xl md:text-7xl font-display font-bold tracking-tight">
-<span class="text-white">THE COMPLETE</span><br>
-<span class="gold-gradient-text">ARCHIVE</span>
-</h1>
-<p class="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto">
-                Relive the intensity. Search every clue, analyze the data, or play a simulation of random old episodes against the clock.
-            </p>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-<div class="glass-panel p-6 rounded-xl text-center">
-<div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Total Prize Money</div>
-<div class="text-3xl font-bold text-green-400 font-display" id="total-money-display">$1,332,222</div>
-</div>
-<div class="glass-panel p-6 rounded-xl text-center">
-<div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Games Archived</div>
-<div class="text-3xl font-bold text-blue-400 font-display" id="total-games-display">40</div>
-</div>
-<div class="glass-panel p-6 rounded-xl text-center">
-<div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Total Winners</div>
-<div class="text-3xl font-bold text-yellow-400 font-display" id="total-winners-display">3,086</div>
-</div>
-</div>
-<div class="flex flex-col sm:flex-row gap-4 justify-center mt-10">
-<button class="btn-primary px-8 py-4 rounded-lg font-bold text-lg flex items-center justify-center gap-2 group" onclick="app.startRandomGame()">
-<span class="material-symbols-outlined group-hover:rotate-12 transition">play_circle</span>
-                    PLAY RANDOM GAME
-                </button>
-<button class="glass-panel px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition flex items-center justify-center gap-2" onclick="app.setView('database')">
-<span class="material-symbols-outlined">database</span>
-                    BROWSE DATABASE
-                </button>
-</div>
-</div>
-</div>
+  <div class="flex items-center justify-center py-20">
+    <div class="text-center text-slate-400">
+      <div class="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      Loading archive...
+    </div>
+  </div>
 </main>
+
 <!-- Footer -->
 <footer class="border-t border-white/10 bg-slate-900 mt-auto pb-safe">
-<div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-slate-400 text-sm gap-4">
-<p>Fan-made archive. Not affiliated with Netflix or Best Guess Live.</p>
-<div class="flex items-center gap-4">
-<div class="flex items-center gap-2">
-<span class="w-2 h-2 rounded-full bg-green-500" id="status-indicator"></span>
-<span id="data-source-status">Live Data Active</span>
-</div>
-<!-- Hidden Button to View Source -->
-<button class="opacity-10 hover:opacity-100 transition-opacity p-2 text-slate-500 hover:text-white" onclick="app.viewSource()" title="View HTML">
-<span class="material-symbols-outlined text-sm">code</span>
-</button>
-</div>
-</div>
+  <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-slate-400 text-sm gap-4">
+    <p>Fan-made archive. Not affiliated with Netflix or Best Guess Live.</p>
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-slate-500" id="status-indicator"></span>
+        <span id="data-source-status">Loading...</span>
+      </div>
+      <!-- Subtle admin button -->
+      <button class="opacity-10 hover:opacity-100 transition-opacity p-2 text-slate-500 hover:text-white" onclick="app.setView('admin')" title="Admin">
+        <span class="material-symbols-outlined text-sm">admin_panel_settings</span>
+      </button>
+    </div>
+  </div>
 </footer>
-<!-- TEMPLATES -->
-<!-- Home View -->
+
+<!-- ==================== TEMPLATES ==================== -->
+
+<!-- HOME -->
 <template id="view-home">
 <div class="flex flex-col items-center justify-center space-y-12 fade-in py-10">
-<div class="text-center space-y-6 max-w-3xl">
-<div class="relative inline-block group cursor-pointer" onclick="app.startRandomGame()">
-<div class="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-blue-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-<img alt="Best Guess Logo" class="relative w-48 h-48 mx-auto rounded-full border-4 border-slate-800 shadow-2xl hover:scale-105 transition transform duration-300 object-cover" src="bestguessarchive.png">
-</div>
-<h1 class="text-5xl md:text-7xl font-display font-bold tracking-tight">
-<span class="text-white">THE COMPLETE</span><br>
-<span class="gold-gradient-text">ARCHIVE</span>
-</h1>
-<p class="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto">
-                Relive the intensity. Search every clue, analyze the data, or play a simulation of random old episodes against the clock.
-            </p>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-<div class="glass-panel p-6 rounded-xl text-center">
-<div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Total Prize Money</div>
-<div class="text-3xl font-bold text-green-400 font-display" id="total-money-display">...</div>
-</div>
-<div class="glass-panel p-6 rounded-xl text-center">
-<div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Games Archived</div>
-<div class="text-3xl font-bold text-blue-400 font-display" id="total-games-display">...</div>
-</div>
-<div class="glass-panel p-6 rounded-xl text-center">
-<div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Total Winners</div>
-<div class="text-3xl font-bold text-yellow-400 font-display" id="total-winners-display">...</div>
-</div>
-</div>
-<div class="flex flex-col sm:flex-row gap-4 justify-center mt-10">
-<button class="btn-primary px-8 py-4 rounded-lg font-bold text-lg flex items-center justify-center gap-2 group" onclick="app.startRandomGame()">
-<span class="material-symbols-outlined group-hover:rotate-12 transition">play_circle</span>
-                    PLAY RANDOM GAME
-                </button>
-<button class="glass-panel px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition flex items-center justify-center gap-2" onclick="app.setView('database')">
-<span class="material-symbols-outlined">database</span>
-                    BROWSE DATABASE
-                </button>
-</div>
-</div>
+  <div class="text-center space-y-6 max-w-3xl">
+    <div class="relative inline-block group cursor-pointer" onclick="app.startRandomGame()">
+      <div class="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-blue-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+      <img src="bestguessarchive.png" alt="Best Guess Logo" class="relative w-48 h-48 mx-auto rounded-full border-4 border-slate-800 shadow-2xl hover:scale-105 transition transform duration-300 object-cover">
+    </div>
+    <h1 class="text-5xl md:text-7xl font-display font-bold tracking-tight">
+      <span class="text-white">THE COMPLETE</span><br>
+      <span class="gold-gradient-text">ARCHIVE</span>
+    </h1>
+    <p class="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto">
+      Relive the intensity. Search every clue, analyze the data, or play a simulation of random old episodes against the clock.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+      <div class="glass-panel p-6 rounded-xl text-center">
+        <div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Total Prize Money</div>
+        <div class="text-3xl font-bold text-green-400 font-display" id="total-money-display">...</div>
+      </div>
+      <div class="glass-panel p-6 rounded-xl text-center">
+        <div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Games Archived</div>
+        <div class="text-3xl font-bold text-blue-400 font-display" id="total-games-display">...</div>
+      </div>
+      <div class="glass-panel p-6 rounded-xl text-center">
+        <div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Total Winners</div>
+        <div class="text-3xl font-bold text-yellow-400 font-display" id="total-winners-display">...</div>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+      <button class="btn-primary px-8 py-4 rounded-lg font-bold text-lg flex items-center justify-center gap-2 group" onclick="app.startRandomGame()">
+        <span class="material-symbols-outlined group-hover:rotate-12 transition">play_circle</span>
+        PLAY RANDOM GAME
+      </button>
+      <button class="glass-panel px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition flex items-center justify-center gap-2" onclick="app.setView('database')">
+        <span class="material-symbols-outlined">database</span>
+        BROWSE DATABASE
+      </button>
+    </div>
+
+    <!-- Tip Jar -->
+    <div class="mt-10 w-full max-w-md mx-auto">
+      <div class="relative rounded-2xl overflow-hidden border border-pink-500/30 shadow-xl shadow-pink-950/40 bg-gradient-to-br from-slate-800 via-slate-800 to-pink-950/40">
+        <div class="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-rose-500/5 pointer-events-none"></div>
+        <div class="relative p-6 text-center space-y-3">
+          <div class="flex items-center justify-center gap-2 mb-1">
+            <span class="material-symbols-outlined text-pink-400 text-3xl">volunteer_activism</span>
+          </div>
+          <h3 class="font-display text-2xl font-bold tracking-wide text-white">KindaCharming's <span class="text-pink-400">Tip Jar</span></h3>
+          <p class="text-slate-400 text-sm">Love the archive? Help keep it running! Every tip is appreciated. 💖</p>
+          <div class="flex flex-col sm:flex-row gap-3 justify-center mt-4">
+            <a id="tip-cashapp" href="#" target="_blank" rel="noopener noreferrer"
+              class="flex items-center justify-center gap-2 bg-[#00D64F] hover:bg-[#00c047] text-black font-bold px-6 py-3 rounded-xl transition shadow-lg shadow-green-900/30 text-sm">
+              <svg width="18" height="18" viewBox="0 0 48 48" fill="currentColor"><path d="M36.3 7.1L40.9 11.7C41.7 12.5 41.7 13.8 40.9 14.6L38.3 17.2C39.5 20.1 39.8 23.2 39.1 26.3L42.9 30.1C43.7 30.9 43.7 32.2 42.9 33L38.3 37.6C37.5 38.4 36.2 38.4 35.4 37.6L31.6 33.8C28.5 34.5 25.4 34.2 22.5 33L19.9 35.6C19.1 36.4 17.8 36.4 17 35.6L12.4 31C11.6 30.2 11.6 28.9 12.4 28.1L15 25.5C13.8 22.6 13.5 19.5 14.2 16.4L10.4 12.6C9.6 11.8 9.6 10.5 10.4 9.7L15 5.1C15.8 4.3 17.1 4.3 17.9 5.1L21.7 8.9C24.8 8.2 27.9 8.5 30.8 9.7L33.4 7.1C34.2 6.3 35.5 6.3 36.3 7.1ZM24 16C19.6 16 16 19.6 16 24C16 28.4 19.6 32 24 32C28.4 32 32 28.4 32 24C32 19.6 28.4 16 24 16Z"/></svg>
+              Cash App
+            </a>
+            <a id="tip-paypal" href="#" target="_blank" rel="noopener noreferrer"
+              class="flex items-center justify-center gap-2 bg-[#003087] hover:bg-[#002070] text-white font-bold px-6 py-3 rounded-xl transition shadow-lg shadow-blue-900/30 text-sm">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 4.643-5.813 4.643H12.55c-.526 0-.974.382-1.056.9l-1.188 7.528-.339 2.158a.67.67 0 0 0 .663.776h3.498c.459 0 .85-.334.922-.787l.038-.196.731-4.63.047-.256a.932.932 0 0 1 .921-.788h.58c3.76 0 6.701-1.528 7.559-5.946.36-1.847.174-3.388-.685-4.115z"/></svg>
+              PayPal
+            </a>
+          </div>
+          <p class="text-[11px] text-slate-600 mt-2">Links open in a new tab · All tips go directly to the creator</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 </template>
-<!-- Play View -->
+
+<!-- PLAY -->
 <template id="view-play">
-<div class="max-w-3xl mx-auto fade-in h-full flex flex-col relative min-h-screen">
-<!-- Game Header -->
-<div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-slate-900/50 p-4 rounded-xl border border-white/5 sticky top-16 z-30 backdrop-blur-md shadow-lg">
-<button class="text-slate-400 hover:text-white flex items-center gap-1 text-sm font-bold transition" onclick="app.exitGame()">
-<span class="material-symbols-outlined">close</span> QUIT
-            </button>
-<div class="text-center">
-<div class="text-[10px] text-slate-500 uppercase tracking-widest">Archive Date</div>
-<div class="text-white font-bold text-sm md:text-base" id="game-date">Loading...</div>
+<!-- Game layout — fills viewport, no page scroll during play -->
+<div id="play-game-layout" class="flex flex-col">
+  <!-- Header bar -->
+  <div class="flex-shrink-0 flex items-center justify-between gap-3 px-4 py-2 border-b border-white/10 bg-slate-900/70 backdrop-blur-sm">
+    <button class="text-slate-400 hover:text-white flex items-center gap-1 text-xs font-bold transition shrink-0" onclick="app.exitGame()">
+      <span class="material-symbols-outlined" style="font-size:18px;line-height:1">close</span> QUIT
+    </button>
+    <div class="text-center min-w-0 flex-grow">
+      <div class="text-white font-semibold text-xs md:text-sm truncate" id="game-date">Loading...</div>
+      <div class="text-[10px] text-slate-500" id="play-rules-hint">One guess only.</div>
+    </div>
+    <div class="text-right shrink-0">
+      <div class="text-[9px] text-green-500 uppercase tracking-widest" id="pot-label">Pot</div>
+      <div class="text-green-400 font-mono font-bold text-sm leading-tight" id="game-pot">$0</div>
+    </div>
+  </div>
+
+  <!-- Past clues — compact, always visible, scrollable if somehow they overflow -->
+  <div class="flex-shrink-0 px-3 pt-2 pb-1 space-y-1.5 overflow-y-auto" style="max-height:35%" id="past-clues"></div>
+
+  <!-- Active clue — takes all remaining height, vertically centered -->
+  <div class="flex-grow flex items-center justify-center px-3 py-2 min-h-0" id="active-clue-area">
+    <div class="text-slate-500 text-sm">Preparing...</div>
+  </div>
+
+  <!-- Input bar — always at bottom, part of normal flow (not fixed) -->
+  <div class="flex-shrink-0 border-t border-white/10 bg-slate-900/80 backdrop-blur-md px-3 pt-3 pb-4" id="input-container" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
+    <div class="relative mb-2">
+      <input autocomplete="off" id="guess-input" type="text"
+        class="w-full bg-slate-800 border border-slate-600 rounded-lg py-3 pl-4 pr-28 text-base text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+        placeholder="Your best guess..."
+        onkeydown="if(event.key==='Enter') app.submitGuess()">
+      <button class="absolute right-2 top-1.5 bottom-1.5 bg-green-600 hover:bg-green-500 text-white font-bold px-4 rounded text-sm transition flex items-center gap-1" onclick="app.submitGuess()">
+        <span class="material-symbols-outlined" style="font-size:16px;line-height:1">check</span> LOCK IN
+      </button>
+    </div>
+    <div class="flex justify-end">
+      <button class="text-slate-400 hover:text-white flex items-center gap-1 text-xs transition" onclick="app.nextClue()">
+        SKIP CLUE <span class="material-symbols-outlined" style="font-size:14px;line-height:1">skip_next</span>
+      </button>
+    </div>
+  </div>
 </div>
-<div class="bg-green-900/20 px-4 py-2 rounded-lg border border-green-500/20">
-<div class="text-[10px] text-green-500 uppercase tracking-widest text-center">Prize Pot</div>
-<div class="text-green-400 font-mono font-bold text-lg" id="game-pot">$0</div>
-</div>
-</div>
-<!-- Clue Stack Container -->
-<div class="space-y-4 mb-40 flex-grow" id="clues-container">
-<!-- Clues injected here dynamically -->
-</div>
-<!-- Fixed Input Area -->
-<div class="fixed bottom-0 left-0 right-0 p-4 bg-slate-900/95 border-t border-white/10 backdrop-blur-lg z-40 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.5)] transition-transform duration-300" id="input-container">
-<div class="max-w-3xl mx-auto space-y-3" id="input-section">
-<div class="relative">
-<input autocomplete="off" class="w-full bg-slate-800 border border-slate-600 rounded-lg py-4 px-6 text-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition shadow-xl" id="guess-input" onkeydown="if(event.key === 'Enter') app.submitGuess()" placeholder="Type your best guess..." type="text">
-<div class="absolute right-2 top-2 bottom-2 flex gap-2">
-<button class="bg-green-600 hover:bg-green-500 text-white font-bold px-6 rounded-md transition shadow-lg flex items-center gap-2" onclick="app.submitGuess()">
-<span class="material-symbols-outlined">check</span> LOCK IN
-                        </button>
-</div>
-</div>
-<div class="flex justify-between items-center text-xs text-slate-500 px-2">
-<span>One guess only. Payout requires winning on the correct clue.</span>
-<button class="text-slate-400 hover:text-white flex items-center gap-1 transition" onclick="app.nextClue()">
-                        SKIP / NEXT CLUE <span class="material-symbols-outlined text-sm">skip_next</span>
-</button>
-</div>
-</div>
-</div>
-<!-- Result Screen -->
-<div class="hidden text-center space-y-8 py-10 fade-in pb-32" id="game-state-result">
-<div class="material-symbols-outlined text-8xl mb-4 animate-bounce" id="result-icon">emoji_events</div>
-<h2 class="text-4xl font-display font-bold text-white" id="result-title"></h2>
-<p class="text-xl text-slate-300 max-w-lg mx-auto" id="result-message"></p>
-<!-- Result Details Card -->
-<div class="glass-panel p-8 rounded-xl max-w-md mx-auto border border-white/10 shadow-2xl">
-<div class="text-xs text-slate-400 uppercase tracking-widest mb-2">The Secret Answer</div>
-<div class="text-4xl font-bold text-white font-display text-blue-400 tracking-wide mb-6" id="result-answer">ANSWER</div>
-<!-- Comparison Table -->
-<div class="bg-slate-900/50 rounded-lg p-4 text-left text-sm space-y-3">
-<div class="flex justify-between border-b border-white/5 pb-2">
-<span class="text-slate-400">Winning Clue:</span>
-<span class="text-white font-bold" id="result-winning-clue">Clue X</span>
-</div>
-<div class="flex justify-between border-b border-white/5 pb-2">
-<span class="text-slate-400">Actual Winners:</span>
-<span class="text-white font-bold" id="result-winner-count">0</span>
-</div>
-<div class="flex justify-between border-b border-white/5 pb-2">
-<span class="text-slate-400">Real Payout:</span>
-<span class="text-green-400 font-mono font-bold" id="result-real-payout">$0</span>
-</div>
-<div class="pt-1">
-<span class="text-slate-400 block text-xs mb-1">Winner Names:</span>
-<span class="text-slate-300 italic leading-snug" id="result-winner-names">None</span>
-</div>
-</div>
-</div>
-<div class="glass-panel p-6 rounded-xl text-left text-sm text-slate-300 space-y-4 max-w-xl mx-auto">
-<h3 class="font-bold text-white border-b border-white/10 pb-2 flex items-center gap-2">
-<span class="material-symbols-outlined text-yellow-500 text-sm">lightbulb</span> 
-                    Host's Explanation
-                </h3>
-<p class="italic text-lg text-slate-200 leading-relaxed" id="result-explanation">...</p>
-<div class="mt-4 pt-4 border-t border-white/5">
-<span class="text-xs text-slate-500 uppercase tracking-widest block mb-1">Host</span>
-<span class="text-white font-medium" id="result-host">Loading...</span>
-</div>
-</div>
-<button class="btn-primary px-8 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-blue-500/20" onclick="app.startRandomGame()">
-                Play Another Round
-            </button>
-</div>
+
+<!-- Result screen — shown after game ends, normal scrollable page layout -->
+<div class="hidden max-w-xl mx-auto text-center space-y-6 py-10 px-4 pb-20 fade-in" id="game-state-result">
+  <div class="material-symbols-outlined text-8xl mb-4 animate-bounce" id="result-icon">emoji_events</div>
+  <h2 class="text-5xl font-display font-bold" id="result-title"></h2>
+  <p class="text-xl text-slate-300 max-w-lg mx-auto" id="result-message"></p>
+  <div class="glass-panel p-6 rounded-xl border border-white/10 shadow-2xl">
+    <div class="text-xs text-slate-400 uppercase tracking-widest mb-2">The Secret Answer</div>
+    <div class="text-4xl font-bold font-display text-blue-400 tracking-wide mb-6" id="result-answer">ANSWER</div>
+    <div class="bg-slate-900/50 rounded-lg p-4 text-left text-sm space-y-3" id="result-stats-table"></div>
+  </div>
+  <div class="glass-panel p-6 rounded-xl text-left text-sm text-slate-300 space-y-4">
+    <h3 class="font-bold text-white border-b border-white/10 pb-2 flex items-center gap-2">
+      <span class="material-symbols-outlined text-yellow-500 text-sm">lightbulb</span>
+      Host's Explanation
+    </h3>
+    <p class="italic text-lg text-slate-200 leading-relaxed" id="result-explanation">...</p>
+    <div class="mt-4 pt-4 border-t border-white/5">
+      <span class="text-xs text-slate-500 uppercase tracking-widest block mb-1">Host</span>
+      <span class="text-white font-medium" id="result-host">Loading...</span>
+    </div>
+  </div>
+  <button class="btn-primary px-8 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-blue-500/20" onclick="app.startRandomGame()">
+    Play Another Round
+  </button>
 </div>
 </template>
-<!-- Database View -->
+
+<!-- DATABASE -->
 <template id="view-database">
 <div class="space-y-6 fade-in pb-20">
-<div class="flex flex-col md:flex-row justify-between items-center gap-4">
-<h2 class="text-3xl font-display font-bold">Game <span class="text-blue-500">Archive</span></h2>
-<div class="relative w-full md:w-96">
-<span class="material-symbols-outlined absolute left-3 top-3 text-slate-400">search</span>
-<input class="w-full bg-slate-800 border border-slate-700 rounded-full py-2 pl-10 pr-4 text-white focus:outline-none focus:border-blue-500" id="db-search" onkeyup="app.filterDatabase()" placeholder="Search item, date, or host..." type="text">
-</div>
-</div>
-<div class="glass-panel rounded-xl overflow-hidden shadow-xl border border-slate-700">
-<div class="overflow-x-auto">
-<table class="w-full text-left text-sm text-slate-300">
-<thead class="bg-slate-900/80 text-xs uppercase font-medium text-slate-400 sticky top-0">
-<tr>
-<th class="px-6 py-4 cursor-pointer hover:text-white" onclick="app.sortDatabase('date')">Date ↕</th>
-<th class="px-6 py-4">Secret Item</th>
-<th class="px-6 py-4 cursor-pointer hover:text-white" onclick="app.sortDatabase('pot')">Prize Pot ↕</th>
-<th class="px-6 py-4 text-center">Winning Clue</th>
-<th class="px-6 py-4 text-center">Winners</th>
-<th class="px-6 py-4">Host</th>
-<th class="px-6 py-4 text-right">Details</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-slate-700/50" id="db-table-body"></tbody>
-</table>
-</div>
-<div class="bg-slate-900/50 px-6 py-3 text-xs text-slate-500 flex justify-between items-center">
-<span id="db-count-display">Loading database...</span>
-</div>
-</div>
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+    <h2 class="text-3xl font-display font-bold">Game <span class="text-blue-500">Archive</span></h2>
+    <div class="relative w-full md:w-96">
+      <span class="material-symbols-outlined absolute left-3 top-3 text-slate-400">search</span>
+      <input id="db-search" type="text" onkeyup="app.filterDatabase()"
+        class="w-full bg-slate-800 border border-slate-700 rounded-full py-2 pl-10 pr-4 text-white focus:outline-none focus:border-blue-500"
+        placeholder="Search item, date, or host...">
+    </div>
+  </div>
+  <div class="glass-panel rounded-xl overflow-hidden shadow-xl border border-slate-700">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-slate-300">
+        <thead class="bg-slate-900/80 text-xs uppercase font-medium text-slate-400 sticky top-0">
+          <tr>
+            <th class="px-6 py-4 cursor-pointer hover:text-white" onclick="app.sortDatabase('date')">Date ↕</th>
+            <th class="px-6 py-4">Secret Item</th>
+            <th class="px-6 py-4 cursor-pointer hover:text-white" onclick="app.sortDatabase('pot')">Pot ↕</th>
+            <th class="px-6 py-4 text-center">Format</th>
+            <th class="px-6 py-4 text-center">Medal Clues</th>
+            <th class="px-6 py-4 text-center">Winners</th>
+            <th class="px-6 py-4">Host</th>
+            <th class="px-6 py-4 text-right">Details</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-700/50" id="db-table-body"></tbody>
+      </table>
+    </div>
+    <div class="bg-slate-900/50 px-6 py-3 text-xs text-slate-500 flex justify-between items-center">
+      <span id="db-count-display">Loading database...</span>
+    </div>
+  </div>
 </div>
 </template>
-<!-- Stats View -->
+
+<!-- STATS -->
 <template id="view-stats">
 <div class="fade-in space-y-8 pb-20">
-<h2 class="text-3xl font-display font-bold mb-6">Archive <span class="text-yellow-500">Statistics</span></h2>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-<div class="glass-panel p-6 rounded-xl border-t-4 border-red-500">
-<h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-red-500">dangerous</span>
-                    Hardest Games
-                </h3>
-<p class="text-xs text-slate-400 mb-4">Games solved on later clues or with few winners.</p>
-<ul class="space-y-3" id="stats-hardest-list"></ul>
-</div>
-<div class="glass-panel p-6 rounded-xl border-t-4 border-green-500">
-<h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-green-500">check_circle</span>
-                    Most Winners
-                </h3>
-<p class="text-xs text-slate-400 mb-4">Games with the highest number of correct guesses.</p>
-<ul class="space-y-3" id="stats-easiest-list"></ul>
-</div>
-<div class="glass-panel p-8 rounded-xl md:col-span-2">
-<h3 class="text-xl font-bold text-white mb-6 border-b border-white/10 pb-2">Host Breakdown</h3>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-<div class="text-center p-4 bg-slate-800/50 rounded-lg">
-<div class="text-4xl font-bold text-blue-400 mb-1" id="stat-hunter-games">0</div>
-<div class="text-sm text-slate-400 uppercase tracking-widest">Hunter March</div>
-</div>
-<div class="text-center p-4 bg-slate-800/50 rounded-lg">
-<div class="text-4xl font-bold text-purple-400 mb-1" id="stat-howie-games">0</div>
-<div class="text-sm text-slate-400 uppercase tracking-widest">Howie Mandel</div>
-</div>
-<div class="text-center p-4 bg-slate-800/50 rounded-lg">
-<div class="text-4xl font-bold text-green-400 mb-1" id="stat-avg-payout">$0</div>
-<div class="text-sm text-slate-400 uppercase tracking-widest">Avg Payout</div>
-</div>
-</div>
-</div>
-</div>
+  <h2 class="text-3xl font-display font-bold mb-6">Archive <span class="text-yellow-500">Statistics</span></h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="glass-panel p-6 rounded-xl border-t-4 border-red-500">
+      <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-red-500">dangerous</span> Hardest Games
+      </h3>
+      <p class="text-xs text-slate-400 mb-4">Games where winners weren't crowned until the latest clues.</p>
+      <ul class="space-y-3" id="stats-hardest-list"></ul>
+    </div>
+    <div class="glass-panel p-6 rounded-xl border-t-4 border-green-500">
+      <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-green-500">check_circle</span> Most Winners
+      </h3>
+      <p class="text-xs text-slate-400 mb-4">Games with the highest total number of correct guesses.</p>
+      <ul class="space-y-3" id="stats-easiest-list"></ul>
+    </div>
+    <div class="glass-panel p-8 rounded-xl md:col-span-2">
+      <h3 class="text-xl font-bold text-white mb-6 border-b border-white/10 pb-2">Breakdown</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center p-4 bg-slate-800/50 rounded-lg">
+          <div class="text-4xl font-bold text-blue-400 mb-1" id="stat-hunter-games">0</div>
+          <div class="text-sm text-slate-400 uppercase tracking-widest">Hunter March</div>
+        </div>
+        <div class="text-center p-4 bg-slate-800/50 rounded-lg">
+          <div class="text-4xl font-bold text-purple-400 mb-1" id="stat-howie-games">0</div>
+          <div class="text-sm text-slate-400 uppercase tracking-widest">Howie Mandel</div>
+        </div>
+        <div class="text-center p-4 bg-slate-800/50 rounded-lg">
+          <div class="text-4xl font-bold text-yellow-400 mb-1" id="stat-v2-games">0</div>
+          <div class="text-sm text-slate-400 uppercase tracking-widest">New Format (v2)</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 </template>
+
+<!-- ADMIN -->
+<template id="view-admin">
+<div class="max-w-2xl mx-auto fade-in py-10 space-y-6">
+  <h2 class="text-3xl font-display font-bold">Admin <span class="text-yellow-500">Panel</span></h2>
+
+  <!-- PIN Gate -->
+  <div id="admin-pin-gate" class="glass-panel p-8 rounded-xl space-y-4">
+    <p class="text-slate-400 text-sm">Enter admin PIN to continue.</p>
+    <input id="admin-pin-input" type="password" maxlength="8"
+      class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-yellow-500"
+      placeholder="PIN"
+      onkeydown="if(event.key==='Enter') app.checkPin()">
+    <button class="btn-primary px-6 py-2 rounded-lg font-bold" onclick="app.checkPin()">Unlock</button>
+    <p class="text-red-400 text-sm hidden" id="admin-pin-error">Incorrect PIN.</p>
+  </div>
+
+  <!-- Admin Workspace (hidden until PIN correct) -->
+  <div id="admin-workspace" class="space-y-6 hidden">
+
+    <!-- GitHub Settings -->
+    <div class="glass-panel p-6 rounded-xl space-y-4">
+      <h3 class="font-bold text-white flex items-center gap-2">
+        <span class="material-symbols-outlined text-blue-400">settings</span> GitHub Settings
+        <span class="text-xs text-slate-500 font-normal ml-2">(stored in localStorage — never committed)</span>
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">GitHub Owner</label>
+          <input id="gh-owner" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500" placeholder="jeremydbean">
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">GitHub Repo</label>
+          <input id="gh-repo" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500" placeholder="best-guess-archive">
+        </div>
+        <div class="md:col-span-2">
+          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Personal Access Token (contents:write scope only)</label>
+          <input id="gh-pat" type="password" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500" placeholder="ghp_...">
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="text-sm bg-slate-700 hover:bg-slate-600 text-white font-bold px-4 py-2 rounded" onclick="app.saveGhSettings()">Save Settings</button>
+        <span class="text-green-400 text-xs hidden" id="gh-save-ok">Saved!</span>
+      </div>
+    </div>
+
+    <!-- Import -->
+    <div class="glass-panel p-6 rounded-xl space-y-4">
+      <h3 class="font-bold text-white flex items-center gap-2">
+        <span class="material-symbols-outlined text-green-400">upload</span> Import New Game(s)
+      </h3>
+      <p class="text-sm text-slate-400">Paste the JSON array from your Gemini pipeline below. One or two game objects per episode are fine. New games will be prepended to <code class="bg-slate-800 px-1 rounded text-xs">data/games.json</code> and committed to GitHub. The site rebuilds in ~30 seconds.</p>
+
+      <!-- Schema reference -->
+      <details class="text-xs text-slate-500 cursor-pointer">
+        <summary class="hover:text-slate-300 transition select-none">▶ Show expected JSON schema (copy this prompt for Gemini)</summary>
+        <div class="mt-3 bg-slate-900/70 rounded-lg p-4 border border-slate-700 space-y-3">
+          <p class="text-slate-300 text-xs">Tell Gemini: <em>"Parse this Best Guess Live transcript and return a JSON array matching this schema exactly:"</em></p>
+          <pre class="overflow-x-auto text-slate-300 text-[11px] leading-relaxed">[
+  {
+    "date": "Monday, April 14, 2026",
+    "pot": 7500,
+    "format": "v2",
+    "host": "Hunter March",
+    "secretItem": "EXAMPLE ITEM",
+    "clues": [
+      { "text": "CLUE TEXT", "correct": "5", "guesses": "6,000", "explanation": "Host explanation here." },
+      { "text": "CLUE TEXT", "correct": "10", "guesses": "5,000", "explanation": "Host explanation here." },
+      { "text": "CLUE TEXT", "correct": "50", "guesses": "4,000", "explanation": "Host explanation here." },
+      { "text": "CLUE TEXT", "correct": "100", "guesses": "3,000", "explanation": "Host explanation here." },
+      { "text": "CLUE TEXT", "correct": "1000", "guesses": "2,000", "explanation": "Host explanation here." }
+    ],
+    "goldClue": 1,
+    "silverClue": 2,
+    "bronzeClue": 3,
+    "goldWinners": 5,
+    "silverWinners": 10,
+    "bronzeWinners": 50,
+    "totalWinners": 65,
+    "goldPayout": 600.00,
+    "silverPayout": 250.00,
+    "bronzePayout": 40.00,
+    "winnerPayout": "$7,500.00",
+    "winnerNames": "Winner One, Winner Two",
+    "wrongGuesses": "wrong guess 1, wrong guess 2"
+  }
+]
+
+NOTE: Use format "v1" for older episodes with a single winning clue.
+For v1, set goldClue to the winning clue number; set silverClue/bronzeClue/goldWinners/silverWinners/bronzeWinners to 0.
+pot is 5000 for round 1 and 10000 for round 2 in v1 episodes.</pre>
+        </div>
+      </details>
+
+      <textarea id="import-json" rows="10"
+        class="w-full bg-slate-800 border border-slate-700 rounded-lg p-4 text-slate-200 font-mono text-xs focus:outline-none focus:border-green-500"
+        placeholder='[{"date":"Monday, April 14, 2026","secretItem":"EXAMPLE",...}]'></textarea>
+
+      <div class="flex gap-3 flex-wrap">
+        <button class="bg-blue-700 hover:bg-blue-600 text-white font-bold px-4 py-2 rounded text-sm" onclick="app.previewImport()">
+          Preview
+        </button>
+        <button class="bg-green-700 hover:bg-green-600 text-white font-bold px-4 py-2 rounded text-sm disabled:opacity-40 disabled:cursor-not-allowed" id="btn-publish" onclick="app.publishImport()" disabled>
+          Publish to GitHub
+        </button>
+      </div>
+
+      <!-- Preview panel -->
+      <div id="import-preview" class="hidden space-y-3"></div>
+      <!-- Status -->
+      <div id="import-status" class="hidden text-sm font-medium px-4 py-2 rounded"></div>
+    </div>
+
+    <!-- Tip Jar Links -->
+    <div class="glass-panel p-6 rounded-xl space-y-4 border-t-2 border-pink-500/40">
+      <h3 class="font-bold text-white flex items-center gap-2">
+        <span class="material-symbols-outlined text-pink-400">volunteer_activism</span> Tip Jar Links
+        <span class="text-xs text-slate-500 font-normal ml-2">(stored in localStorage)</span>
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Cash App URL</label>
+          <input id="tip-cashapp-url" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-pink-500" placeholder="https://cash.app/$YourName">
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">PayPal URL</label>
+          <input id="tip-paypal-url" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-pink-500" placeholder="https://paypal.me/YourName">
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="text-sm bg-pink-700 hover:bg-pink-600 text-white font-bold px-4 py-2 rounded" onclick="app.saveTipLinks()">Save Links</button>
+        <span class="text-green-400 text-xs hidden" id="tip-save-ok">Saved!</span>
+      </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <div class="glass-panel p-6 rounded-xl space-y-4 border-t-2 border-orange-500/40">
+      <h3 class="font-bold text-white flex items-center gap-2">
+        <span class="material-symbols-outlined text-orange-400">analytics</span> Google Analytics
+        <span class="text-xs text-slate-500 font-normal ml-2">(stored in localStorage)</span>
+      </h3>
+      <details class="text-xs text-slate-400 cursor-pointer">
+        <summary class="hover:text-slate-300 transition select-none font-semibold">▶ How to get your Measurement ID (step-by-step)</summary>
+        <ol class="mt-3 space-y-2 text-slate-300 list-decimal list-inside leading-relaxed">
+          <li>Go to <strong>analytics.google.com</strong> and sign in.</li>
+          <li>In the left sidebar, click <strong>Admin</strong> (gear icon, bottom left).</li>
+          <li>Under <em>Property</em>, click <strong>Data Streams</strong>.</li>
+          <li>Click your web stream (or create one — choose <em>Web</em>, enter your GitHub Pages URL like <code class="bg-slate-800 px-1 rounded">https://jeremydbean.github.io/best-guess-archive</code>).</li>
+          <li>Your <strong>Measurement ID</strong> starts with <code class="bg-slate-800 px-1 rounded">G-</code> and looks like <code class="bg-slate-800 px-1 rounded">G-ABC123XYZ</code>. Copy it.</li>
+          <li>Paste it below and click Save. The GA script activates automatically on the next page load — no code editing needed.</li>
+        </ol>
+      </details>
+      <div class="flex gap-3 items-end">
+        <div class="flex-grow">
+          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Measurement ID</label>
+          <input id="ga-measurement-id" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm font-mono focus:outline-none focus:border-orange-500" placeholder="G-XXXXXXXXXX">
+        </div>
+        <button class="text-sm bg-orange-700 hover:bg-orange-600 text-white font-bold px-4 py-2 rounded shrink-0" onclick="app.saveGaId()">Save &amp; Activate</button>
+      </div>
+      <div id="ga-status" class="text-xs text-slate-500"></div>
+    </div>
+
+    <!-- Supabase Live Counter -->
+    <div class="glass-panel p-6 rounded-xl space-y-4 border-t-2 border-cyan-500/40">
+      <h3 class="font-bold text-white flex items-center gap-2">
+        <span class="material-symbols-outlined text-cyan-400">sensors</span> Live Viewer Counter
+        <span class="text-xs text-slate-500 font-normal ml-2">(Supabase Realtime — stored in localStorage)</span>
+      </h3>
+      <details class="text-xs text-slate-400 cursor-pointer">
+        <summary class="hover:text-slate-300 transition select-none font-semibold">▶ How to set up Supabase (free, 5 minutes)</summary>
+        <ol class="mt-3 space-y-2 text-slate-300 list-decimal list-inside leading-relaxed">
+          <li>Go to <strong>supabase.com</strong> → click <em>Start for Free</em> → sign in with GitHub.</li>
+          <li>Click <strong>New Project</strong>. Name it anything (e.g. <em>best-guess</em>). Choose a region close to your audience. Click <em>Create</em>. Wait ~1 min for it to provision.</li>
+          <li>In your project, go to <strong>Settings → API</strong>.</li>
+          <li>Copy the <strong>Project URL</strong> (looks like <code class="bg-slate-800 px-1 rounded">https://xxxx.supabase.co</code>) and the <strong>anon public key</strong> (a long JWT string).</li>
+          <li>Paste both below and click Save. The live counter pill will appear in the top-right nav automatically — no deploy needed.</li>
+          <li><em>Note: Supabase free tier allows up to 500 concurrent connections. More than enough for this site.</em></li>
+        </ol>
+      </details>
+      <div class="grid grid-cols-1 gap-3">
+        <div>
+          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Supabase Project URL</label>
+          <input id="sb-url" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm font-mono focus:outline-none focus:border-cyan-500" placeholder="https://xxxxxxxxxxxx.supabase.co">
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Supabase Anon Public Key</label>
+          <input id="sb-key" type="text" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm font-mono focus:outline-none focus:border-cyan-500" placeholder="eyJhbGci...">
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="text-sm bg-cyan-700 hover:bg-cyan-600 text-white font-bold px-4 py-2 rounded" onclick="app.saveSupabaseSettings()">Save &amp; Connect</button>
+        <span id="sb-status" class="text-xs text-slate-500"></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</template>
+
 <!-- Modal -->
-<div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4" id="modal-backdrop" onclick="if(event.target===this) app.closeModal()">
-<div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl relative fade-in">
-<button class="absolute top-4 right-4 text-slate-400 hover:text-white" onclick="app.closeModal()">
-<span class="material-symbols-outlined">close</span>
-</button>
-<div class="p-8" id="modal-content"></div>
+<div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4"
+  id="modal-backdrop" onclick="if(event.target===this) app.closeModal()">
+  <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl relative fade-in">
+    <button class="absolute top-4 right-4 text-slate-400 hover:text-white" onclick="app.closeModal()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="p-8" id="modal-content"></div>
+  </div>
 </div>
-</div>
+
 <script>
-const FALLBACK_CSV_HISTORY = `"Date (Day, Month DD, YYYY)",Prize Pot,Clue 1 (Correct / Guesses),Clue 2 (Correct / Guesses),Clue 3 (Correct / Guesses),Clue 4 (Correct / Guesses),Clue 5 (Correct / Guesses),Secret Item,Winning Clue,Number of Winners,Winner Payout,Total Players (approx.),Winner Names
-"Friday, January 2, 2026","$5,000","UNIVERSALLY RECOGNIZED (0 / 10,168)","ACCESSIBLE BY LAND AND BY SEA (0 / 13,871)","START APART FINISH TOGETHER (3 / 13,450)","THE ANSWER IS USUALLY BLACK AND WHITE (95 / 6,787)","A DELECTABLE DUO TO ENHANCE YOUR SOUP AND STEW (14,160 / 22,100)",SALT AND PEPPER,3,3,"$1,666.66","80,000","Reader47, Sassy Lolli724, Katon Htx"`;
+// ============================================================
+// ADMIN PIN
+// SHA-256 of the PIN. Default PIN is "1234".
+// To change: open browser console and run:
+//   crypto.subtle.digest('SHA-256',new TextEncoder().encode('YOURPIN'))
+//     .then(b=>console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
+// Then update ADMIN_PIN_HASH below and commit.
+const ADMIN_PIN_HASH = '9071cdd9b1455951925e4a5ebbcb248fecc6e9028feac5bfd7f38d9bc2f1bf37'; // SHA-256("132025")
 
-const FALLBACK_CSV_EXPLANATIONS = `Date,Secret Item,Clue 1 - Host's Explanation,Clue 2 - Host's Explanation,Clue 3 - Host's Explanation,Clue 4 - Host's Explanation,Clue 5 - Host's Explanation,Host's Name,Popular Wrong Guesses
-"Friday, January 2, 2026",SALT AND PEPPER,"...","...","...","...","...",Howie Mandel,"Minions*, Mario*"`;
+async function sha256hex(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2,'0')).join('');
+}
 
+// ============================================================
 class App {
-    constructor() {
-        this.games = [];
-        this.currentGame = null;
-        this.currentClueIndex = 0;
-        this.timer = null;
-        this.init();
+  constructor() {
+    this.games = [];
+    this.currentGame = null;
+    this.currentClueIndex = 0;
+    this.timer = null;
+    this._pendingGames = null;
+    this.init();
+  }
+
+  async init() {
+    try {
+      const res = await fetch('./data/games.json');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      this.games = await res.json();
+      document.getElementById('status-indicator').className = 'w-2 h-2 rounded-full bg-green-500';
+      document.getElementById('data-source-status').innerText = `${this.games.length} games loaded`;
+    } catch (err) {
+      console.error('Could not load games.json:', err);
+      document.getElementById('status-indicator').className = 'w-2 h-2 rounded-full bg-red-500';
+      document.getElementById('data-source-status').innerText = 'Data load failed';
     }
+    this._initGA();
+    this._initSupabase();
+    this.setView('home');
+  }
 
-    async init() {
-        const spreadsheetId = '1BprC9IhVhs-EDCkoLuF0U8nRZEJE5o6QBt21i3HUwLE';
-        // URL for fetching CSV by sheet name
-        const urlHistory = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=Clues%20%26%20Answers`;
-        const urlExpl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=Explanations%20%26%20Wrong%20Guesses`;
-
-        try {
-            const [respHistory, respExpl] = await Promise.all([fetch(urlHistory), fetch(urlExpl)]);
-            if (respHistory.ok && respExpl.ok) {
-                const textHistory = await respHistory.text();
-                const textExpl = await respExpl.text();
-                this.processData(textHistory, textExpl);
-                document.getElementById('status-indicator').className = 'w-2 h-2 rounded-full bg-green-500';
-                document.getElementById('data-source-status').innerText = 'Live Data Active';
-            } else throw new Error("Network error");
-        } catch (error) {
-            console.warn("Using fallback data", error);
-            this.processData(FALLBACK_CSV_HISTORY, FALLBACK_CSV_EXPLANATIONS);
-            document.getElementById('status-indicator').className = 'w-2 h-2 rounded-full bg-yellow-500';
-            document.getElementById('data-source-status').innerText = 'Offline/Fallback Data';
-        }
+  // Google Analytics — loads if a measurement ID is saved in localStorage
+  _initGA() {
+    const id = localStorage.getItem('ga_measurement_id') || 'G-YYGK3MHH26';
+    if (!id || !id.startsWith('G-')) return;
+    const s = document.getElementById('ga-placeholder');
+    if (s) {
+      s.outerHTML = `<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"><\/script>`;
     }
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', id);
+  }
 
-    parseCSV(text) {
-        const rows = [];
-        let row = [];
-        let inQuote = false;
-        let currentCell = '';
-        for (let i = 0; i < text.length; i++) {
-            const char = text[i];
-            const nextChar = text[i + 1];
-            if (char === '"') {
-                if (inQuote && nextChar === '"') { currentCell += '"'; i++; }
-                else { inQuote = !inQuote; }
-            } else if (char === ',' && !inQuote) {
-                row.push(currentCell); currentCell = '';
-            } else if ((char === '\r' || char === '\n') && !inQuote) {
-                if (currentCell || row.length > 0) { row.push(currentCell); rows.push(row); row = []; currentCell = ''; }
-                if (char === '\r' && nextChar === '\n') i++;
-            } else { currentCell += char; }
-        }
-        if (currentCell || row.length > 0) { row.push(currentCell); rows.push(row); }
-        return rows;
-    }
-
-    // UPDATED NORMALIZATION: Removes leading 'the', 'a', 'an' and all non-alphanumeric chars
-    normalizeKey(str) {
-        if (!str) return '';
-        let s = str.toLowerCase();
-        s = s.replace(/^(the|a|an)\s+/g, ''); // Strip leading articles
-        s = s.replace(/['"”’]/g, ''); // Strip quotes to handle smart quotes issue
-        return s.replace(/[^a-z0-9]/g, ''); // Strip remaining non-alphanumeric
-    }
-
-    processData(csvHistory, csvExpl) {
-        const historyData = this.parseCSV(csvHistory).slice(1);
-        const explData = this.parseCSV(csvExpl).slice(1);
-        const explMap = {};
-        
-        explData.forEach(row => {
-            if(row.length < 2) return;
-            const clean = (str) => str ? str.replace(/^"|"$/g, '') : '';
-            const rawKey = clean(row[1]); // Secret Item
-            const key = this.normalizeKey(rawKey); 
-            
-            explMap[key] = {
-                clues: [row[2], row[3], row[4], row[5], row[6]].map(clean),
-                host: clean(row[7]),
-                wrongGuesses: clean(row[8])
-            };
+  // Supabase Realtime Presence — shows live viewer count in nav
+  _initSupabase() {
+    const url = localStorage.getItem('sb_url');
+    const key = localStorage.getItem('sb_key');
+    if (!url || !key || typeof window.supabase === 'undefined') return;
+    try {
+      const client = window.supabase.createClient(url, key);
+      const uid = Math.random().toString(36).slice(2);
+      const channel = client.channel('site-presence', { config: { presence: { key: uid } } });
+      channel
+        .on('presence', { event: 'sync' }, () => {
+          const state = channel.presenceState();
+          const count = Object.keys(state).length;
+          const pill = document.getElementById('live-pill');
+          const ct = document.getElementById('live-count');
+          if (pill && ct) {
+            ct.innerText = count;
+            pill.classList.remove('hidden');
+            pill.classList.add('flex');
+          }
+        })
+        .subscribe(async (status) => {
+          if (status === 'SUBSCRIBED') {
+            await channel.track({ online_at: new Date().toISOString() });
+          }
         });
+      this._sbChannel = channel;
+    } catch(e) {
+      console.warn('Supabase presence failed:', e);
+    }
+  }
 
-        this.games = historyData.map(row => {
-            if (row.length < 8) return null;
-            const clean = (str) => str ? str.replace(/^"|"$/g, '') : '';
-            const secretItem = clean(row[7]);
-            const key = this.normalizeKey(secretItem);
-            
-            // Fallback: If strict key fails, provide defaults but try to find it via date if possible (omitted for speed)
-            const expl = explMap[key] || { clues: ["","","","",""], host: "Unknown", wrongGuesses: "N/A" };
-            
-            const clues = [];
-            for (let i = 2; i <= 6; i++) {
-                const raw = clean(row[i]);
-                const match = raw.match(/^(.*)\s\((.*)\s\/\s(.*)\)$/);
-                clues.push({
-                    text: match ? match[1].trim() : raw.replace(/\(N\/A.*?\)/, '').trim(),
-                    correct: match ? match[2].trim() : "N/A",
-                    guesses: match ? match[3].trim() : "N/A",
-                    explanation: expl.clues[i-2] || "No explanation available."
-                });
-            }
+  // ==================== VIEWS ====================
+  setView(name) {
+    const tpl = document.getElementById(`view-${name}`);
+    if (!tpl) return;
+    const container = document.getElementById('app-container');
+    container.innerHTML = tpl.innerHTML;
+    // Play mode: fill the viewport with no padding so the layout is self-contained
+    if (name === 'play') {
+      container.style.padding = '0';
+      container.style.overflow = 'hidden';
+      // Size the game layout to fill remaining viewport below the nav (64px)
+      const layout = document.getElementById('play-game-layout');
+      if (layout) {
+        layout.style.height = 'calc(100dvh - 64px)';
+        layout.style.maxWidth = '48rem'; // max-w-3xl equivalent
+        layout.style.margin = '0 auto';
+      }
+    } else {
+      container.style.padding = '';
+      container.style.overflow = '';
+    }
+    window.scrollTo(0, 0);
+    if (name === 'home')     { this.renderHomeStats(); this._applyTipLinks(); }
+    if (name === 'database') this.renderDatabase();
+    if (name === 'stats')    this.renderStats();
+    if (name === 'admin')    this.initAdmin();
+  }
 
-            return {
-                date: clean(row[0]),
-                pot: parseFloat(clean(row[1]).replace(/[$,]/g, '')) || 0,
-                clues: clues,
-                secretItem: secretItem,
-                winningClue: parseInt(clean(row[8])),
-                winnerCount: parseInt(clean(row[9]).replace(/,/g,'')) || 0,
-                winnerPayout: clean(row[10]),
-                winnerNames: clean(row[12]) || "None/Not Listed",
-                host: expl.host,
-                wrongGuesses: expl.wrongGuesses
-            };
-        }).filter(g => g !== null);
+  // ==================== HOME ====================
+  renderHomeStats() {
+    if (!this.games.length) return;
+    const totalPot     = this.games.reduce((a, g) => a + g.pot, 0);
+    const totalWinners = this.games.reduce((a, g) => a + (g.totalWinners || g.winnerCount || 0), 0);
+    setTimeout(() => {
+      const m = document.getElementById('total-money-display');
+      const g = document.getElementById('total-games-display');
+      const w = document.getElementById('total-winners-display');
+      if (m) m.innerText = '$' + totalPot.toLocaleString();
+      if (g) g.innerText = this.games.length;
+      if (w) w.innerText = totalWinners.toLocaleString();
+    }, 50);
+  }
 
-        this.renderHomeStats();
-        this.setView('home');
+  // Default tip URLs (overridden by admin settings if saved)
+  _tipDefaults() {
+    return {
+      cashapp: localStorage.getItem('tip_cashapp') || 'https://cash.app/$JeremyBean',
+      paypal:  localStorage.getItem('tip_paypal')  || 'https://paypal.me/KindaCharming'
+    };
+  }
+
+  // Apply saved tip links to the home page cards
+  _applyTipLinks() {
+    const { cashapp, paypal } = this._tipDefaults();
+    const cashApp = cashapp;
+    const pp      = paypal;
+    setTimeout(() => {
+      const ca = document.getElementById('tip-cashapp');
+      const ppEl = document.getElementById('tip-paypal');
+      if (ca) ca.href = cashApp;
+      if (ppEl) ppEl.href = pp;
+    }, 50);
+  }
+
+  // Tip jar modal — opens from nav button
+  openTipJar() {
+    const { cashapp: cashApp, paypal } = this._tipDefaults();
+    document.getElementById('modal-backdrop').classList.remove('hidden');
+    document.getElementById('modal-content').innerHTML = `
+      <div class="text-center space-y-5">
+        <div class="flex justify-center">
+          <span class="material-symbols-outlined text-pink-400" style="font-size:56px">volunteer_activism</span>
+        </div>
+        <h2 class="font-display text-3xl font-bold text-white">KindaCharming's <span class="text-pink-400">Tip Jar</span></h2>
+        <p class="text-slate-400 max-w-sm mx-auto text-sm leading-relaxed">
+          This archive is a fan-made labor of love — tracking every episode, every clue, every winner.
+          If it brings you joy, consider leaving a tip! 💖
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center mt-2">
+          <a href="${cashApp}" target="_blank" rel="noopener noreferrer"
+            class="flex items-center justify-center gap-2 bg-[#00D64F] hover:bg-[#00c047] text-black font-bold px-8 py-4 rounded-xl transition shadow-lg text-base">
+            <svg width="20" height="20" viewBox="0 0 48 48" fill="currentColor"><path d="M36.3 7.1L40.9 11.7C41.7 12.5 41.7 13.8 40.9 14.6L38.3 17.2C39.5 20.1 39.8 23.2 39.1 26.3L42.9 30.1C43.7 30.9 43.7 32.2 42.9 33L38.3 37.6C37.5 38.4 36.2 38.4 35.4 37.6L31.6 33.8C28.5 34.5 25.4 34.2 22.5 33L19.9 35.6C19.1 36.4 17.8 36.4 17 35.6L12.4 31C11.6 30.2 11.6 28.9 12.4 28.1L15 25.5C13.8 22.6 13.5 19.5 14.2 16.4L10.4 12.6C9.6 11.8 9.6 10.5 10.4 9.7L15 5.1C15.8 4.3 17.1 4.3 17.9 5.1L21.7 8.9C24.8 8.2 27.9 8.5 30.8 9.7L33.4 7.1C34.2 6.3 35.5 6.3 36.3 7.1ZM24 16C19.6 16 16 19.6 16 24C16 28.4 19.6 32 24 32C28.4 32 32 28.4 32 24C32 19.6 28.4 16 24 16Z"/></svg>
+            Cash App
+          </a>
+          <a href="${paypal}" target="_blank" rel="noopener noreferrer"
+            class="flex items-center justify-center gap-2 bg-[#003087] hover:bg-[#002070] text-white font-bold px-8 py-4 rounded-xl transition shadow-lg text-base">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 4.643-5.813 4.643H12.55c-.526 0-.974.382-1.056.9l-1.188 7.528-.339 2.158a.67.67 0 0 0 .663.776h3.498c.459 0 .85-.334.922-.787l.038-.196.731-4.63.047-.256a.932.932 0 0 1 .921-.788h.58c3.76 0 6.701-1.528 7.559-5.946.36-1.847.174-3.388-.685-4.115z"/></svg>
+            PayPal
+          </a>
+        </div>
+        <p class="text-xs text-slate-600 pt-2">Links open in a new tab · Thank you so much! 🙏</p>
+      </div>`;
+  }
+
+  // ==================== PLAY ====================
+  startRandomGame() {
+    if (this.timer) clearTimeout(this.timer);
+    this.setView('play');
+    const idx = Math.floor(Math.random() * this.games.length);
+    this.currentGame = this.games[idx];
+    this.currentClueIndex = 0;
+
+    document.getElementById('game-date').innerText = this.currentGame.date;
+
+    const potEl   = document.getElementById('game-pot');
+    const labelEl = document.getElementById('pot-label');
+    if (this.currentGame.format === 'v2') {
+      potEl.innerHTML   = `$${this.currentGame.pot.toLocaleString()}<div class="text-[10px] text-slate-400 mt-0.5">🥇$3K · 🥈$2.5K · 🥉$2K</div>`;
+      labelEl.innerText = 'Prize Pot';
+    } else {
+      potEl.innerText   = '$' + this.currentGame.pot.toLocaleString();
+      labelEl.innerText = 'Prize Pot';
     }
 
-    setView(viewName) {
-        const container = document.getElementById('app-container');
-        const template = document.getElementById(`view-${viewName}`);
-        if (template) {
-            container.innerHTML = template.innerHTML;
-            window.scrollTo(0,0);
-            if(viewName==='database') this.renderDatabase();
-            if(viewName==='stats') this.renderStats();
-            if(viewName==='home') this.renderHomeStats();
-        }
+    const hint = document.getElementById('play-rules-hint');
+    if (hint) hint.innerText = this.currentGame.format === 'v2'
+      ? 'Win gold on earliest clue · silver next · bronze third'
+      : 'One guess only. Earliest correct clue takes the pot.';
+
+    this.renderGameLoop();
+  }
+
+  exitGame() {
+    if (this.timer) clearTimeout(this.timer);
+    this.setView('home');
+  }
+
+  renderGameLoop() {
+    const g = this.currentGame;
+    const ci = this.currentClueIndex;
+
+    // Past clues — compact rows, always visible above active clue
+    const pastEl = document.getElementById('past-clues');
+    if (pastEl) {
+      pastEl.innerHTML = '';
+      for (let j = 0; j < ci; j++) {
+        const div = document.createElement('div');
+        div.className = 'flex items-start gap-2 bg-slate-800/50 rounded-lg px-3 py-2 border border-slate-700/40';
+        div.innerHTML = `<span class="flex-shrink-0 text-[10px] font-bold text-slate-400 bg-slate-700 px-1.5 py-0.5 rounded leading-tight mt-0.5">C${j+1}</span>
+          <span class="text-slate-300 text-sm leading-snug">${g.clues[j].text}</span>`;
+        pastEl.appendChild(div);
+      }
+      pastEl.scrollTop = pastEl.scrollHeight;
     }
 
-    renderHomeStats() {
-        if (!this.games.length) return;
-        const totalPot = this.games.reduce((acc, g) => acc + g.pot, 0);
-        const totalWinners = this.games.reduce((acc, g) => acc + g.winnerCount, 0);
-        setTimeout(() => {
-            if(document.getElementById('total-money-display')) document.getElementById('total-money-display').innerText = '$' + totalPot.toLocaleString();
-            if(document.getElementById('total-games-display')) document.getElementById('total-games-display').innerText = this.games.length;
-            if(document.getElementById('total-winners-display')) document.getElementById('total-winners-display').innerText = totalWinners.toLocaleString();
-        }, 100);
+    // Active clue card — takes the remaining space
+    const activeEl = document.getElementById('active-clue-area');
+    if (!activeEl) return;
+
+    activeEl.innerHTML = `
+      <div class="w-full bg-slate-800 rounded-2xl border-2 border-blue-500 shadow-2xl overflow-hidden clue-stack-enter">
+        <div class="px-5 pt-5 pb-4">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs font-bold text-blue-400 bg-blue-900/30 px-2 py-1 rounded">CLUE ${ci+1} of 5</span>
+            <span class="text-xs font-mono text-white/40" id="timer-text-${ci}"></span>
+          </div>
+          <div id="loading-state-${ci}" class="flex flex-col items-center justify-center py-8 gap-3">
+            <div class="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+            <span class="text-blue-400 font-display tracking-widest text-sm animate-pulse">INCOMING TRANSMISSION...</span>
+          </div>
+          <div id="text-state-${ci}" class="hidden py-2">
+            <h2 class="text-2xl md:text-3xl font-bold text-white leading-tight text-center">${g.clues[ci].text}</h2>
+          </div>
+        </div>
+        <div class="h-1.5 w-full bg-slate-700">
+          <div id="timer-bar-${ci}" class="h-full bg-blue-500 w-full"></div>
+        </div>
+      </div>`;
+
+    this.timer = setTimeout(() => {
+      const loading = document.getElementById(`loading-state-${ci}`);
+      const text = document.getElementById(`text-state-${ci}`);
+      if (loading) loading.classList.add('hidden');
+      if (text) text.classList.remove('hidden');
+      const wordCount = g.clues[ci].text.split(/\s+/).length;
+      const secs = Math.max(10, Math.min(30, Math.ceil(8 + wordCount * 0.8)));
+      this.runClueTimer(
+        secs,
+        document.getElementById(`timer-bar-${ci}`),
+        document.getElementById(`timer-text-${ci}`)
+      );
+    }, 1500);
+  }
+
+  runClueTimer(seconds, barEl, textEl) {
+    barEl.style.transition = 'none';
+    barEl.style.width = '100%';
+    barEl.classList.add('timer-bar');
+    barEl.offsetHeight; // force reflow
+    barEl.style.transition = `width ${seconds}s linear`;
+    barEl.style.width = '0%';
+
+    let remaining = seconds;
+    if (textEl) textEl.innerText = remaining + 's';
+    const interval = setInterval(() => {
+      remaining--;
+      if (textEl) textEl.innerText = remaining + 's';
+      if (remaining <= 0) clearInterval(interval);
+    }, 1000);
+
+    this.timer = setTimeout(() => {
+      clearInterval(interval);
+      this.nextClue();
+    }, seconds * 1000);
+  }
+
+  nextClue() {
+    if (this.timer) clearTimeout(this.timer);
+    if (this.currentClueIndex < 4) {
+      this.currentClueIndex++;
+      this.renderGameLoop();
+    } else {
+      this.endGame(false, "Time's up! You ran out of clues.");
     }
+  }
 
-    startRandomGame() {
-        if(this.timer) clearTimeout(this.timer);
-        this.setView('play');
-        const randomIndex = Math.floor(Math.random() * this.games.length);
-        this.currentGame = this.games[randomIndex];
-        this.currentClueIndex = 0;
-        
-        document.getElementById('game-date').innerText = this.currentGame.date;
-        document.getElementById('game-pot').innerText = '$' + this.currentGame.pot.toLocaleString();
-        
-        this.renderGameLoop();
-    }
+  submitGuess() {
+    if (this.timer) clearTimeout(this.timer);
+    const input = document.getElementById('guess-input').value.trim();
+    if (!input) return;
 
-    exitGame() {
-        if(this.timer) clearTimeout(this.timer);
-        this.setView('home');
-    }
+    const guess  = input.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const answer = this.currentGame.secretItem.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-    renderGameLoop() {
-        const container = document.getElementById('clues-container');
-        container.innerHTML = ''; 
-        
-        for (let i = 0; i <= this.currentClueIndex; i++) {
-            const isCurrent = (i === this.currentClueIndex);
-            const clue = this.currentGame.clues[i];
-            
-            const clueEl = document.createElement('div');
-            clueEl.className = isCurrent 
-                ? "relative bg-slate-800 rounded-xl border-2 border-blue-500 shadow-xl overflow-hidden transition-all duration-500 clue-stack-enter"
-                : "relative bg-slate-900/40 rounded-lg border border-slate-700/50 p-4 opacity-75 grayscale-[0.5]";
-            
-            if (isCurrent) {
-                clueEl.innerHTML = `
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-xs font-bold text-blue-400 bg-blue-900/30 px-2 py-1 rounded">CLUE ${i+1} of 5</span>
-                            <span class="text-xs font-mono text-white/50" id="timer-text-${i}">Waiting...</span>
-                        </div>
-                        <div id="loading-state-${i}" class="flex flex-col items-center justify-center py-8 gap-3">
-                            <div class="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-                            <span class="text-blue-400 font-display tracking-widest text-sm animate-pulse">INCOMING TRANSMISSION...</span>
-                        </div>
-                        <div id="text-state-${i}" class="hidden">
-                            <h2 class="text-2xl md:text-3xl font-bold text-white leading-tight text-center py-4">${clue.text}</h2>
-                        </div>
-                    </div>
-                    <div class="h-1 w-full bg-slate-700 absolute bottom-0 left-0">
-                        <div id="timer-bar-${i}" class="h-full bg-blue-500 w-full"></div>
-                    </div>
-                `;
-            } else {
-                clueEl.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-[10px] font-bold text-slate-500 uppercase">Clue ${i+1}</span>
-                            <p class="text-base text-slate-300 font-medium">${clue.text}</p>
-                        </div>
-                        <span class="material-symbols-outlined text-slate-600 text-lg">check_circle</span>
-                    </div>
-                `;
-            }
-            container.appendChild(clueEl);
-        }
+    if (guess === answer) {
+      const n = this.currentClueIndex + 1;
+      const g = this.currentGame;
 
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-
-        const loading = document.getElementById(`loading-state-${this.currentClueIndex}`);
-        const textDiv = document.getElementById(`text-state-${this.currentClueIndex}`);
-        const timerBar = document.getElementById(`timer-bar-${this.currentClueIndex}`);
-        const timerText = document.getElementById(`timer-text-${this.currentClueIndex}`);
-
-        this.timer = setTimeout(() => {
-            loading.classList.add('hidden');
-            textDiv.classList.remove('hidden');
-            
-            // Calculate dynamic duration based on word count
-            const currentClueText = this.currentGame.clues[this.currentClueIndex].text;
-            const wordCount = currentClueText.split(/\s+/).length;
-            const calculatedTime = Math.max(10, Math.min(30, Math.ceil(8 + (wordCount * 0.8))));
-            
-            this.runClueTimer(calculatedTime, timerBar, timerText);
-        }, 3000);
-    }
-
-    runClueTimer(seconds, barEl, textEl) {
-        barEl.style.transition = 'none';
-        barEl.style.width = '100%';
-        barEl.classList.add('timer-bar');
-        barEl.offsetHeight; 
-        barEl.style.transition = `width ${seconds}s linear`;
-        barEl.style.width = '0%';
-        
-        let remaining = seconds;
-        textEl.innerText = remaining + 's';
-
-        const interval = setInterval(() => {
-            remaining--;
-            if(textEl) textEl.innerText = remaining + 's';
-            if(remaining <= 0) clearInterval(interval);
-        }, 1000);
-
-        this.timer = setTimeout(() => {
-            clearInterval(interval);
-            this.nextClue();
-        }, seconds * 1000);
-    }
-
-    nextClue() {
-        if(this.timer) clearTimeout(this.timer);
-        if (this.currentClueIndex < 4) {
-            this.currentClueIndex++;
-            this.renderGameLoop();
+      if (g.format === 'v2') {
+        const { goldClue, silverClue, bronzeClue, goldWinners, silverWinners, bronzeWinners } = g;
+        const lastMedalClue = bronzeClue || silverClue || goldClue;
+        if (n < goldClue) {
+          this.endGame(true, `You solved it before any real winners! Gold wasn't cracked until Clue ${goldClue}. You'd win the entire $3,000 gold pot solo!`, 3000, 'gold');
+        } else if (n === goldClue) {
+          const share = 3000 / (Number(goldWinners) + 1);
+          this.endGame(true, `🥇 Gold! You matched ${Number(goldWinners).toLocaleString()} real gold winner${goldWinners != 1 ? 's' : ''} on Clue ${goldClue}. You'd be winner #${(Number(goldWinners)+1).toLocaleString()}!`, share, 'gold');
+        } else if (silverClue && n === silverClue) {
+          const share = 2500 / (Number(silverWinners) + 1);
+          this.endGame(true, `🥈 Silver! You matched ${Number(silverWinners).toLocaleString()} silver winner${silverWinners != 1 ? 's' : ''} on Clue ${silverClue}. You'd share the $2,500 silver pot!`, share, 'silver');
+        } else if (bronzeClue && n === bronzeClue) {
+          const share = 2000 / (Number(bronzeWinners) + 1);
+          this.endGame(true, `🥉 Bronze! You matched ${Number(bronzeWinners).toLocaleString()} bronze winner${bronzeWinners != 1 ? 's' : ''} on Clue ${bronzeClue}. You'd share the $2,000 bronze pot!`, share, 'bronze');
+        } else if (n < lastMedalClue) {
+          this.endGame(false, `Correct answer, wrong clue! You guessed on Clue ${n}, but medal tiers were set at Clue ${goldClue} (🥇 gold)${silverClue ? ', Clue ' + silverClue + ' (🥈 silver)' : ''}${bronzeClue ? ', Clue ' + bronzeClue + ' (🥉 bronze)' : ''}. You needed to hold your guess for a medal clue.`);
         } else {
-            this.endGame(false, "Time's up! You ran out of clues.");
+          this.endGame(false, `You were right, but too late! All medals were awarded by Clue ${lastMedalClue}. You answered on Clue ${n}.`);
         }
-    }
-
-    submitGuess() {
-        if(this.timer) clearTimeout(this.timer);
-        const input = document.getElementById('guess-input').value.trim();
-        if(!input) return;
-
-        const guess = input.toLowerCase().replace(/[^a-z0-9]/g, '');
-        const answer = this.currentGame.secretItem.toLowerCase().replace(/[^a-z0-9]/g, '');
-
-        if (guess === answer) {
-            const guessedClueNum = this.currentClueIndex + 1;
-            const winningClueNum = this.currentGame.winningClue;
-            
-            if (guessedClueNum > winningClueNum) {
-                this.endGame(false, `You were right! But a bit late! The game actually ended on Clue ${winningClueNum}.`);
-            } else if (guessedClueNum < winningClueNum) {
-                 this.endGame(true, `You got it early! In the real game, players didn't solve it until Clue ${winningClueNum}. You win the Pot!`, this.currentGame.pot);
-            } else {
-                const realWinners = this.currentGame.winnerCount;
-                const newTotalWinners = realWinners + 1;
-                const myShare = this.currentGame.pot / newTotalWinners;
-                
-                let message = `Correct! You matched the real winners on Clue ${winningClueNum}. `;
-                message += `There were ${realWinners.toLocaleString()} real winners. You would have been winner #${newTotalWinners.toLocaleString()}!`;
-                
-                this.endGame(true, message, myShare);
-            }
+      } else {
+        const winningClue = g.winningClue || g.goldClue;
+        const winnerCount = g.totalWinners || g.winnerCount || 0;
+        if (n > winningClue) {
+          this.endGame(false, `You were right! But too late — the game ended on Clue ${winningClue}.`);
+        } else if (n < winningClue) {
+          this.endGame(true, `You got it early! Real players didn't solve it until Clue ${winningClue}. You win the whole pot!`, g.pot);
         } else {
-            this.endGame(false, `"${input}" was incorrect.`);
+          const share = g.pot / (winnerCount + 1);
+          this.endGame(true, `Correct! You matched the ${winnerCount.toLocaleString()} real winner${winnerCount !== 1 ? 's' : ''} on Clue ${winningClue}. You'd be winner #${(winnerCount+1).toLocaleString()}!`, share);
         }
+      }
+    } else {
+      this.endGame(false, `"${input}" was incorrect.`);
+    }
+  }
+
+  endGame(won, message, amount = 0, medal = null) {
+    // Hide the fixed-height game layout, restore normal page flow for the result
+    const layout = document.getElementById('play-game-layout');
+    if (layout) layout.classList.add('hidden');
+    const container = document.getElementById('app-container');
+    container.style.padding = '';
+    container.style.overflow = '';
+    document.getElementById('game-state-result').classList.remove('hidden');
+    window.scrollTo(0, 0);
+
+    const colors = { gold: 'text-yellow-400', silver: 'text-slate-300', bronze: 'text-orange-400' };
+    const winColor = medal ? colors[medal] : 'text-green-400';
+
+    document.getElementById('result-title').innerText = won ? (medal ? `YOU WIN ${medal.toUpperCase()}!` : 'YOU WON!') : 'GAME OVER';
+    document.getElementById('result-title').className = won
+      ? `text-5xl font-display font-bold ${winColor}`
+      : 'text-5xl font-display font-bold text-red-500';
+    document.getElementById('result-icon').innerText = won ? 'emoji_events' : 'cancel';
+    document.getElementById('result-icon').className = won
+      ? `material-symbols-outlined text-8xl mb-4 animate-bounce ${winColor}`
+      : 'material-symbols-outlined text-8xl mb-4 text-red-500';
+
+    document.getElementById('result-message').innerHTML =
+      `${message}<br><span class="text-white font-bold block mt-4 text-2xl">Your Payout: $${amount.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</span>`;
+
+    document.getElementById('result-answer').innerText = this.currentGame.secretItem;
+
+    const g = this.currentGame;
+    const fmt = s => Number(s).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    const statsEl = document.getElementById('result-stats-table');
+    if (g.format === 'v2') {
+      statsEl.innerHTML = `
+        <div class="flex justify-between border-b border-white/5 pb-2">
+          <span class="text-yellow-400 font-bold">🥇 Gold — Clue ${g.goldClue}</span>
+          <span class="text-white">${Number(g.goldWinners).toLocaleString()} winner${g.goldWinners != 1 ? 's' : ''} · $${fmt(g.goldPayout)} each</span>
+        </div>
+        <div class="flex justify-between border-b border-white/5 pb-2">
+          <span class="text-slate-300 font-bold">🥈 Silver — Clue ${g.silverClue}</span>
+          <span class="text-white">${Number(g.silverWinners).toLocaleString()} winner${g.silverWinners != 1 ? 's' : ''} · $${fmt(g.silverPayout)} each</span>
+        </div>
+        <div class="flex justify-between border-b border-white/5 pb-2">
+          <span class="text-orange-400 font-bold">🥉 Bronze — Clue ${g.bronzeClue}</span>
+          <span class="text-white">${Number(g.bronzeWinners).toLocaleString()} winner${g.bronzeWinners != 1 ? 's' : ''} · $${fmt(g.bronzePayout)} each</span>
+        </div>
+        <div class="flex justify-between border-b border-white/5 pb-2">
+          <span class="text-slate-400">Total Winners</span>
+          <span class="text-white font-bold">${Number(g.totalWinners || 0).toLocaleString()}</span>
+        </div>
+        <div class="pt-1">
+          <span class="text-slate-400 block text-xs mb-1">Winner Names</span>
+          <span class="text-slate-300 italic">${g.winnerNames || 'None listed'}</span>
+        </div>`;
+    } else {
+      statsEl.innerHTML = `
+        <div class="flex justify-between border-b border-white/5 pb-2">
+          <span class="text-slate-400">Winning Clue</span>
+          <span class="text-white font-bold">Clue ${g.winningClue || g.goldClue}</span>
+        </div>
+        <div class="flex justify-between border-b border-white/5 pb-2">
+          <span class="text-slate-400">Actual Winners</span>
+          <span class="text-white font-bold">${Number(g.totalWinners || g.winnerCount || 0).toLocaleString()}</span>
+        </div>
+        <div class="flex justify-between border-b border-white/5 pb-2">
+          <span class="text-slate-400">Real Payout</span>
+          <span class="text-green-400 font-mono font-bold">${g.winnerPayout || '$0'}</span>
+        </div>
+        <div class="pt-1">
+          <span class="text-slate-400 block text-xs mb-1">Winner Names</span>
+          <span class="text-slate-300 italic">${g.winnerNames || 'None listed'}</span>
+        </div>`;
     }
 
-    endGame(won, message, amount = 0) {
-        document.getElementById('clues-container').classList.add('hidden');
-        document.getElementById('input-container').classList.add('hidden');
-        const resDiv = document.getElementById('game-state-result');
-        resDiv.classList.remove('hidden');
+    document.getElementById('result-host').innerText = g.host || 'Unknown';
+    let expl = (g.clues[Math.min(this.currentClueIndex, 4)] || {}).explanation || '';
+    if (expl.includes(' - "')) expl = expl.split(' - "')[1].slice(0,-1);
+    document.getElementById('result-explanation').innerText = expl ? `"${expl}"` : 'No explanation recorded.';
+  }
 
-        document.getElementById('result-title').innerText = won ? "YOU WON!" : "GAME OVER";
-        document.getElementById('result-title').className = won ? "text-5xl font-display font-bold text-green-400" : "text-5xl font-display font-bold text-red-500";
-        document.getElementById('result-icon').innerText = won ? "emoji_events" : "cancel";
-        document.getElementById('result-icon').className = won ? "material-symbols-outlined text-8xl mb-4 text-green-400 animate-bounce" : "material-symbols-outlined text-8xl mb-4 text-red-500";
-        
-        document.getElementById('result-message').innerHTML = `${message}<br><span class="text-white font-bold block mt-4 text-2xl">Your Payout: $${amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>`;
+  // ==================== DATABASE ====================
+  renderDatabase() {
+    const filter = (document.getElementById('db-search')?.value || '').toLowerCase();
+    const filtered = this.games.filter(g =>
+      g.secretItem.toLowerCase().includes(filter) ||
+      g.date.toLowerCase().includes(filter) ||
+      (g.host && g.host.toLowerCase().includes(filter))
+    );
+    document.getElementById('db-count-display').innerText = `Showing ${filtered.length} of ${this.games.length} games`;
 
-        document.getElementById('result-answer').innerText = this.currentGame.secretItem;
-        document.getElementById('result-winning-clue').innerText = `Clue ${this.currentGame.winningClue}`;
-        document.getElementById('result-winner-count').innerText = this.currentGame.winnerCount.toLocaleString();
-        document.getElementById('result-real-payout').innerText = this.currentGame.winnerPayout || '$0';
-        document.getElementById('result-winner-names').innerText = this.currentGame.winnerNames || 'None listed';
-        document.getElementById('result-host').innerText = this.currentGame.host || 'Unknown';
+    document.getElementById('db-table-body').innerHTML = filtered.map(g => {
+      const medalCell = g.format === 'v2'
+        ? `<span class="text-[10px] bg-yellow-900/30 text-yellow-400 px-1 rounded mr-1">🥇${g.goldClue}</span><span class="text-[10px] bg-slate-700/50 text-slate-300 px-1 rounded mr-1">🥈${g.silverClue}</span><span class="text-[10px] bg-orange-900/30 text-orange-400 px-1 rounded">🥉${g.bronzeClue}</span>`
+        : `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-900 text-blue-300 text-xs font-bold">${g.goldClue || g.winningClue}</span>`;
+      const fmtBadge = g.format === 'v2'
+        ? '<span class="text-[10px] bg-yellow-900/40 text-yellow-400 border border-yellow-600/30 px-2 py-0.5 rounded-full font-bold">NEW</span>'
+        : '<span class="text-[10px] bg-slate-700/40 text-slate-400 border border-slate-600/30 px-2 py-0.5 rounded-full">CLASSIC</span>';
+      const safeItem = g.secretItem.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      const safeDate = g.date.replace(/'/g,"\\'");
+      return `<tr class="hover:bg-slate-800/50 transition border-b border-slate-800 last:border-0">
+        <td class="px-6 py-4 text-slate-400 font-mono text-xs whitespace-nowrap">${g.date}</td>
+        <td class="px-6 py-4 font-bold text-white">${g.secretItem}</td>
+        <td class="px-6 py-4 text-green-400 font-mono">$${g.pot.toLocaleString()}</td>
+        <td class="px-6 py-4 text-center">${fmtBadge}</td>
+        <td class="px-6 py-4 text-center">${medalCell}</td>
+        <td class="px-6 py-4 text-center text-slate-400">${(g.totalWinners || g.winnerCount || 0).toLocaleString()}</td>
+        <td class="px-6 py-4 text-slate-400">${g.host}</td>
+        <td class="px-6 py-4 text-right">
+          <button onclick="app.showDetails('${safeDate}','${safeItem}')" class="text-blue-400 hover:text-blue-300" title="View details">
+            <span class="material-symbols-outlined">visibility</span>
+          </button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
 
-        let explanationText = this.currentGame.clues[Math.min(this.currentClueIndex, 4)].explanation;
-        if (explanationText.includes(' - "')) explanationText = explanationText.split(' - "')[1].slice(0, -1);
-        document.getElementById('result-explanation').innerText = `"${explanationText}"`;
+  filterDatabase() { this.renderDatabase(); }
+
+  sortDatabase(key) {
+    if (!this._sortDir) this._sortDir = {};
+    this._sortDir[key] = this._sortDir[key] === 'asc' ? 'desc' : 'asc';
+    const dir = this._sortDir[key] === 'asc' ? 1 : -1;
+    if (key === 'pot') {
+      this.games.sort((a, b) => dir * (a.pot - b.pot));
+    } else if (key === 'date') {
+      this.games.sort((a, b) => dir * (new Date(a.date) - new Date(b.date)));
+    }
+    this.renderDatabase();
+  }
+
+  showDetails(date, item) {
+    const g = this.games.find(x => x.date === date && x.secretItem === item);
+    if (!g) return;
+    document.getElementById('modal-backdrop').classList.remove('hidden');
+
+    const cluesHtml = g.clues.map((c, i) => {
+      let e = c.explanation || '';
+      if (e.includes(' - "')) e = e.split(' - "')[1].slice(0,-1);
+      const n = i + 1;
+      const isGold   = g.format === 'v2' && n === g.goldClue;
+      const isSilver = g.format === 'v2' && n === g.silverClue;
+      const isBronze = g.format === 'v2' && n === g.bronzeClue;
+      const badge = isGold   ? '<span class="text-xs font-bold text-yellow-400 bg-yellow-900/30 px-2 py-1 rounded">🥇 Gold Winner Clue</span>'
+                  : isSilver ? '<span class="text-xs font-bold text-slate-300 bg-slate-700/50 px-2 py-1 rounded">🥈 Silver Winner Clue</span>'
+                  : isBronze ? '<span class="text-xs font-bold text-orange-400 bg-orange-900/30 px-2 py-1 rounded">🥉 Bronze Winner Clue</span>'
+                  : '';
+      return `<div class="mb-6 pb-6 border-b border-slate-700 last:border-0">
+        <div class="flex flex-wrap justify-between items-center mb-2 gap-2">
+          <span class="text-xs font-bold text-blue-400 bg-blue-900/30 px-2 py-1 rounded">Clue ${n}</span>
+          ${badge}
+          <span class="text-xs text-slate-500 ml-auto">${c.correct} correct / ${c.guesses} guesses</span>
+        </div>
+        <p class="text-xl text-white font-medium mb-3">"${c.text}"</p>
+        <div class="bg-slate-800 p-3 rounded-lg"><p class="text-sm text-slate-400 italic">"${e || 'No explanation recorded.'}"</p></div>
+      </div>`;
+    }).join('');
+
+    const fmt2 = n => Number(n).toFixed(2);
+    const medalSummary = g.format === 'v2'
+      ? `<div class="flex justify-center gap-2 mt-4 flex-wrap">
+          <span class="bg-yellow-900/30 text-yellow-400 border border-yellow-600/30 px-3 py-1 rounded-full text-xs font-bold">🥇 Clue ${g.goldClue} · ${Number(g.goldWinners).toLocaleString()} winners · $${fmt2(g.goldPayout)} each</span>
+          <span class="bg-slate-700/30 text-slate-300 border border-slate-600/30 px-3 py-1 rounded-full text-xs font-bold">🥈 Clue ${g.silverClue} · ${Number(g.silverWinners).toLocaleString()} winners · $${fmt2(g.silverPayout)} each</span>
+          <span class="bg-orange-900/30 text-orange-400 border border-orange-600/30 px-3 py-1 rounded-full text-xs font-bold">🥉 Clue ${g.bronzeClue} · ${Number(g.bronzeWinners).toLocaleString()} winners · $${fmt2(g.bronzePayout)} each</span>
+        </div>`
+      : `<div class="flex justify-center mt-4">
+          <span class="bg-blue-900/30 text-blue-400 border border-blue-600/30 px-3 py-1 rounded-full text-sm font-bold">Won on Clue ${g.winningClue || g.goldClue} · ${(g.totalWinners||g.winnerCount||0).toLocaleString()} winners · ${g.winnerPayout}</span>
+        </div>`;
+
+    document.getElementById('modal-content').innerHTML = `
+      <div class="text-center mb-8">
+        <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">${g.date}</div>
+        <h2 class="text-4xl font-display font-bold text-white">${g.secretItem}</h2>
+        <div class="flex justify-center gap-4 mt-4 flex-wrap">
+          <span class="inline-flex items-center gap-1 bg-green-900/30 text-green-400 border border-green-500/30 px-3 py-1 rounded-full text-sm font-bold">$${g.pot.toLocaleString()}</span>
+          <span class="inline-flex items-center gap-1 bg-purple-900/30 text-purple-400 border border-purple-500/30 px-3 py-1 rounded-full text-sm font-bold">${g.host}</span>
+        </div>
+        ${medalSummary}
+        <div class="mt-4 text-xs text-slate-400 border-t border-slate-700 pt-3">
+          <span class="font-bold text-white">Winners:</span> ${g.winnerNames || 'None listed'}
+        </div>
+      </div>
+      <div class="bg-slate-900/50 rounded-xl p-2 mb-6 border border-white/5">${cluesHtml}</div>
+      <div class="text-sm text-slate-400 bg-red-900/10 border border-red-500/20 p-4 rounded-lg">
+        <span class="font-bold text-red-400 block mb-1">Common Wrong Guesses:</span> ${g.wrongGuesses || 'N/A'}
+      </div>`;
+  }
+
+  closeModal() { document.getElementById('modal-backdrop').classList.add('hidden'); }
+
+  // ==================== STATS ====================
+  renderStats() {
+    const hardest = [...this.games].sort((a,b) => {
+      const ac = a.format==='v2' ? (a.bronzeClue||a.goldClue) : (a.winningClue||a.goldClue||0);
+      const bc = b.format==='v2' ? (b.bronzeClue||b.goldClue) : (b.winningClue||b.goldClue||0);
+      return (bc - ac) || ((a.totalWinners||a.winnerCount||0) - (b.totalWinners||b.winnerCount||0));
+    }).slice(0,5);
+
+    document.getElementById('stats-hardest-list').innerHTML = hardest.map(g => {
+      const last = g.format==='v2' ? (g.bronzeClue||g.goldClue) : (g.winningClue||g.goldClue||'?');
+      const w = (g.totalWinners||g.winnerCount||0);
+      return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0">
+        <div><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div>
+        <div class="text-right shrink-0 ml-4">
+          <div class="text-red-400 font-bold text-sm bg-red-900/20 px-2 py-1 rounded">Clue ${last}</div>
+          <div class="text-xs text-slate-500 mt-1">${w.toLocaleString()} winners</div>
+        </div>
+      </li>`;
+    }).join('');
+
+    const easiest = [...this.games].sort((a,b) => (b.totalWinners||b.winnerCount||0) - (a.totalWinners||a.winnerCount||0)).slice(0,5);
+    document.getElementById('stats-easiest-list').innerHTML = easiest.map(g => {
+      const w = (g.totalWinners||g.winnerCount||0);
+      return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0">
+        <div><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div>
+        <div class="text-right shrink-0 ml-4">
+          <div class="text-green-400 font-bold text-sm bg-green-900/20 px-2 py-1 rounded">${w.toLocaleString()}</div>
+          <div class="text-xs text-slate-500 mt-1">winners</div>
+        </div>
+      </li>`;
+    }).join('');
+
+    document.getElementById('stat-hunter-games').innerText = this.games.filter(g => g.host === 'Hunter March').length;
+    document.getElementById('stat-howie-games').innerText  = this.games.filter(g => g.host === 'Howie Mandel').length;
+    document.getElementById('stat-v2-games').innerText     = this.games.filter(g => g.format === 'v2').length;
+  }
+
+  // ==================== ADMIN ====================
+  initAdmin() {
+    setTimeout(() => {
+      const o  = document.getElementById('gh-owner');          if (o)  o.value  = localStorage.getItem('gh_owner')          || '';
+      const r  = document.getElementById('gh-repo');           if (r)  r.value  = localStorage.getItem('gh_repo')           || '';
+      const p  = document.getElementById('gh-pat');            if (p)  p.value  = localStorage.getItem('gh_pat')            || '';
+      const tc = document.getElementById('tip-cashapp-url');   if (tc) tc.value = localStorage.getItem('tip_cashapp')       || 'https://cash.app/$JeremyBean';
+      const tp = document.getElementById('tip-paypal-url');    if (tp) tp.value = localStorage.getItem('tip_paypal')        || 'https://paypal.me/KindaCharming';
+      const gi = document.getElementById('ga-measurement-id'); if (gi) gi.value = localStorage.getItem('ga_measurement_id') || 'G-YYGK3MHH26';
+      const su = document.getElementById('sb-url');            if (su) su.value = localStorage.getItem('sb_url')            || '';
+      const sk = document.getElementById('sb-key');            if (sk) sk.value = localStorage.getItem('sb_key')            || '';
+    }, 50);
+  }
+
+  saveTipLinks() {
+    const cashApp = document.getElementById('tip-cashapp-url').value.trim();
+    const paypal  = document.getElementById('tip-paypal-url').value.trim();
+    localStorage.setItem('tip_cashapp', cashApp);
+    localStorage.setItem('tip_paypal',  paypal);
+    const ok = document.getElementById('tip-save-ok');
+    ok.classList.remove('hidden');
+    setTimeout(() => ok.classList.add('hidden'), 2500);
+  }
+
+  saveGaId() {
+    const id = document.getElementById('ga-measurement-id').value.trim();
+    localStorage.setItem('ga_measurement_id', id);
+    const status = document.getElementById('ga-status');
+    if (id.startsWith('G-')) {
+      this._initGA();
+      status.className = 'text-xs text-green-400 mt-1';
+      status.innerText = `✓ Analytics enabled for ${id}. Tracking begins after your next page load.`;
+    } else {
+      status.className = 'text-xs text-red-400 mt-1';
+      status.innerText = id ? 'ID must start with G-. Check the GA steps above.' : 'ID cleared — analytics disabled.';
+    }
+  }
+
+  saveSupabaseSettings() {
+    const url = document.getElementById('sb-url').value.trim();
+    const key = document.getElementById('sb-key').value.trim();
+    localStorage.setItem('sb_url', url);
+    localStorage.setItem('sb_key', key);
+    const status = document.getElementById('sb-status');
+    status.className = 'text-xs text-blue-400 mt-1';
+    status.innerText = 'Connecting…';
+    this._initSupabase();
+    setTimeout(() => {
+      const pill = document.getElementById('live-pill');
+      if (pill && pill.style.display !== 'none' && !pill.classList.contains('hidden')) {
+        status.className = 'text-xs text-green-400 mt-1';
+        status.innerText = '✓ Connected! The live viewer counter is now active in the nav.';
+      } else {
+        status.className = 'text-xs text-yellow-400 mt-1';
+        status.innerText = 'Settings saved. Reload the page to activate — if the pill doesn\'t appear, double-check your URL and anon key.';
+      }
+    }, 3500);
+  }
+
+  async checkPin() {
+    const input = document.getElementById('admin-pin-input').value;
+    const hash  = await sha256hex(input);
+    if (hash === ADMIN_PIN_HASH) {
+      document.getElementById('admin-pin-gate').classList.add('hidden');
+      document.getElementById('admin-workspace').classList.remove('hidden');
+    } else {
+      document.getElementById('admin-pin-error').classList.remove('hidden');
+    }
+  }
+
+  saveGhSettings() {
+    localStorage.setItem('gh_owner', document.getElementById('gh-owner').value.trim());
+    localStorage.setItem('gh_repo',  document.getElementById('gh-repo').value.trim());
+    localStorage.setItem('gh_pat',   document.getElementById('gh-pat').value.trim());
+    const ok = document.getElementById('gh-save-ok');
+    ok.classList.remove('hidden');
+    setTimeout(() => ok.classList.add('hidden'), 2500);
+  }
+
+  previewImport() {
+    const raw     = document.getElementById('import-json').value.trim();
+    const preview = document.getElementById('import-preview');
+    const btn     = document.getElementById('btn-publish');
+    const status  = document.getElementById('import-status');
+    preview.innerHTML = '';
+    status.className  = 'hidden';
+    this._pendingGames = null;
+    btn.disabled = true;
+
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) parsed = [parsed];
+    } catch (e) {
+      preview.classList.remove('hidden');
+      preview.innerHTML = `<div class="text-red-400 text-sm bg-red-900/20 p-3 rounded">Invalid JSON: ${e.message}</div>`;
+      return;
     }
 
-    // Database & Stats
-    renderDatabase() {
-        const tbody = document.getElementById('db-table-body');
-        const filter = (document.getElementById('db-search')?.value || '').toLowerCase();
-        const filtered = this.games.filter(g => g.secretItem.toLowerCase().includes(filter) || g.date.toLowerCase().includes(filter) || (g.host && g.host.toLowerCase().includes(filter)));
-        
-        document.getElementById('db-count-display').innerText = `Showing ${filtered.length} of ${this.games.length} games`;
-        tbody.innerHTML = filtered.map(g => `
-            <tr class="hover:bg-slate-800/50 transition border-b border-slate-800 last:border-0">
-                <td class="px-6 py-4 text-slate-400 font-mono text-xs whitespace-nowrap">${g.date}</td>
-                <td class="px-6 py-4 font-bold text-white">${g.secretItem}</td>
-                <td class="px-6 py-4 text-green-400 font-mono">$${g.pot.toLocaleString()}</td>
-                <td class="px-6 py-4 text-center"><span class="inline-block w-6 h-6 rounded-full bg-blue-900 text-blue-300 text-xs flex items-center justify-center font-bold">${g.winningClue}</span></td>
-                <td class="px-6 py-4 text-center text-slate-400">${g.winnerCount.toLocaleString()}</td>
-                <td class="px-6 py-4 text-slate-400">${g.host}</td>
-                <td class="px-6 py-4 text-right">
-                    <button onclick="app.showDetails('${g.date}', '${g.secretItem.replace(/'/g, "\\'")}')" class="text-blue-400 hover:text-blue-300"><span class="material-symbols-outlined">visibility</span></button>
-                </td>
-            </tr>
-        `).join('');
+    const errors = [];
+    parsed.forEach((g, i) => {
+      ['date','secretItem','clues','goldClue'].forEach(k => {
+        if (g[k] === undefined || g[k] === null || g[k] === '') errors.push(`Game ${i+1}: missing "${k}"`);
+      });
+      if (g.clues && g.clues.length !== 5) errors.push(`Game ${i+1}: clues array must have exactly 5 items (found ${g.clues?.length})`);
+    });
+
+    if (errors.length) {
+      preview.classList.remove('hidden');
+      preview.innerHTML = `<div class="text-red-400 text-sm bg-red-900/20 p-3 rounded space-y-1">${errors.map(e=>`<div>⚠ ${e}</div>`).join('')}</div>`;
+      return;
     }
 
-    filterDatabase() { this.renderDatabase(); }
-    sortDatabase() { this.games.reverse(); this.renderDatabase(); }
+    this._pendingGames = parsed;
+    preview.classList.remove('hidden');
+    preview.innerHTML = parsed.map(g => `
+      <div class="glass-panel p-4 rounded-lg border ${g.format==='v2'?'border-yellow-600/30':'border-slate-700'}">
+        <div class="flex justify-between items-start gap-4">
+          <div>
+            <span class="text-xs ${g.format==='v2'?'text-yellow-400 bg-yellow-900/30':'text-slate-400 bg-slate-800'} px-2 py-0.5 rounded font-bold uppercase">${g.format==='v2'?'New Format':'Classic Format'} · ${g.date}</span>
+            <div class="text-xl font-bold text-white mt-1">${g.secretItem}</div>
+            <div class="text-sm text-slate-400 mt-1">Host: ${g.host||'?'} · Pot: $${(g.pot||0).toLocaleString()}</div>
+          </div>
+          <div class="text-xs text-slate-500 shrink-0 text-right">
+            ${g.format==='v2' ? `🥇C${g.goldClue} 🥈C${g.silverClue} 🥉C${g.bronzeClue}` : `Clue ${g.goldClue}`}
+          </div>
+        </div>
+        <div class="mt-2 text-xs text-slate-500 flex flex-wrap gap-2">${g.clues.map((c,i)=>`<span class="bg-slate-800 px-2 py-0.5 rounded">C${i+1}: ${c.text.slice(0,28)}${c.text.length>28?'…':''}</span>`).join('')}</div>
+      </div>`).join('');
+    btn.disabled = false;
+  }
 
-    showDetails(date, item) {
-        const game = this.games.find(g => g.date === date && g.secretItem === item);
-        if (!game) return;
-        document.getElementById('modal-backdrop').classList.remove('hidden');
-        
-        const cluesHtml = game.clues.map((c, i) => {
-            let e = c.explanation; if(e.includes(' - "')) e = e.split(' - "')[1].slice(0, -1);
-            return `
-                <div class="mb-6 pb-6 border-b border-slate-700 last:border-0">
-                    <div class="flex justify-between mb-2">
-                        <span class="text-xs font-bold text-blue-400 uppercase bg-blue-900/30 px-2 py-1 rounded">Clue ${i+1}</span>
-                        <span class="text-xs text-slate-500">${c.correct} correct / ${c.guesses} guesses</span>
-                    </div>
-                    <p class="text-xl text-white font-medium mb-3">"${c.text}"</p>
-                    <div class="bg-slate-800 p-3 rounded-lg"><p class="text-sm text-slate-400 italic">"${e}"</p></div>
-                </div>`;
-        }).join('');
+  async publishImport() {
+    if (!this._pendingGames) return;
+    const owner = localStorage.getItem('gh_owner');
+    const repo  = localStorage.getItem('gh_repo');
+    const pat   = localStorage.getItem('gh_pat');
+    const status = document.getElementById('import-status');
+    const btn    = document.getElementById('btn-publish');
 
-        document.getElementById('modal-content').innerHTML = `
-            <div class="text-center mb-8">
-                <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">${game.date}</div>
-                <h2 class="text-4xl font-display font-bold text-white">${game.secretItem}</h2>
-                <div class="flex justify-center gap-4 mt-4">
-                     <span class="inline-flex items-center gap-1 bg-green-900/30 text-green-400 border border-green-500/30 px-3 py-1 rounded-full text-sm font-bold">$${game.pot.toLocaleString()}</span>
-                     <span class="inline-flex items-center gap-1 bg-purple-900/30 text-purple-400 border border-purple-500/30 px-3 py-1 rounded-full text-sm font-bold">${game.host}</span>
-                </div>
-                <div class="mt-4 text-xs text-slate-400 border-t border-slate-700 pt-2">
-                    <span class="font-bold text-white">Winners:</span> ${game.winnerNames}
-                </div>
-            </div>
-            <div class="bg-slate-900/50 rounded-xl p-2 mb-8 border border-white/5">${cluesHtml}</div>
-            <div class="text-sm text-slate-400 bg-red-900/10 border border-red-500/20 p-4 rounded-lg">
-                <span class="font-bold text-red-400 block mb-1">Common Wrong Guesses:</span> ${game.wrongGuesses}
-            </div>
-        `;
+    if (!owner || !repo || !pat) {
+      status.className = 'text-sm font-medium px-4 py-2 rounded bg-red-900/20 text-red-400';
+      status.innerText = 'Save your GitHub settings first.';
+      status.classList.remove('hidden');
+      return;
     }
 
-    closeModal() { document.getElementById('modal-backdrop').classList.add('hidden'); }
+    btn.disabled = true;
+    btn.innerText = 'Publishing...';
+    status.className = 'text-sm font-medium px-4 py-2 rounded bg-blue-900/20 text-blue-400';
+    status.innerText = 'Fetching current games.json from GitHub...';
+    status.classList.remove('hidden');
 
-    viewSource() {
-        const html = document.documentElement.outerHTML;
-        document.getElementById('modal-backdrop').classList.remove('hidden');
-        document.getElementById('modal-content').innerHTML = `
-            <div class="space-y-4">
-                <h3 class="text-2xl font-bold text-white">Source Code</h3>
-                <textarea class="w-full h-96 bg-slate-800 text-slate-300 font-mono text-xs p-4 rounded border border-slate-700 focus:outline-none" readonly>${html.replace(/</g, '<').replace(/>/g, '>')}</textarea>
-                <div class="flex justify-end gap-2">
-                    <button class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded" onclick="app.closeModal()">Close</button>
-                    <button class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded" onclick="navigator.clipboard.writeText(document.documentElement.outerHTML); alert('Copied!')">Copy</button>
-                </div>
-            </div>
-        `;
+    try {
+      // 1. Get current file + SHA
+      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/data/games.json`, {
+        headers: { Authorization: `token ${pat}`, Accept: 'application/vnd.github.v3+json' }
+      });
+      if (!getRes.ok) throw new Error(`GitHub GET failed (${getRes.status}). Check your PAT and repo settings.`);
+      const fileData = await getRes.json();
+
+      // 2. Decode, deduplicate, merge
+      const existing = JSON.parse(atob(fileData.content.replace(/\n/g, '')));
+      const existingKeys = new Set(existing.map(g => g.date + '||' + g.secretItem));
+      const newGames = this._pendingGames.filter(g => !existingKeys.has(g.date + '||' + g.secretItem));
+      if (!newGames.length) throw new Error('All games in this batch already exist in the archive (duplicate check passed — nothing to add).');
+
+      // 3. Prepend and commit
+      const merged  = [...newGames, ...existing];
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(merged, null, 2))));
+
+      status.innerText = `Committing ${newGames.length} new game${newGames.length>1?'s':''}...`;
+      const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/data/games.json`, {
+        method: 'PUT',
+        headers: { Authorization: `token ${pat}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: `Add ${newGames.length} game${newGames.length>1?'s':''}: ${newGames.map(g=>g.secretItem).join(', ')}`,
+          content,
+          sha: fileData.sha
+        })
+      });
+      if (!putRes.ok) throw new Error(`GitHub commit failed (${putRes.status}): ${await putRes.text()}`);
+
+      // 4. Update local state
+      this.games = merged;
+      this._pendingGames = null;
+      document.getElementById('import-json').value = '';
+      document.getElementById('import-preview').classList.add('hidden');
+      btn.disabled = true;
+      btn.innerText = 'Publish to GitHub';
+
+      status.className = 'text-sm font-medium px-4 py-2 rounded bg-green-900/20 text-green-400';
+      status.innerText = `✓ ${newGames.length} game${newGames.length>1?'s':''} published! GitHub Pages will rebuild in ~30 seconds.`;
+    } catch (e) {
+      status.className = 'text-sm font-medium px-4 py-2 rounded bg-red-900/20 text-red-400';
+      status.innerText = `Error: ${e.message}`;
+      btn.disabled = false;
+      btn.innerText = 'Publish to GitHub';
     }
-
-    renderStats() {
-        const hardest = [...this.games].sort((a,b) => (b.winningClue - a.winningClue) || (a.winnerCount - b.winnerCount)).slice(0,5);
-        document.getElementById('stats-hardest-list').innerHTML = hardest.map(g => `
-            <li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0">
-                <div><div class="font-bold text-white text-lg">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div>
-                <div class="text-right"><div class="text-red-400 font-bold text-sm bg-red-900/20 px-2 py-1 rounded">Clue ${g.winningClue}</div><div class="text-xs text-slate-500 mt-1">${g.winnerCount} winners</div></div>
-            </li>`).join('');
-
-        const easiest = [...this.games].sort((a,b) => b.winnerCount - a.winnerCount).slice(0,5);
-        document.getElementById('stats-easiest-list').innerHTML = easiest.map(g => `
-            <li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0">
-                <div><div class="font-bold text-white text-lg">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div>
-                <div class="text-right"><div class="text-green-400 font-bold text-sm bg-green-900/20 px-2 py-1 rounded">${g.winnerCount.toLocaleString()}</div><div class="text-xs text-slate-500 mt-1">Winners</div></div>
-            </li>`).join('');
-
-        const hunterGames = this.games.filter(g => g.host === "Hunter March").length;
-        const howieGames = this.games.filter(g => g.host === "Howie Mandel").length;
-        const avgPayout = this.games.length ? (this.games.reduce((acc,g) => acc + (parseFloat(g.winnerPayout.replace(/[$,]/g,''))||0),0) / this.games.length) : 0;
-        document.getElementById('stat-hunter-games').innerText = hunterGames;
-        document.getElementById('stat-howie-games').innerText = howieGames;
-        document.getElementById('stat-avg-payout').innerText = '$' + avgPayout.toLocaleString(undefined, {maximumFractionDigits: 0});
-    }
+  }
 }
 
 const app = new App();
 </script>
-
-
-</body></html>
+</body>
+</html>
