@@ -287,6 +287,7 @@
             <th class="px-4 py-3">Clue 3</th>
             <th class="px-4 py-3">Clue 4</th>
             <th class="px-4 py-3">Clue 5</th>
+            <th class="px-4 py-3 text-center">Winning Clue</th>
             <th class="px-4 py-3 text-center cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('players')">Total Players ↕</th>
             <th class="px-4 py-3 text-center cursor-pointer hover:text-white whitespace-nowrap" onclick="app.sortDatabase('winners')">Winners ↕</th>
             <th class="px-4 py-3 whitespace-nowrap">Payouts</th>
@@ -1142,16 +1143,18 @@ class App {
       if (isV2 && g.bronzeClue) medalMap[Number(g.bronzeClue)] = (medalMap[Number(g.bronzeClue)] || '') + '🥉';
 
       // Clue cells
+      const winningClueNum = g.winningClue || g.goldClue;
       const clueCells = Array.from({ length: 5 }, (_, i) => {
         const clue = g.clues[i];
         const medal = medalMap[i + 1] || '';
+        const isWinning = (i + 1) === Number(winningClueNum);
         if (!clue) return `<td class="px-4 py-3 text-slate-700 text-center align-top">—</td>`;
         const correct = parseN(clue.correct);
         const guesses = parseN(clue.guesses);
         const pct = guesses > 0 ? ((correct / guesses) * 100).toFixed(1) : '0.0';
         return `<td class="px-4 py-3 align-top" style="min-width:200px">
-          <div class="font-medium text-slate-200 leading-snug">${clue.text}</div>
-          <div class="text-xs font-mono mt-1"><span class="text-green-500">${correct.toLocaleString()}</span><span class="text-slate-600"> / </span><span class="text-slate-400">${guesses.toLocaleString()}</span><span class="text-slate-600"> (${pct}%)</span>${medal ? `<span class="ml-1 text-sm">${medal}</span>` : ''}</div>
+          <div class="font-medium ${isWinning && !isV2 ? 'text-yellow-300 bg-yellow-900/30 border border-yellow-400/40 rounded px-1 py-0.5 shadow-sm' : 'text-slate-200'} leading-snug">${clue.text}${isWinning && !isV2 ? ' <span class=\"font-bold text-yellow-400 ml-1\">★</span>' : ''}</div>
+          <div class="text-xs font-mono mt-1"><span class="text-green-500">${correct.toLocaleString()}</span><span class="text-slate-600"> / </span><span class="text-slate-400">${guesses.toLocaleString()}</span><span class="text-slate-600"> (${pct}%)</span>${medal ? `<span class=\"ml-1 text-sm\">${medal}</span>` : ''}</div>
         </td>`;
       }).join('');
 
@@ -1192,6 +1195,7 @@ class App {
         </td>
         <td class="px-4 py-3 text-green-400 font-mono whitespace-nowrap align-top">$${g.pot.toLocaleString()}</td>
         ${clueCells}
+        <td class="px-4 py-3 text-center font-bold ${!isV2 ? 'text-yellow-400' : 'text-slate-400'} align-top">${winningClueNum || ''}${!isV2 && winningClueNum ? ' <span class=\"text-yellow-400\">★</span>' : ''}</td>
         <td class="px-4 py-3 text-center align-top"><span class="font-mono text-blue-300">${totalPlayers.toLocaleString()}</span></td>
         <td class="px-4 py-3 align-top">${winnersHtml}</td>
         <td class="px-4 py-3 align-top">${payoutsHtml}</td>
