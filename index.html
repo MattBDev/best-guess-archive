@@ -355,9 +355,15 @@
       #db-floating-scrollbar { display: none !important; }
     }
   </style>
+  <div class="flex items-center gap-2 mb-2">
+    <button id="db-zoom-out" class="px-3 py-1 rounded bg-slate-800 text-slate-200 border border-slate-600 hover:bg-slate-700 font-bold text-sm" title="Zoom Out">-</button>
+    <button id="db-zoom-in" class="px-3 py-1 rounded bg-slate-800 text-slate-200 border border-slate-600 hover:bg-slate-700 font-bold text-sm" title="Zoom In">+</button>
+    <button id="db-zoom-reset" class="px-3 py-1 rounded bg-slate-800 text-slate-200 border border-slate-600 hover:bg-slate-700 font-bold text-sm" title="Reset Zoom">Reset</button>
+    <span class="text-xs text-slate-400 ml-2" id="db-zoom-label">100%</span>
+  </div>
   <div class="glass-panel rounded-xl overflow-hidden shadow-xl border border-slate-700 db-responsive-container">
     <div class="relative db-responsive-inner">
-      <div class="db-table-scroll" id="db-table-scroll">
+      <div class="db-table-scroll" id="db-table-scroll" style="transition: transform 0.2s;">
         <table class="db-table w-full text-left text-sm text-slate-300">
         <thead class="bg-slate-900/80 text-xs uppercase font-medium text-slate-400 sticky top-0 z-20">
           <tr>
@@ -395,6 +401,53 @@
       <span id="db-count-display">Loading database...</span>
     </div>
     <script>
+    // Zoom controls for database table
+    (function() {
+      let zoom = 1;
+      const minZoom = 0.5;
+      const maxZoom = 2;
+      const step = 0.1;
+      function updateZoom() {
+        const scroll = document.getElementById('db-table-scroll');
+        const label = document.getElementById('db-zoom-label');
+        if (scroll) scroll.style.transform = `scale(${zoom})`;
+        if (label) label.textContent = Math.round(zoom * 100) + '%';
+      }
+      function setupZoomButtons() {
+        const btnIn = document.getElementById('db-zoom-in');
+        const btnOut = document.getElementById('db-zoom-out');
+        const btnReset = document.getElementById('db-zoom-reset');
+        btnIn && btnIn.addEventListener('click', function() {
+          zoom = Math.min(maxZoom, zoom + step);
+          updateZoom();
+        });
+        btnOut && btnOut.addEventListener('click', function() {
+          zoom = Math.max(minZoom, zoom - step);
+          updateZoom();
+        });
+        btnReset && btnReset.addEventListener('click', function() {
+          zoom = 1;
+          updateZoom();
+        });
+        updateZoom();
+      }
+      // Setup on database view
+      const origSetView = app.setView.bind(app);
+      app.setView = function(name) {
+        origSetView(name);
+        if (name === 'database') {
+          setTimeout(setupZoomButtons, 200);
+        } else {
+          zoom = 1;
+          updateZoom();
+        }
+      };
+      // If already on database view, setup immediately
+      if (document.getElementById('db-table-scroll')) {
+        setTimeout(setupZoomButtons, 200);
+      }
+    })();
+
     // Move floating horizontal scrollbar to <body> and control its visibility globally
     (function() {
       // Create floating bar if not present
