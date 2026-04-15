@@ -2297,6 +2297,8 @@ class App {
 }
 
 window.app = new App();
+// Ensure showDetails is globally accessible for diagnostics and event delegation
+window.app.showDetails = window.app.showDetails.bind(window.app);
 </script>
 </body>
 <script>
