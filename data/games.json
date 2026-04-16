@@ -52,109 +52,94 @@
     "wrongGuesses": "LEMONADE STAND, ORANGE JUICE, COUNTDOWN, SUNNY D, ICE CREAM"
   },
   {
-    "date": "Wednesday, April 15, 2026",
+    "date": "Monday, April 13, 2026",
     "pot": 7500,
     "format": "v2",
-    "host": "Howie Mandel, Austin Show",
-    "secretItem": "YOGA",
+    "host": "Hunter March",
+    "secretItem": "BART SIMPSON",
     "clues": [
       {
-        "text": "A CLASS ACT",
+        "text": "NEVER CHANGES WITH THE SEASONS",
+        "correct": "0",
+        "guesses": "5,512",
+        "explanation": "The character has remained the same age throughout the show's 37 seasons."
+      },
+      {
+        "text": "POPULAR H&M PRODUCT",
+        "correct": "5",
+        "guesses": "6,574",
+        "explanation": "He is the product/child of Homer and Marge (H&M)."
+      },
+      {
+        "text": "DISTINCT STYLE POINTS",
+        "correct": "6",
+        "guesses": "11,258",
+        "explanation": "His spiky haircut features several distinct, pointed tips."
+      },
+      {
+        "text": "ON BOARD FOR SHENANIGANS",
         "correct": "4",
-        "guesses": "5,668",
-        "explanation": "You often do yoga in a classroom setting."
+        "guesses": "3,691",
+        "explanation": "He is a skateboarder (on board) known for causing trouble (shenanigans)."
       },
       {
-        "text": "SOME LIKE IT HOT",
-        "correct": "602",
-        "guesses": "5,576",
-        "explanation": "This refers to the common practice of hot yoga."
-      },
-      {
-        "text": "HAS AN INSTRUCTOR BUT YOU WEAR THE PANTS",
-        "correct": "7,666",
-        "guesses": "11,621",
-        "explanation": "Yoga typically has an instructor leading the session, and yoga pants are the standard attire."
-      },
-      {
-        "text": "WHERE YOU'LL FIND CATS, DOGS, COBRAS, AND WARRIORS",
-        "correct": "2,016",
-        "guesses": "4,702",
-        "explanation": "These are all popular yoga poses."
-      },
-      {
-        "text": "THE ANSWER IS A REAL STRETCH",
-        "correct": "2,158",
-        "guesses": "4,088",
-        "explanation": "Yoga involves significant stretching."
+        "text": "TV'S ANIMATED MIXED UP BRAT",
+        "correct": "1,179",
+        "guesses": "3,967",
+        "explanation": "Bart is an animated character and his name is an anagram of 'brat'."
       }
     ],
-    "goldClue": 1,
-    "silverClue": 2,
-    "bronzeClue": 3,
-    "goldWinners": 4,
-    "silverWinners": 602,
-    "bronzeWinners": 7666,
-    "totalWinners": 8272,
-    "goldPayout": 750.00,
-    "silverPayout": 4.15,
-    "bronzePayout": 0.26,
+    "goldClue": 2,
+    "silverClue": 3,
+    "bronzeClue": 4,
+    "goldWinners": 5,
+    "silverWinners": 6,
+    "bronzeWinners": 4,
+    "totalWinners": 15,
+    "goldPayout": 600,
+    "silverPayout": 416.67,
+    "bronzePayout": 500,
     "winnerPayout": "$7,500.00",
-    "winnerNames": "Fourthpacker 178, Tasha K",
-    "wrongGuesses": "CLOWN, COFFEE, TEACHER, ZOO, TEA"
+    "winnerNames": "Veritas California, 69420, emperor Joe, uneven gang way",
+    "wrongGuesses": "JEANS, UNDERWEAR, SOCKS, MANNEQUIN, SUN"
   },
   {
-    "date": "Wednesday, April 15, 2026",
-    "pot": 7500,
-    "format": "v2",
-    "host": "Howie Mandel, Austin Show",
-    "secretItem": "YODA",
+    "date": "Friday, April 10, 2026",
+    "pot": 5000,
+    "format": "v1",
+    "host": "Howie Mandel",
+    "secretItem": "HELICOPTER",
     "clues": [
       {
-        "text": "ONE SHIFTY ONE-OFF",
-        "correct": "0",
-        "guesses": "3,715",
-        "explanation": "Shifting one letter from YOGA (G to D) results in YODA."
+        "text": "ALL OVER THE PLACE",
+        "correct": "1",
+        "guesses": "8,546",
+        "explanation": "All Over The Place - \"A helicopter can move all directions and they are all over the place. They're up, they're down, they're sideways, they're forward. They're covering, you know, crime, they're covering chases, they're doing transportation. They're all over the place.\""
       },
       {
-        "text": "MADE QUITE AN ENEMY",
-        "correct": "0",
-        "guesses": "4,288",
-        "explanation": "Yoda trained the Jedi who became major enemies of the dark side."
+        "text": "CUT TO THE CHASE",
+        "correct": "30",
+        "guesses": "4,788",
+        "explanation": "Cut To The Chase - \"Helicopters are used to track and cover car chases. That's the only way we see them every time.\""
       },
       {
-        "text": "GENTLE BUT FORCEFUL",
-        "correct": "86",
-        "guesses": "7,271",
-        "explanation": "Yoda has a gentle demeanor but is a master of the Force."
+        "text": "ELEVATED BEATS PER MINUTE",
+        "correct": "17",
+        "guesses": "5,000",
+        "explanation": "Elevated Beats Per Minute - \"Helicopters are elevated into the air and the rotating blades beat rapidly. I've flown in a helicopter, it sounds like a heartbeat.\""
       },
       {
-        "text": "KERMIT-Y AND HERMIT-Y",
-        "correct": "243",
-        "guesses": "6,704",
-        "explanation": "He is a green hermit and was originally a puppet like Kermit."
+        "text": "DOESN'T LIKE TO WING IT",
+        "correct": "68",
+        "guesses": "2,079",
+        "explanation": "Doesn't Like To Wing It - \"Speaks for itself. Helicopters don't have wings like an airplane, they have blades instead. It is a flying craft without wings.\""
       },
       {
-        "text": "GUESS OR GUESS NOT THERE IS NO TRY",
-        "correct": "3,973",
-        "guesses": "7,881",
-        "explanation": "A play on his famous quote: 'Do or do not, there is no try.'"
+        "text": "DUCK TO GET IN A FLYING CRAFT WHOSE BLADES SPIN",
+        "correct": "5,055",
+        "guesses": "6,179",
+        "explanation": "Duck To Get In A Flying Craft Whose Blades Spin - \"People often duck to enter. You should not often, you should always duck to get into a helicopter.\""
       }
-    ],
-    "goldClue": 3,
-    "silverClue": 4,
-    "bronzeClue": 5,
-    "goldWinners": 86,
-    "silverWinners": 243,
-    "bronzeWinners": 3973,
-    "totalWinners": 4302,
-    "goldPayout": 34.88,
-    "silverPayout": 10.28,
-    "bronzePayout": 0.50,
-    "winnerPayout": "$7,500.00",
-    "winnerNames": "Haliew, Aspottedpickle, Regalbark272, Hammsky1726, Goldendisc882",
-    "wrongGuesses": "FROG, MUPPETS, CRAB, KERMIT THE FROG, STICK SHIFT"
-  },
     ],
     "goldClue": 1,
     "silverClue": 0,
@@ -8868,10 +8853,10 @@
         "explanation": "Arrives orderly in many shapes and sizes - \"arrives orderly in many shapes and sizes.\""
       },
       {
-        "text": "PASS THE KETCHUP S'IL VOUS PLAIT",
+        "text": "PASS THE KETCHUP S'IL VOUS PLA\u00c3\u0083\u00c2\u008eT",
         "correct": "1,800",
         "guesses": "N/A",
-        "explanation": "Pass the ketchup s'il vous plait - \"well pass the ketchup see play French and fries.\""
+        "explanation": "Pass the ketchup s'il vous pla\u00c3\u0083\u00c2\u00aet - \"well pass the ketchup see play French and fries.\""
       }
     ],
     "goldClue": 3,
