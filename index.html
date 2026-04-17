@@ -249,6 +249,15 @@ document.addEventListener('focusout', function(e) {
       </div>
 <!-- How to Play Modal Template -->
 <template id="how-to-play-modal">
+<!-- Modal Backdrop/Content (for robustness if not present in main HTML) -->
+<div id="modal-backdrop" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4" onclick="if(event.target===this) app.closeModal()">
+  <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl relative fade-in">
+    <button class="absolute top-4 right-4 text-slate-400 hover:text-white" onclick="app.closeModal()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="p-8" id="modal-content"></div>
+  </div>
+</div>
   <div class="space-y-6">
     <h2 class="text-3xl font-display font-bold text-yellow-400">How to Play</h2>
     <ol class="list-decimal list-inside text-slate-200 space-y-2 text-lg">
@@ -1068,6 +1077,27 @@ class App {
     if (name === 'home') {
       this.renderHomeStats(); 
       this._applyTipLinks();
+      // --- Fix: Rebind How to Play button event ---
+      setTimeout(() => {
+        const btn = document.querySelector('button[onclick*="openHowToPlay"]');
+        if (btn) {
+          btn.onclick = (e) => {
+            e.preventDefault();
+            this.openHowToPlay();
+          };
+        }
+        // Hide floating guess preview box if present
+        const guessBox = document.getElementById('guess-preview-box');
+        if (guessBox) {
+          guessBox.textContent = '';
+          guessBox.style.opacity = '0';
+        }
+        // Hide any timer-bar if present (should not be visible on home)
+        document.querySelectorAll('.timer-bar').forEach(el => {
+          el.style.width = '0%';
+          el.style.opacity = '0';
+        });
+      }, 0);
     }
     if (name === 'play') {
       const durSel = document.getElementById('clue-duration-select');
@@ -1077,6 +1107,14 @@ class App {
     // if (name === 'archive')  this.renderArchive();
     if (name === 'stats')    this.renderStats();
     if (name === 'admin')    this.initAdmin();
+  }
+
+  // --- Open How to Play Modal ---
+  openHowToPlay() {
+    const modalTpl = document.getElementById('how-to-play-modal');
+    if (!modalTpl) return;
+    document.getElementById('modal-backdrop').classList.remove('hidden');
+    document.getElementById('modal-content').innerHTML = modalTpl.innerHTML;
   }
 
   // ==================== HOME ====================
