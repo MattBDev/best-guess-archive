@@ -17,6 +17,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 <style>
+    /* Mobile keyboard handling and compressed layout */
+    @media (max-width: 600px) {
+      body.keyboard-open #play-game-layout { max-height: 100dvh !important; overflow: hidden; }
+      body.keyboard-open #active-clue-area { min-height: 60px !important; padding: 0 !important; }
+      body.keyboard-open #active-clue-area h2 { font-size: 1.2rem !important; padding: 0.5rem 0 !important; }
+      body.keyboard-open #past-clues { max-height: 80px !important; }
+      body.keyboard-open #input-container { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+    }
   body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #fff; background-image: radial-gradient(circle at 50% 0%, #1e1b4b, #0f172a); min-height: 100vh; }
   .font-display { font-family: 'Oswald', sans-serif; }
   .glass-panel { background: rgba(30,41,59,.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.1); }
@@ -42,6 +50,40 @@
 </style>
 </head>
 <body class="flex flex-col">
+
+<script>
+// Detect keyboard open on mobile and adjust layout
+function isMobile() {
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+}
+let lastInnerHeight = window.innerHeight;
+window.addEventListener('resize', function() {
+  if (!isMobile()) return;
+  // If height shrinks by >120px, likely keyboard is open
+  if (window.innerHeight < lastInnerHeight - 120) {
+    document.body.classList.add('keyboard-open');
+  } else if (window.innerHeight > lastInnerHeight + 80) {
+    document.body.classList.remove('keyboard-open');
+  }
+  lastInnerHeight = window.innerHeight;
+});
+// Also handle input focus/blur for extra reliability
+document.addEventListener('focusin', function(e) {
+  if (isMobile() && e.target && e.target.id === 'guess-input') {
+    document.body.classList.add('keyboard-open');
+    setTimeout(()=>{
+      // Scroll the play area into view
+      const play = document.getElementById('play-game-layout');
+      if (play) play.scrollIntoView({block:'start', behavior:'smooth'});
+    }, 100);
+  }
+});
+document.addEventListener('focusout', function(e) {
+  if (isMobile() && e.target && e.target.id === 'guess-input') {
+    document.body.classList.remove('keyboard-open');
+  }
+});
+</script>
 
 <!-- Navigation -->
 <nav class="glass-panel sticky top-0 z-50 border-b border-white/10">
