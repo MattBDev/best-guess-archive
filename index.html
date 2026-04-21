@@ -103,35 +103,58 @@
 
 
 <script>
-// Detect keyboard open on mobile and adjust layout
+// Detect keyboard open on mobile and adjust layout.
+// iPads running iPadOS 13+ report as "Macintosh", so check touch support too.
 function isMobile() {
-  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 }
-let lastInnerHeight = window.innerHeight;
-window.addEventListener('resize', function() {
-  if (!isMobile()) return;
-  // If height shrinks by >120px, likely keyboard is open
-  if (window.innerHeight < lastInnerHeight - 120) {
+
+function setKeyboardOpen(open) {
+  if (open) {
     document.body.classList.add('keyboard-open');
-  } else if (window.innerHeight > lastInnerHeight + 80) {
+  } else {
     document.body.classList.remove('keyboard-open');
   }
-  lastInnerHeight = window.innerHeight;
-});
-// Also handle input focus/blur for extra reliability
+}
+
+// visualViewport is the reliable API: window.innerHeight stays fixed on iOS
+// when the soft keyboard opens, but visualViewport.height shrinks.
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', function() {
+    if (!isMobile()) return;
+    const gap = window.innerHeight - window.visualViewport.height;
+    setKeyboardOpen(gap > 120);
+  });
+} else {
+  // Fallback for older browsers
+  let lastInnerHeight = window.innerHeight;
+  window.addEventListener('resize', function() {
+    if (!isMobile()) return;
+    if (window.innerHeight < lastInnerHeight - 120) {
+      setKeyboardOpen(true);
+    } else if (window.innerHeight > lastInnerHeight + 80) {
+      setKeyboardOpen(false);
+    }
+    lastInnerHeight = window.innerHeight;
+  });
+}
+
+// focusin immediately marks keyboard open (before resize fires).
+// focusout uses a short delay so tapping SKIP CLUE doesn't collapse the
+// layout before the tap registers on its new position.
+let _kbCloseTimer = null;
 document.addEventListener('focusin', function(e) {
-  if (isMobile() && e.target && e.target.id === 'guess-input') {
-    document.body.classList.add('keyboard-open');
-    setTimeout(()=>{
-      // Scroll the play area into view
-      const play = document.getElementById('play-game-layout');
-      if (play) play.scrollIntoView({block:'start', behavior:'smooth'});
-    }, 100);
+  if (e.target && e.target.id === 'guess-input') {
+    clearTimeout(_kbCloseTimer);
+    if (isMobile()) setKeyboardOpen(true);
   }
 });
 document.addEventListener('focusout', function(e) {
-  if (isMobile() && e.target && e.target.id === 'guess-input') {
-    document.body.classList.remove('keyboard-open');
+  if (e.target && e.target.id === 'guess-input') {
+    _kbCloseTimer = setTimeout(function() {
+      setKeyboardOpen(false);
+    }, 150);
   }
 });
 </script>
@@ -341,7 +364,8 @@ document.addEventListener('focusout', function(e) {
   <!-- Input bar — always at bottom, part of normal flow (not fixed) -->
   <div class="flex-shrink-0 border-t border-white/10 bg-slate-900/80 backdrop-blur-md px-3 pt-3 pb-4" id="input-container" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
     <div class="relative mb-2">
-      <input autocomplete="off" id="guess-input" type="text"
+      <input autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="go"
+        id="guess-input" type="text"
         class="w-full bg-slate-800 border border-slate-600 rounded-lg py-3 pl-4 pr-28 text-base text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
         placeholder="Your best guess..."
         onkeydown="if(event.key==='Enter') app.submitGuess()">
@@ -349,19 +373,19 @@ document.addEventListener('focusout', function(e) {
         <span class="material-symbols-outlined" style="font-size:16px;line-height:1">check</span> LOCK IN
       </button>
     </div>
-    <div class="flex justify-between">
+    <div class="flex justify-between items-center">
       <div class="flex items-center gap-2 text-xs text-slate-400">
         <span class="material-symbols-outlined text-[#FFA300] text-[16px]">timer</span>
-        <label for="clue-duration-select">Clue Display Time:</label>
-        <select id="clue-duration-select" class="bg-slate-800 border border-slate-600 focus:border-blue-500 text-white rounded px-1 py-0.5 outline-none transition" onchange="localStorage.setItem('clue_time', this.value); if(app.currentGame && app.gameStarted) app.renderGameLoop();">
-          <option value="20">20s (Real Game)</option>
+        <label for="clue-duration-select" class="hidden sm:inline">Clue Time:</label>
+        <select id="clue-duration-select" class="bg-slate-800 border border-slate-600 focus:border-blue-500 text-white rounded px-2 py-1.5 outline-none transition text-xs" onchange="localStorage.setItem('clue_time', this.value); if(app.currentGame && app.gameStarted) app.renderGameLoop();">
+          <option value="20">20s (Real)</option>
           <option value="30">30s</option>
           <option value="45">45s</option>
           <option value="60">60s</option>
         </select>
       </div>
-      <button class="text-slate-400 hover:text-white flex items-center gap-1 text-xs transition" onclick="app.nextClue()">
-        SKIP CLUE <span class="material-symbols-outlined" style="font-size:14px;line-height:1">skip_next</span>
+      <button class="text-slate-400 hover:text-white active:text-white flex items-center gap-1 text-xs font-bold transition py-2 px-3 rounded-lg hover:bg-white/10 active:bg-white/10 min-h-[36px]" onclick="app.nextClue()">
+        SKIP <span class="material-symbols-outlined" style="font-size:16px;line-height:1">skip_next</span>
       </button>
     </div>
   </div>
@@ -1255,7 +1279,9 @@ class App {
     const inputEl = document.getElementById('guess-input');
     if (inputEl) {
       inputEl.disabled = false;
-      inputEl.focus();
+      // setTimeout defers focus to the next tick, which is required on iOS Safari
+      // for programmatic .focus() to reliably open the soft keyboard.
+      setTimeout(() => inputEl.focus(), 0);
     }
     this.renderGameLoop();
   }
@@ -1426,6 +1452,10 @@ class App {
     }
 
   endGame(won, message, amount = 0, medal = null) {
+    // Dismiss the soft keyboard before switching to the result screen
+    const inputEl = document.getElementById('guess-input');
+    if (inputEl) inputEl.blur();
+
     // Hide the fixed-height game layout, restore normal page flow for the result
     const layout = document.getElementById('play-game-layout');
     if (layout) layout.classList.add('hidden');
