@@ -1696,6 +1696,51 @@ class App {
     if (!g) return;
     document.getElementById('modal-backdrop').classList.remove('hidden');
 
+    // Bonus/special gift mapping by date
+    const bonusMap = {
+      'Wednesday, December 31, 2025': {
+        title: 'Uber Voucher',
+        desc: 'Players received a voucher for 50% off their next Uber ride. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two.'
+      },
+      'Friday, January 30, 2026': {
+        title: 'Netflix Subscription',
+        desc: 'Players won a free one-month subscription to Netflix. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two.'
+      },
+      'Friday, February 6, 2026': {
+        title: 'Good Ranchers Meat Delivery',
+        desc: 'Players received $100 off a Good Ranchers meat delivery subscription and "free meat for life". Anyone who got the answer correct on the earliest clue received a bonus essentials box (chicken, beef, seed-oil-free chicken nuggets, ~$250 value). <br><b>How to qualify:</b> Submit any answer during round two for the standard offer; lock in the correct answer on the earliest clue for the bonus meat box.'
+      },
+      'Friday, February 20, 2026': {
+        title: 'iFIT Subscription',
+        desc: 'Players won a free two-month subscription to iFIT online fitness training. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two.'
+      },
+      'Wednesday, February 25, 2026': {
+        title: 'Inkind Dining Voucher',
+        desc: 'Players received a $50 voucher toward a $100 meal at over 6,000 participating restaurants on the Inkind dining rewards app. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two.'
+      },
+      'Friday, February 27, 2026': {
+        title: 'RDX Sports Gift Card',
+        desc: 'Players earned a $20 digital gift card to use on purchases of $100 or more for RDX Sports combat and fitness gear. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two.'
+      },
+      'Monday, March 9, 2026': {
+        title: 'Partanna Olive Oil Voucher',
+        desc: 'Players received a voucher for $15 off an order of $75 or more for Partanna olive oil. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two.'
+      },
+      'Friday, March 13, 2026': {
+        title: 'The Guessie Awards',
+        desc: 'Three families won Best Guess Live exclusive merchandise (t-shirt, hat, mug) and six months of free Netflix. <br><b>How to qualify:</b> Submit a video of yourself/family playing the game, selected as a winner by viewer votes during the Guessie Awards.'
+      },
+      'Tuesday, March 31, 2026': {
+        title: 'Skechers Voucher',
+        desc: 'Players received a voucher for 40% off one item from Skechers. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two.'
+      },
+      'Monday, April 20, 2026': {
+        title: 'Netflix Shop Voucher',
+        desc: 'Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue).'
+      }
+    };
+    const bonus = bonusMap[g.date];
+
     const cluesHtml = g.clues.map((c, i) => {
       let e = c.explanation || '';
       if (e.includes(' - "')) e = e.split(' - "')[1].slice(0,-1);
@@ -1742,6 +1787,7 @@ class App {
         <div class="mt-4 text-xs text-slate-400 border-t border-slate-700 pt-3">
           <span class="font-bold text-white">Winners:</span> ${(g.winnerNames || 'None listed').toUpperCase()}
         </div>
+        ${bonus ? `<div class='mt-6 bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 text-left max-w-xl mx-auto'><span class='font-bold text-blue-300 block mb-1'>Special Bonus: ${bonus.title}</span><span class='text-blue-100 text-sm'>${bonus.desc}</span></div>` : ''}
       </div>
       <div class="bg-slate-900/50 rounded-xl p-2 mb-6 border border-white/5">${cluesHtml}</div>
       <div class="text-sm text-slate-400 bg-red-900/10 border border-red-500/20 p-4 rounded-lg">
