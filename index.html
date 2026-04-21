@@ -47,34 +47,15 @@
             display: block;
           }
         }
-      @media (max-width: 600px) {
-        body.keyboard-open #active-clue-area .bg-gradient-to-br {
-          min-height: 40px !important;
-          padding: 0.25rem 0.5rem !important;
-          height: auto !important;
-          box-shadow: none !important;
-        }
-        body.keyboard-open #active-clue-area .bg-gradient-to-br h2 {
-          font-size: 1.1rem !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          line-height: 1.2 !important;
-        }
-        body.keyboard-open #active-clue-area .absolute.inset-0 {
-          display: none !important;
-        }
-      }
     /* Mobile keyboard handling and compressed layout */
     @media (max-width: 600px) {
       body.in-play #play-game-layout { overflow: hidden; }
-      body.keyboard-open #active-clue-area { min-height: 60px !important; padding: 0 !important; }
-      body.keyboard-open #active-clue-area h2 { font-size: 1.2rem !important; padding: 0.5rem 0 !important; }
-      body.keyboard-open #past-clues { max-height: 80px !important; }
+      /* Removed keyboard-open layout rules — JS height tracking + flex handles compression */
       body.keyboard-open #input-container { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
     }
   body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #fff; background-image: radial-gradient(circle at 50% 0%, #1e1b4b, #0f172a); min-height: 100vh; }
   body.in-play nav { display: none !important; }
-  body.in-play { overflow: hidden !important; touch-action: none; position: fixed; width: 100%; top: 0; left: 0; }
+  body.in-play { overflow: hidden; touch-action: none; }
   .font-display { font-family: 'Oswald', sans-serif; }
   .glass-panel { background: rgba(30,41,59,.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.1); }
   .gold-gradient-text { background: linear-gradient(to bottom,#fde68a,#d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -1115,25 +1096,37 @@ class App {
       const layout = document.getElementById('play-game-layout');
       if (layout) {
         layout.style.position = 'fixed';
-        layout.style.top = '0';
         layout.style.left = '0';
         layout.style.right = '0';
         layout.style.margin = '0 auto';
         layout.style.maxWidth = '48rem';
         layout.style.zIndex = '100';
-        // Height tracks visualViewport (shrinks when keyboard opens on iOS).
-        const applyPlayHeight = () => {
-          const vvh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+        // Track both height AND offsetTop of the visual viewport.
+        // On iOS Safari, even with overflow:hidden on body, Safari can shift
+        // the visual viewport when an input is focused (offsetTop becomes > 0),
+        // placing our fixed-top layout above the visible area. Tracking offsetTop
+        // keeps the layout anchored to what the user can actually see.
+        const applyPlayLayout = () => {
+          const vv = window.visualViewport;
+          const vvh = vv ? vv.height : window.innerHeight;
+          const vvTop = vv ? vv.offsetTop : 0;
+          layout.style.top = vvTop + 'px';
           layout.style.height = vvh + 'px';
         };
-        applyPlayHeight();
+        applyPlayLayout();
         if (this._playResizeHandler) {
           window.removeEventListener('resize', this._playResizeHandler);
-          if (window.visualViewport) window.visualViewport.removeEventListener('resize', this._playResizeHandler);
+          if (window.visualViewport) {
+            window.visualViewport.removeEventListener('resize', this._playResizeHandler);
+            window.visualViewport.removeEventListener('scroll', this._playResizeHandler);
+          }
         }
-        this._playResizeHandler = applyPlayHeight;
+        this._playResizeHandler = applyPlayLayout;
         window.addEventListener('resize', this._playResizeHandler);
-        if (window.visualViewport) window.visualViewport.addEventListener('resize', this._playResizeHandler);
+        if (window.visualViewport) {
+          window.visualViewport.addEventListener('resize', this._playResizeHandler);
+          window.visualViewport.addEventListener('scroll', this._playResizeHandler);
+        }
       }
     } else {
       document.body.classList.remove('in-play');
@@ -1143,7 +1136,10 @@ class App {
       container.style.overflow = '';
       if (this._playResizeHandler) {
         window.removeEventListener('resize', this._playResizeHandler);
-        if (window.visualViewport) window.visualViewport.removeEventListener('resize', this._playResizeHandler);
+        if (window.visualViewport) {
+          window.visualViewport.removeEventListener('resize', this._playResizeHandler);
+          window.visualViewport.removeEventListener('scroll', this._playResizeHandler);
+        }
         this._playResizeHandler = null;
       }
     }
@@ -1516,7 +1512,10 @@ class App {
     if (navEl) navEl.style.display = '';
     if (this._playResizeHandler) {
       window.removeEventListener('resize', this._playResizeHandler);
-      if (window.visualViewport) window.visualViewport.removeEventListener('resize', this._playResizeHandler);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', this._playResizeHandler);
+        window.visualViewport.removeEventListener('scroll', this._playResizeHandler);
+      }
       this._playResizeHandler = null;
     }
     document.getElementById('game-state-result').classList.remove('hidden');
