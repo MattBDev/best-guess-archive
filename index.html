@@ -1046,6 +1046,20 @@ class App {
     this.init();
   }
 
+  _b64DecodeUTF8(b64) {
+    const binary = atob(b64.replace(/\n/g, ''));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  _b64EncodeUTF8(str) {
+    const bytes = new TextEncoder().encode(str);
+    let binary = '';
+    bytes.forEach(b => binary += String.fromCharCode(b));
+    return btoa(binary);
+  }
+
   async init() {
     try {
       const res = await fetch('./data/games.json?v=' + Date.now());
@@ -2159,16 +2173,17 @@ class App {
       const fileData = await getRes.json();
 
       // 2. Decode and filter out the selected date
-      const existing = JSON.parse(decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, '')))));
+      const existing = JSON.parse(this._b64DecodeUTF8(fileData.content));
+      if (!Array.isArray(existing)) throw new Error('games.json on GitHub is not a valid array. Aborting to prevent data loss.');
       const gamesToKeep = existing.filter(g => g.date !== dateToDelete);
       const deletedCount = existing.length - gamesToKeep.length;
-      
+
       if (deletedCount === 0) {
         throw new Error(`No games found matching date ${dateToDelete} in the remote file.`);
       }
 
       // 3. Commit the updated array
-      const content = btoa(encodeURIComponent(JSON.stringify(gamesToKeep, null, 2)));
+      const content = this._b64EncodeUTF8(JSON.stringify(gamesToKeep, null, 2));
       
       status.innerText = `Committing deletion of ${deletedCount} game${deletedCount>1?'s':''} from ${dateToDelete}...`;
       const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/data/games.json`, {
@@ -2236,20 +2251,93 @@ class App {
 
     const errors = [];
     parsed.forEach((g, i) => {
-      ['date','format','host','pot','secretItem','clues','goldClue','totalWinners','winnerPayout','winnerNames','wrongGuesses'].forEach(k => {
-        if (g[k] === undefined || g[k] === null || g[k] === '') errors.push(`Game ${i+1}: missing "${k}"`);
-      });
-      if (g.clues && g.clues.length !== 5) errors.push(`Game ${i+1}: clues array must have exactly 5 items (found ${g.clues?.length})`);
+      const label = `Game ${i+1}${g.secretItem ? ` ("${g.secretItem}")` : ''}`;
+
+      // date
+      if (!g.date || typeof g.date !== 'string' || !g.date.trim())
+        errors.push(`${label}: "date" is missing or empty`);
+
+      // format
+      if (g.format !== 'v1' && g.format !== 'v2')
+        errors.push(`${label}: "format" must be "v1" or "v2" (got ${JSON.stringify(g.format)})`);
+
+      // host
+      if (!g.host || typeof g.host !== 'string')
+        errors.push(`${label}: "host" is missing or not a string`);
+
+      // pot — must be a finite number so .toLocaleString() works
+      if (typeof g.pot !== 'number' || !isFinite(g.pot) || g.pot < 0)
+        errors.push(`${label}: "pot" must be a non-negative number (got ${JSON.stringify(g.pot)})`);
+
+      // secretItem
+      if (!g.secretItem || typeof g.secretItem !== 'string')
+        errors.push(`${label}: "secretItem" is missing or not a string`);
+
+      // clues array — missing or wrong type crashes every reduce/map on the game
+      if (!Array.isArray(g.clues)) {
+        errors.push(`${label}: "clues" must be an array`);
+      } else {
+        if (g.clues.length !== 5)
+          errors.push(`${label}: "clues" must have exactly 5 items (found ${g.clues.length})`);
+        g.clues.forEach((c, ci) => {
+          const clueLabel = `${label} clue ${ci+1}`;
+          if (!c || typeof c !== 'object') {
+            errors.push(`${clueLabel}: is not an object`);
+            return;
+          }
+          if (!c.text || typeof c.text !== 'string')
+            errors.push(`${clueLabel}: missing "text"`);
+          if (c.correct === undefined || c.correct === null || c.correct === '')
+            errors.push(`${clueLabel}: missing "correct"`);
+          else if (isNaN(parseInt(String(c.correct).replace(/[^0-9]/g, ''), 10)))
+            errors.push(`${clueLabel}: "correct" is not numeric (got ${JSON.stringify(c.correct)})`);
+          if (c.guesses === undefined || c.guesses === null || c.guesses === '')
+            errors.push(`${clueLabel}: missing "guesses"`);
+          else if (isNaN(parseInt(String(c.guesses).replace(/[^0-9]/g, ''), 10)))
+            errors.push(`${clueLabel}: "guesses" is not numeric (got ${JSON.stringify(c.guesses)})`);
+        });
+      }
+
+      // goldClue — must be integer 1-5
+      const goldN = Number(g.goldClue);
+      if (g.goldClue === undefined || g.goldClue === null || g.goldClue === '' || !Number.isInteger(goldN) || goldN < 1 || goldN > 5)
+        errors.push(`${label}: "goldClue" must be an integer 1–5 (got ${JSON.stringify(g.goldClue)})`);
+
+      // totalWinners — must be a non-negative number
+      if (typeof g.totalWinners !== 'number' || !isFinite(g.totalWinners) || g.totalWinners < 0)
+        errors.push(`${label}: "totalWinners" must be a non-negative number (got ${JSON.stringify(g.totalWinners)})`);
+
+      // winnerPayout
+      if (g.winnerPayout === undefined || g.winnerPayout === null || g.winnerPayout === '')
+        errors.push(`${label}: "winnerPayout" is missing`);
+
+      // winnerNames / wrongGuesses — null is fine but the key must exist
+      if (!('winnerNames' in g))
+        errors.push(`${label}: "winnerNames" field is missing (use null or "" if none)`);
+      if (!('wrongGuesses' in g))
+        errors.push(`${label}: "wrongGuesses" field is missing (use null or "" if none)`);
+
+      // v2-specific fields
       if (g.format === 'v2') {
-        ['silverClue','bronzeClue','goldWinners','silverWinners','bronzeWinners','goldPayout','silverPayout','bronzePayout'].forEach(k => {
-          if (g[k] === undefined || g[k] === null || g[k] === '') errors.push(`Game ${i+1} (v2 format): missing "${k}"`);
+        ['silverClue','bronzeClue'].forEach(k => {
+          const n = Number(g[k]);
+          if (g[k] === undefined || g[k] === null || g[k] === '' || !Number.isInteger(n) || n < 1 || n > 5)
+            errors.push(`${label}: "${k}" must be an integer 1–5 (got ${JSON.stringify(g[k])})`);
+        });
+        ['goldWinners','silverWinners','bronzeWinners'].forEach(k => {
+          if (typeof g[k] !== 'number' || !isFinite(g[k]) || g[k] < 0)
+            errors.push(`${label}: "${k}" must be a non-negative number (got ${JSON.stringify(g[k])})`);
+        });
+        ['goldPayout','silverPayout','bronzePayout'].forEach(k => {
+          if (g[k] === undefined || g[k] === null || g[k] === '')
+            errors.push(`${label}: "${k}" is missing`);
         });
       }
     });
 
     if (errors.length) {
       preview.classList.remove('hidden');
-      preview.innerHTML = `<div class="text-red-400 text-sm bg-red-900/20 p-3 rounded space-y-1">${errors.map(e=>`<div>⚠ ${e}</div>`).join('')}</div>`;
+      preview.innerHTML = `<div class="text-red-400 text-sm bg-red-900/20 p-3 rounded space-y-1"><div class="font-bold mb-2">⛔ Import blocked — fix these errors before publishing:</div>${errors.map(e => `<div class="pl-2">• ${e}</div>`).join('')}</div>`;
       return;
     }
 
@@ -2343,7 +2431,8 @@ class App {
       const fileData = await getRes.json();
 
       // 2. Decode, overwrite existing, merge
-      const existing = JSON.parse(decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, '')))));
+      const existing = JSON.parse(this._b64DecodeUTF8(fileData.content));
+      if (!Array.isArray(existing)) throw new Error('games.json on GitHub is not a valid array. Aborting to prevent data loss.');
       const targetReplaceDate = document.getElementById('delete-date-select').value;
       
       let filteredExisting = [];
@@ -2358,7 +2447,7 @@ class App {
 
       // 3. Prepend and commit
       const merged  = [...this._pendingGames, ...filteredExisting];
-      const content = btoa(encodeURIComponent(JSON.stringify(merged, null, 2)));
+      const content = this._b64EncodeUTF8(JSON.stringify(merged, null, 2));
 
       let commitMsg = `Import ${this._pendingGames.length} game${this._pendingGames.length>1?'s':''}: ${this._pendingGames.map(g=>g.secretItem).join(', ')}`;
       if (targetReplaceDate) {
