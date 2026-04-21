@@ -66,14 +66,15 @@
       }
     /* Mobile keyboard handling and compressed layout */
     @media (max-width: 600px) {
-      body.keyboard-open nav { display: none; }
-      body.keyboard-open #play-game-layout { overflow: hidden; }
+      body.in-play #play-game-layout { overflow: hidden; }
       body.keyboard-open #active-clue-area { min-height: 60px !important; padding: 0 !important; }
       body.keyboard-open #active-clue-area h2 { font-size: 1.2rem !important; padding: 0.5rem 0 !important; }
       body.keyboard-open #past-clues { max-height: 80px !important; }
       body.keyboard-open #input-container { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
     }
   body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #fff; background-image: radial-gradient(circle at 50% 0%, #1e1b4b, #0f172a); min-height: 100vh; }
+  body.in-play nav { display: none; }
+  body.in-play { overflow: hidden; touch-action: none; }
   .font-display { font-family: 'Oswald', sans-serif; }
   .glass-panel { background: rgba(30,41,59,.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.1); }
   .gold-gradient-text { background: linear-gradient(to bottom,#fde68a,#d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -1099,23 +1100,20 @@ class App {
     if (!tpl) return;
     const container = document.getElementById('app-container');
     container.innerHTML = tpl.innerHTML;
-    // Play mode: fill the viewport with no padding so the layout is self-contained
+    // Play mode: full-screen layout, nav hidden via body.in-play CSS.
     if (name === 'play') {
+      document.body.classList.add('in-play');
       container.style.padding = '0';
       container.style.overflow = 'hidden';
-      // Size the game layout to fill remaining viewport below the nav.
-      // Use visualViewport.height (tracks keyboard state on iOS) instead of 100dvh
-      // which is unreliable and causes the header to slip behind the nav when
-      // the keyboard opens.
       const layout = document.getElementById('play-game-layout');
       if (layout) {
-        layout.style.maxWidth = '48rem'; // max-w-3xl equivalent
+        layout.style.maxWidth = '48rem';
         layout.style.margin = '0 auto';
+        // Nav is hidden (body.in-play) so use full visualViewport height.
+        // visualViewport.height tracks the available area above the keyboard on iOS.
         const applyPlayHeight = () => {
-          const navEl = document.querySelector('nav');
-          const navH = navEl ? navEl.offsetHeight : 64;
           const vvh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-          layout.style.height = (vvh - navH) + 'px';
+          layout.style.height = vvh + 'px';
         };
         applyPlayHeight();
         if (this._playResizeHandler) {
@@ -1127,6 +1125,7 @@ class App {
         if (window.visualViewport) window.visualViewport.addEventListener('resize', this._playResizeHandler);
       }
     } else {
+      document.body.classList.remove('in-play');
       container.style.padding = '';
       container.style.overflow = '';
       if (this._playResizeHandler) {
