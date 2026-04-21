@@ -1017,7 +1017,7 @@ FORMATTING RULES:
 //   crypto.subtle.digest('SHA-256',new TextEncoder().encode('YOURPIN'))
 //     .then(b=>console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
 // Then update ADMIN_PIN_HASH below and commit.
-const ADMIN_PIN_HASH = '9071cdd9b1455951925e4a5ebbcb248fecc6e9028feac5bfd7f38d9bc2f1bf37'; // SHA-256("132025")
+const ADMIN_PIN_HASH = '269ea4910f6202594cab138862120b206126129a90e9a74a8d4ffeabc3871f1f'; // SHA-256("8131010372172929")
 
 async function sha256hex(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
