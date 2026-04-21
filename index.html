@@ -861,7 +861,7 @@ document.addEventListener('focusout', function(e) {
   <!-- PIN Gate -->
   <div id="admin-pin-gate" class="glass-panel p-8 rounded-xl space-y-4">
     <p class="text-slate-400 text-sm">Enter admin PIN to continue.</p>
-    <input id="admin-pin-input" type="password" maxlength="8"
+    <input id="admin-pin-input" type="password" maxlength="32"
       class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-yellow-500"
       placeholder="PIN"
       onkeydown="if(event.key==='Enter') app.checkPin()">
