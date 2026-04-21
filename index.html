@@ -2253,75 +2253,6 @@ class App {
     const errors = [];
     const seenDates = new Set();
     parsed.forEach((g, i) => {
-<<<<<<< HEAD
-      const label = `Game ${i+1}${g.secretItem ? ` ("${g.secretItem}")` : ''}`;
-
-      // date
-      if (!g.date || typeof g.date !== 'string' || !g.date.trim())
-        errors.push(`${label}: "date" is missing or empty`);
-
-      // format
-      if (g.format !== 'v1' && g.format !== 'v2')
-        errors.push(`${label}: "format" must be "v1" or "v2" (got ${JSON.stringify(g.format)})`);
-
-      // host
-      if (!g.host || typeof g.host !== 'string')
-        errors.push(`${label}: "host" is missing or not a string`);
-
-      // pot — must be a finite number so .toLocaleString() works
-      if (typeof g.pot !== 'number' || !isFinite(g.pot) || g.pot < 0)
-        errors.push(`${label}: "pot" must be a non-negative number (got ${JSON.stringify(g.pot)})`);
-
-      // secretItem
-      if (!g.secretItem || typeof g.secretItem !== 'string')
-        errors.push(`${label}: "secretItem" is missing or not a string`);
-
-      // clues array — missing or wrong type crashes every reduce/map on the game
-      if (!Array.isArray(g.clues)) {
-        errors.push(`${label}: "clues" must be an array`);
-      } else {
-        if (g.clues.length !== 5)
-          errors.push(`${label}: "clues" must have exactly 5 items (found ${g.clues.length})`);
-        g.clues.forEach((c, ci) => {
-          const clueLabel = `${label} clue ${ci+1}`;
-          if (!c || typeof c !== 'object') {
-            errors.push(`${clueLabel}: is not an object`);
-            return;
-          }
-          if (!c.text || typeof c.text !== 'string')
-            errors.push(`${clueLabel}: missing "text"`);
-          if (c.correct === undefined || c.correct === null || c.correct === '')
-            errors.push(`${clueLabel}: missing "correct"`);
-          else if (isNaN(parseInt(String(c.correct).replace(/[^0-9]/g, ''), 10)))
-            errors.push(`${clueLabel}: "correct" is not numeric (got ${JSON.stringify(c.correct)})`);
-          if (c.guesses === undefined || c.guesses === null || c.guesses === '')
-            errors.push(`${clueLabel}: missing "guesses"`);
-          else if (isNaN(parseInt(String(c.guesses).replace(/[^0-9]/g, ''), 10)))
-            errors.push(`${clueLabel}: "guesses" is not numeric (got ${JSON.stringify(c.guesses)})`);
-        });
-      }
-
-      // goldClue — must be integer 1-5
-      const goldN = Number(g.goldClue);
-      if (g.goldClue === undefined || g.goldClue === null || g.goldClue === '' || !Number.isInteger(goldN) || goldN < 1 || goldN > 5)
-        errors.push(`${label}: "goldClue" must be an integer 1–5 (got ${JSON.stringify(g.goldClue)})`);
-
-      // totalWinners — must be a non-negative number
-      if (typeof g.totalWinners !== 'number' || !isFinite(g.totalWinners) || g.totalWinners < 0)
-        errors.push(`${label}: "totalWinners" must be a non-negative number (got ${JSON.stringify(g.totalWinners)})`);
-
-      // winnerPayout
-      if (g.winnerPayout === undefined || g.winnerPayout === null || g.winnerPayout === '')
-        errors.push(`${label}: "winnerPayout" is missing`);
-
-      // winnerNames / wrongGuesses — null is fine but the key must exist
-      if (!('winnerNames' in g))
-        errors.push(`${label}: "winnerNames" field is missing (use null or "" if none)`);
-      if (!('wrongGuesses' in g))
-        errors.push(`${label}: "wrongGuesses" field is missing (use null or "" if none)`);
-
-      // v2-specific fields
-=======
       // Basic required fields
       ['date','format','host','pot','secretItem','clues','goldClue','totalWinners','winnerPayout','winnerNames','wrongGuesses'].forEach(k => {
         if (g[k] === undefined || g[k] === null || g[k] === '') errors.push(`Game ${i+1}: missing "${k}"`);
@@ -2329,7 +2260,6 @@ class App {
       // Clues array
       if (!Array.isArray(g.clues) || g.clues.length !== 5) errors.push(`Game ${i+1}: clues array must have exactly 5 items (found ${g.clues?.length})`);
       // v2 format extra fields
->>>>>>> 65672e4 (Revamp admin import system: strict validation, no overwrite, safe deletion only)
       if (g.format === 'v2') {
         ['silverClue','bronzeClue'].forEach(k => {
           const n = Number(g[k]);
@@ -2455,26 +2385,6 @@ class App {
       if (!getRes.ok) throw new Error(`GitHub GET failed (${getRes.status}). Check your PAT and repo settings.`);
       const fileData = await getRes.json();
 
-<<<<<<< HEAD
-      // 2. Decode, overwrite existing, merge
-      const existing = JSON.parse(this._b64DecodeUTF8(fileData.content));
-      if (!Array.isArray(existing)) throw new Error('games.json on GitHub is not a valid array. Aborting to prevent data loss.');
-      const targetReplaceDate = document.getElementById('delete-date-select').value;
-      
-      let filteredExisting = [];
-      if (targetReplaceDate) {
-         // If user specifically selected a date to replace, completely remove all games from that date
-         filteredExisting = existing.filter(g => g.date !== targetReplaceDate);
-      } else {
-         // Otherwise, just auto-overwrite games with exact matching date + secret Item
-         const pendingKeys = new Set(this._pendingGames.map(g => g.date + '||' + g.secretItem));
-         filteredExisting = existing.filter(g => !pendingKeys.has(g.date + '||' + g.secretItem));
-      }
-
-      // 3. Prepend and commit
-      const merged  = [...this._pendingGames, ...filteredExisting];
-      const content = this._b64EncodeUTF8(JSON.stringify(merged, null, 2));
-=======
       // 2. Decode and validate no collisions
       const existing = JSON.parse(decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, '')))));
       const existingKeys = new Set(existing.map(g => g.date + '||' + g.secretItem));
@@ -2490,7 +2400,6 @@ class App {
       // 3. Append new games only
       const merged = [...existing, ...this._pendingGames];
       const content = btoa(encodeURIComponent(JSON.stringify(merged, null, 2)));
->>>>>>> 65672e4 (Revamp admin import system: strict validation, no overwrite, safe deletion only)
 
       const commitMsg = `Import ${this._pendingGames.length} game${this._pendingGames.length>1?'s':''}: ${this._pendingGames.map(g=>g.secretItem).join(', ')}`;
       status.innerText = `Committing ${this._pendingGames.length} new game${this._pendingGames.length>1?'s':''}...`;
