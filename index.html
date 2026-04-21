@@ -66,7 +66,7 @@
       }
     /* Mobile keyboard handling and compressed layout */
     @media (max-width: 600px) {
-      body.keyboard-open #play-game-layout { max-height: 100dvh !important; overflow: hidden; }
+      body.keyboard-open #play-game-layout { overflow: hidden; }
       body.keyboard-open #active-clue-area { min-height: 60px !important; padding: 0 !important; }
       body.keyboard-open #active-clue-area h2 { font-size: 1.2rem !important; padding: 0.5rem 0 !important; }
       body.keyboard-open #past-clues { max-height: 80px !important; }
@@ -1102,18 +1102,41 @@ class App {
     if (name === 'play') {
       container.style.padding = '0';
       container.style.overflow = 'hidden';
-      // Size the game layout to fill remaining viewport below the nav (64px)
+      // Size the game layout to fill remaining viewport below the nav.
+      // Use visualViewport.height (tracks keyboard state on iOS) instead of 100dvh
+      // which is unreliable and causes the header to slip behind the nav when
+      // the keyboard opens.
       const layout = document.getElementById('play-game-layout');
       if (layout) {
-        layout.style.height = 'calc(100dvh - 64px)';
         layout.style.maxWidth = '48rem'; // max-w-3xl equivalent
         layout.style.margin = '0 auto';
+        const applyPlayHeight = () => {
+          const navEl = document.querySelector('nav');
+          const navH = navEl ? navEl.offsetHeight : 64;
+          const vvh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+          layout.style.height = (vvh - navH) + 'px';
+        };
+        applyPlayHeight();
+        if (this._playResizeHandler) {
+          window.removeEventListener('resize', this._playResizeHandler);
+          if (window.visualViewport) window.visualViewport.removeEventListener('resize', this._playResizeHandler);
+        }
+        this._playResizeHandler = applyPlayHeight;
+        window.addEventListener('resize', this._playResizeHandler);
+        if (window.visualViewport) window.visualViewport.addEventListener('resize', this._playResizeHandler);
       }
     } else {
       container.style.padding = '';
       container.style.overflow = '';
+      if (this._playResizeHandler) {
+        window.removeEventListener('resize', this._playResizeHandler);
+        if (window.visualViewport) window.visualViewport.removeEventListener('resize', this._playResizeHandler);
+        this._playResizeHandler = null;
+      }
     }
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     if (name === 'home') {
       this.renderHomeStats(); 
       this._applyTipLinks();
