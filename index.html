@@ -615,67 +615,6 @@ document.addEventListener('focusout', function(e) {
     <div class="bg-slate-900/50 px-6 py-3 text-xs text-slate-500 flex justify-between items-center">
       <span id="db-count-display">Loading database...</span>
     </div>
-    <script>
-    window.setupDatabaseScrollControls = function setupDatabaseScrollControls() {
-      const controls = document.getElementById('db-desktop-controls');
-      const tableShell = document.getElementById('db-table-shell');
-      const tableScroll = document.getElementById('db-table-scroll');
-      const leftBtn = document.getElementById('db-scroll-left');
-      const rightBtn = document.getElementById('db-scroll-right');
-      if (!controls || !tableShell || !tableScroll || !leftBtn || !rightBtn) return;
-
-      if (typeof tableScroll._dbScrollCleanup === 'function') {
-        tableScroll._dbScrollCleanup();
-        tableScroll._dbScrollCleanup = null;
-      }
-      const scrollStep = () => Math.max(320, Math.round(tableScroll.clientWidth * 0.72));
-
-      const updateControls = () => {
-        const maxScroll = Math.max(0, tableScroll.scrollWidth - tableScroll.clientWidth);
-        const needsScroll = maxScroll > 10;
-        const canScrollLeft = tableScroll.scrollLeft > 10;
-        const canScrollRight = tableScroll.scrollLeft < maxScroll - 10;
-        const isDesktop = window.matchMedia('(min-width: 768px)').matches;
-
-        controls.hidden = !(isDesktop && needsScroll);
-        leftBtn.disabled = !canScrollLeft;
-        rightBtn.disabled = !canScrollRight;
-        tableShell.classList.toggle('can-scroll-left', canScrollLeft);
-        tableShell.classList.toggle('can-scroll-right', canScrollRight);
-      };
-
-      const onLeftClick = () => {
-        tableScroll.scrollBy({ left: -scrollStep(), behavior: 'smooth' });
-      };
-      const onRightClick = () => {
-        tableScroll.scrollBy({ left: scrollStep(), behavior: 'smooth' });
-      };
-      const onResize = () => updateControls();
-      const onScroll = () => updateControls();
-
-      leftBtn.addEventListener('click', onLeftClick);
-      rightBtn.addEventListener('click', onRightClick);
-      tableScroll.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onResize);
-
-      updateControls();
-      requestAnimationFrame(updateControls);
-      setTimeout(updateControls, 120);
-
-      tableScroll._dbScrollCleanup = function() {
-        leftBtn.removeEventListener('click', onLeftClick);
-        rightBtn.removeEventListener('click', onRightClick);
-        tableScroll.removeEventListener('scroll', onScroll);
-        window.removeEventListener('resize', onResize);
-      };
-    };
-
-    setTimeout(() => {
-      if (typeof window.setupDatabaseScrollControls === 'function') {
-        window.setupDatabaseScrollControls();
-      }
-    }, 0);
-    </script>
   </div>
 </div>
 </template>
@@ -1017,6 +956,65 @@ async function sha256hex(str) {
   return [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2,'0')).join('');
 }
 
+window.cleanupDatabaseScrollControls = function cleanupDatabaseScrollControls() {
+  const tableScroll = document.getElementById('db-table-scroll');
+  if (tableScroll && typeof tableScroll._dbScrollCleanup === 'function') {
+    tableScroll._dbScrollCleanup();
+    tableScroll._dbScrollCleanup = null;
+  }
+};
+
+window.setupDatabaseScrollControls = function setupDatabaseScrollControls() {
+  const controls = document.getElementById('db-desktop-controls');
+  const tableShell = document.getElementById('db-table-shell');
+  const tableScroll = document.getElementById('db-table-scroll');
+  const leftBtn = document.getElementById('db-scroll-left');
+  const rightBtn = document.getElementById('db-scroll-right');
+  if (!controls || !tableShell || !tableScroll || !leftBtn || !rightBtn) return;
+
+  window.cleanupDatabaseScrollControls();
+
+  const scrollStep = () => Math.max(320, Math.round(tableScroll.clientWidth * 0.72));
+  const updateControls = () => {
+    const maxScroll = Math.max(0, tableScroll.scrollWidth - tableScroll.clientWidth);
+    const needsScroll = maxScroll > 10;
+    const canScrollLeft = tableScroll.scrollLeft > 10;
+    const canScrollRight = tableScroll.scrollLeft < maxScroll - 10;
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+
+    controls.hidden = !(isDesktop && needsScroll);
+    leftBtn.disabled = !canScrollLeft;
+    rightBtn.disabled = !canScrollRight;
+    tableShell.classList.toggle('can-scroll-left', canScrollLeft);
+    tableShell.classList.toggle('can-scroll-right', canScrollRight);
+  };
+
+  const onLeftClick = () => {
+    tableScroll.scrollBy({ left: -scrollStep(), behavior: 'smooth' });
+  };
+  const onRightClick = () => {
+    tableScroll.scrollBy({ left: scrollStep(), behavior: 'smooth' });
+  };
+  const onResize = () => updateControls();
+  const onScroll = () => updateControls();
+
+  leftBtn.addEventListener('click', onLeftClick);
+  rightBtn.addEventListener('click', onRightClick);
+  tableScroll.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onResize);
+
+  updateControls();
+  requestAnimationFrame(updateControls);
+  setTimeout(updateControls, 120);
+
+  tableScroll._dbScrollCleanup = function() {
+    leftBtn.removeEventListener('click', onLeftClick);
+    rightBtn.removeEventListener('click', onRightClick);
+    tableScroll.removeEventListener('scroll', onScroll);
+    window.removeEventListener('resize', onResize);
+  };
+};
+
 // ============================================================
 class App {
   constructor() {
@@ -1100,6 +1098,9 @@ class App {
 
   // ==================== VIEWS ====================
   setView(name) {
+    if (name !== 'database' && typeof window.cleanupDatabaseScrollControls === 'function') {
+      window.cleanupDatabaseScrollControls();
+    }
     const tpl = document.getElementById(`view-${name}`);
     if (!tpl) return;
     const container = document.getElementById('app-container');
