@@ -1092,6 +1092,7 @@ class App {
       const res = await fetch('./data/games.json?v=' + Date.now());
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       this.games = await res.json();
+      this._normalizeGames(this.games);
       document.getElementById('status-indicator').className = 'w-2 h-2 rounded-full bg-green-500';
       document.getElementById('data-source-status').innerText = `${this.games.length} rounds loaded`;
     } catch (err) {
@@ -1221,7 +1222,7 @@ class App {
   renderHomeStats() {
     if (!this.games.length) return;
     const totalPot     = this.games.reduce((a, g) => a + g.pot, 0);
-    const totalWinners = this.games.reduce((a, g) => a + (g.totalWinners || g.winnerCount || 0), 0);
+    const totalWinners = this.games.reduce((a, g) => a + (g.totalWinners), 0);
     setTimeout(() => {
       const m = document.getElementById('total-money-display');
       const g = document.getElementById('total-games-display');
@@ -1535,7 +1536,7 @@ class App {
           }
         } else {
           const winningClue = g.winningClue || g.goldClue;
-          const winnerCount = g.totalWinners || g.winnerCount || 0;
+          const winnerCount = g.totalWinners;
           if (n > winningClue) {
             this.endGame('close', `You were right, but a little too late! The game was already decided on Clue ${winningClue}.`);
           } else if (n < winningClue) {
@@ -1646,7 +1647,7 @@ class App {
         </div>
         <div class="flex justify-between border-b border-white/5 pb-2">
           <span class="text-slate-400">Actual Winners</span>
-          <span class="text-white font-bold">${Number(g.totalWinners || g.winnerCount || 0).toLocaleString()}</span>
+          <span class="text-white font-bold">${Number(g.totalWinners).toLocaleString()}</span>
         </div>
         <div class="flex justify-between border-b border-white/5 pb-2">
           <span class="text-slate-400">Real Payout</span>
@@ -1746,7 +1747,7 @@ class App {
       const totalPlayers = g.clues.reduce((a, c) => a + parseN(c.guesses), 0);
 
       // Winners
-      const totalW = g.totalWinners || g.winnerCount || 0;
+      const totalW = g.totalWinners;
       const winnersHtml = isV2
         ? `<div class="text-xs text-center space-y-0.5">
             <div>🥇 <span class="font-mono text-yellow-400">${(g.goldWinners || 0).toLocaleString()}</span></div>
@@ -1813,7 +1814,7 @@ class App {
       const tot = g => g.clues.reduce((a,c) => { const n=s=>parseInt(String(s||'0').replace(/[^0-9]/g,''),10)||0; return a+n(c.guesses); }, 0);
       this.games.sort((a, b) => dir * (tot(a) - tot(b)));
     } else if (key === 'winners') {
-      this.games.sort((a, b) => dir * ((a.totalWinners||a.winnerCount||0) - (b.totalWinners||b.winnerCount||0)));
+      this.games.sort((a, b) => dir * (a.totalWinners - b.totalWinners));
     }
     this.renderDatabase();
   }
@@ -1910,7 +1911,7 @@ class App {
           <span class="bg-orange-900/30 text-orange-400 border border-orange-600/30 px-3 py-1 rounded-full text-xs font-bold">🥉 Clue ${g.bronzeClue} · ${Number(g.bronzeWinners).toLocaleString()} winners · $${fmt2(g.bronzePayout)} each</span>
         </div>`
       : `<div class="flex justify-center mt-4">
-          <span class="bg-blue-900/30 text-blue-400 border border-blue-600/30 px-3 py-1 rounded-full text-sm font-bold">Won on Clue ${g.winningClue || g.goldClue} · ${(g.totalWinners||g.winnerCount||0).toLocaleString()} winners · ${g.winnerPayout}</span>
+          <span class="bg-blue-900/30 text-blue-400 border border-blue-600/30 px-3 py-1 rounded-full text-sm font-bold">Won on Clue ${g.winningClue || g.goldClue} · ${(g.totalWinners).toLocaleString()} winners · ${g.winnerPayout}</span>
         </div>`;
 
     document.getElementById('modal-content').innerHTML = `
@@ -1975,8 +1976,8 @@ class App {
 
     // ---- Core aggregates ----
     const totalPot = games.reduce((a, g) => a + g.pot, 0);
-    const totalWinners = games.reduce((a, g) => a + (g.totalWinners || g.winnerCount || 0), 0);
-    const soloWins = games.filter(g => (g.totalWinners || g.winnerCount || 0) === 1).length;
+    const totalWinners = games.reduce((a, g) => a + (g.totalWinners), 0);
+    const soloWins = games.filter(g => (g.totalWinners) === 1).length;
     const totalGuesses = games.reduce((a, g) => a + g.clues.reduce((b, c) => b + parseNum(c.guesses), 0), 0);
     const clueDist = {1:0,2:0,3:0,4:0,5:0};
     games.forEach(g => { const wc = Number(g.winningClue || g.goldClue); if (wc >= 1 && wc <= 5) clueDist[wc]++; });
@@ -2011,7 +2012,7 @@ class App {
       const sorted = [...games].sort((a,b) => new Date(a.date) - new Date(b.date));
       const timeLabels = sorted.map(g => { try { const d = new Date(g.date); if (!isNaN(d)) return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); } catch(e){} return g.date.split(',')[1]?.trim() || g.date; });
       const guessesData = sorted.map(g => g.clues.reduce((a, c) => a + parseNum(c.guesses), 0));
-      const winnersData = sorted.map(g => g.totalWinners || g.winnerCount || 0);
+      const winnersData = sorted.map(g => g.totalWinners);
       this._charts.playersTime = new Chart(document.getElementById('chart-players-time'), {
         type:'line',
         data:{ labels: timeLabels, datasets:[
@@ -2044,7 +2045,7 @@ class App {
       });
 
       // ---- Avg Winners Per Winning Clue ----
-      // For v2 games, use gold/silver/bronzeWinners for their respective clues; for v1, use totalWinners/winnerCount for winningClue
+      // For v2 games, use gold/silver/bronzeWinners per tier; for v1, use totalWinners for winningClue
       const wcWinnersMap = {1:[],2:[],3:[],4:[],5:[]};
       games.forEach(g => {
         if (g.format === 'v2') {
@@ -2053,7 +2054,7 @@ class App {
           if (g.bronzeClue && g.bronzeWinners != null && Number(g.bronzeWinners) > 0) wcWinnersMap[Number(g.bronzeClue)].push(Number(g.bronzeWinners));
         } else {
           const wc = Number(g.winningClue||g.goldClue);
-          const w = g.totalWinners||g.winnerCount||0;
+          const w = g.totalWinners;
           if (wc>=1&&wc<=5 && w > 0) wcWinnersMap[wc].push(w);
         }
       });
@@ -2140,7 +2141,7 @@ class App {
       const h = g.host || 'Unknown';
       if (!hostMap[h]) hostMap[h] = {games:0,winners:0,pot:0,clues:[]};
       hostMap[h].games++;
-      hostMap[h].winners += g.totalWinners||g.winnerCount||0;
+      hostMap[h].winners += g.totalWinners;
       hostMap[h].pot += g.pot;
       const wc = Number(g.winningClue||g.goldClue)||0;
       if (wc) hostMap[h].clues.push(wc);
@@ -2167,7 +2168,7 @@ class App {
     // ---- Records & Fun Facts ----
     const biggestPot = games.reduce((a,b) => b.pot>a.pot ? b : a);
     // Per-tier payout helpers: use actual goldPayout/silverPayout/bronzePayout for v2,
-    // fall back to pot/winnerCount for v1 which has only one tier.
+    // fall back to pot/totalWinners for v1 which has only one tier.
     const tierMin = g => {
       if (g.format==='v2') {
         const v=[];
@@ -2176,7 +2177,7 @@ class App {
         if ((g.bronzeWinners||0)>0&&(g.bronzePayout||0)>0) v.push({amt:g.bronzePayout,tier:'Bronze',w:g.bronzeWinners});
         return v.length ? v.reduce((a,b)=>b.amt<a.amt?b:a) : null;
       }
-      const w=g.totalWinners||g.winnerCount||0;
+      const w=g.totalWinners;
       return (w>0&&g.pot>0)?{amt:g.pot/w,tier:null,w}:null;
     };
     const tierMax = g => {
@@ -2187,11 +2188,11 @@ class App {
         if ((g.bronzeWinners||0)>0&&(g.bronzePayout||0)>0) v.push({amt:g.bronzePayout,tier:'Bronze',w:g.bronzeWinners});
         return v.length ? v.reduce((a,b)=>b.amt>a.amt?b:a) : null;
       }
-      const w=g.totalWinners||g.winnerCount||0;
+      const w=g.totalWinners;
       return (w>0&&g.pot>0)?{amt:g.pot/w,tier:null,w}:null;
     };
     const lowestWonEntry = games.map(g=>({g,r:tierMin(g)})).filter(x=>x.r).reduce((a,b)=>b.r.amt<a.r.amt?b:a);
-    const mostWinnersGame = games.reduce((a,b) => (b.totalWinners||b.winnerCount||0)>(a.totalWinners||a.winnerCount||0) ? b : a);
+    const mostWinnersGame = games.reduce((a,b) => b.totalWinners>a.totalWinners ? b : a);
     const mostGuessesGame = games.reduce((a,g) => { const t=g.clues.reduce((x,c)=>x+parseNum(c.guesses),0); return t>a.t?{t,g}:a; },{t:0,g:null});
     const longestItem = games.reduce((a,b) => b.secretItem.length>a.secretItem.length ? b : a);
     const shortestItem = games.reduce((a,b) => b.secretItem.length<a.secretItem.length ? b : a);
@@ -2234,7 +2235,7 @@ class App {
     const records = [
       {icon:'monetization_on', color:'text-yellow-400', label:'Biggest Single Pot', val:'$'+biggestPot.pot.toLocaleString(), sub: biggestPot.secretItem+' · '+biggestPot.date},
       {icon:'arrow_downward', color:'text-slate-400', label:'Lowest Amount Won', val: lowestWonEntry ? '$'+lowestWonEntry.r.amt.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}) : 'N/A', sub: lowestWonEntry ? (lowestWonEntry.r.tier?lowestWonEntry.r.tier+' · ':'')+lowestWonEntry.g.secretItem+' · '+lowestWonEntry.g.date : ''},
-      {icon:'people', color:'text-green-400', label:'Most Winners in One Game', val:(mostWinnersGame.totalWinners||mostWinnersGame.winnerCount||0).toLocaleString(), sub: mostWinnersGame.secretItem+' · '+mostWinnersGame.date},
+      {icon:'people', color:'text-green-400', label:'Most Winners in One Game', val:mostWinnersGame.totalWinners.toLocaleString(), sub: mostWinnersGame.secretItem+' · '+mostWinnersGame.date},
       {icon:'dangerous', color:'text-red-400', label:'Hardest Clue (Lowest %)',
         val: hardestClue ? `${hardestClue.clue.text}` : 'N/A',
         sub: hardestClue ? `Clue ${hardestClue.clueNum} · ${hardestClue.game.secretItem} · ${hardestClue.game.date} · ${(hardestClue.pct*100).toFixed(3)}% correct (${parseNum(hardestClue.clue.correct)}/${parseNum(hardestClue.clue.guesses)})` : ''
@@ -2266,15 +2267,15 @@ class App {
     const hardest = [...games].sort((a,b) => {
       const ac=a.format==='v2'?(a.bronzeClue||a.goldClue):(a.winningClue||a.goldClue||0);
       const bc=b.format==='v2'?(b.bronzeClue||b.goldClue):(b.winningClue||b.goldClue||0);
-      return (bc-ac)||((a.totalWinners||a.winnerCount||0)-(b.totalWinners||b.winnerCount||0));
+      return (bc-ac)||(a.totalWinners-b.totalWinners);
     }).slice(0,5);
     document.getElementById('stats-hardest-list').innerHTML = hardest.map(g => {
-      const last=g.format==='v2'?(g.bronzeClue||g.goldClue):(g.winningClue||g.goldClue||'?'); const w=g.totalWinners||g.winnerCount||0;
+      const last=g.format==='v2'?(g.bronzeClue||g.goldClue):(g.winningClue||g.goldClue||'?'); const w=g.totalWinners;
       return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div><div class="text-right shrink-0 ml-4"><div class="text-red-400 font-bold text-sm bg-red-900/20 px-2 py-1 rounded">Clue ${last}</div><div class="text-xs text-slate-500 mt-1">${w.toLocaleString()} winners</div></div></li>`;
     }).join('');
-    const easiest = [...games].sort((a,b)=>(b.totalWinners||b.winnerCount||0)-(a.totalWinners||a.winnerCount||0)).slice(0,5);
+    const easiest = [...games].sort((a,b)=>b.totalWinners-a.totalWinners).slice(0,5);
     document.getElementById('stats-easiest-list').innerHTML = easiest.map(g => {
-      const w=g.totalWinners||g.winnerCount||0;
+      const w=g.totalWinners;
       return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div><div class="text-right shrink-0 ml-4"><div class="text-green-400 font-bold text-sm bg-green-900/20 px-2 py-1 rounded">${w.toLocaleString()}</div><div class="text-xs text-slate-500 mt-1">winners</div></div></li>`;
     }).join('');
     const fewestEntries = games.map(g=>({g,r:tierMin(g)})).filter(x=>x.r).sort((a,b)=>a.r.amt-b.r.amt).slice(0,5);
@@ -2304,9 +2305,20 @@ class App {
       const res = await fetch('data/games.json?_=' + Date.now());
       if (!res.ok) throw new Error('Failed to fetch games.json');
       this.games = await res.json();
+      this._normalizeGames(this.games);
       this.renderStats();
     } catch (e) {
       alert('Error refreshing stats: ' + e.message);
+    }
+  }
+
+  // Unify v1/v2 winner count field so the rest of the app can rely on
+  // g.totalWinners. v1 games previously stored it as winnerCount.
+  _normalizeGames(games) {
+    for (const g of games) {
+      if (typeof g.totalWinners !== 'number') {
+        g.totalWinners = Number(g.winnerCount) || 0;
+      }
     }
   }
 
