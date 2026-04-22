@@ -76,7 +76,7 @@
        sticky would resolve to <body> (overflow:hidden is not a scroll container),
        causing #past-clues to float up and overlap the game header on devices
        where dvh !== window.innerHeight - navHeight by even 1px. */
-    #past-clues { background: rgba(15,23,42,0.97); }
+    #past-clues { background: transparent; }
     #input-container { background: rgba(15,23,42,0.97); }
     #active-clue-area { min-height: 120px; }
     input#guess-input { font-size: 18px; padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
@@ -341,7 +341,7 @@ document.addEventListener('focusout', function(e) {
   </div>
 
   <!-- Past clues — sticky on mobile, always visible, scrollable if overflow -->
-  <div class="flex-shrink-0 px-3 pt-2 pb-1 space-y-1.5 overflow-y-auto" style="max-height:35%" id="past-clues"></div>
+  <div class="flex-shrink-0 px-3 pt-2 pb-1 space-y-2 overflow-y-auto" style="max-height:35%" id="past-clues"></div>
 
   <!-- Active clue — takes all remaining height, card stretches to fill it -->
   <div class="flex-grow flex items-stretch px-3 py-2 min-h-0 overflow-hidden" id="active-clue-area">
@@ -1346,9 +1346,17 @@ class App {
       pastEl.innerHTML = '';
       for (let j = 0; j < ci; j++) {
         const div = document.createElement('div');
-        div.className = 'flex items-start gap-2 bg-slate-800/50 rounded-lg px-3 py-2 border border-slate-700/40';
-        div.innerHTML = `<span class="flex-shrink-0 text-[10px] font-bold text-slate-400 bg-slate-700 px-1.5 py-0.5 rounded leading-tight mt-0.5">C${j+1}</span>
-          <span class="text-slate-300 text-sm leading-snug">${g.clues[j].text}</span>`;
+        div.className = 'flex items-stretch rounded-xl overflow-hidden clue-stack-enter';
+        div.style.background = 'linear-gradient(90deg, #1a3a7a 0%, #1e4ea8 40%, #1a3a7a 100%)';
+        div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.4)';
+        div.innerHTML = `
+          <div class="flex items-center justify-center px-3 flex-shrink-0" style="background:rgba(0,0,0,0.18); min-width:2.5rem;">
+            <span class="text-white font-bold text-sm font-display">${j+1}</span>
+          </div>
+          <div class="w-px self-stretch flex-shrink-0" style="background:rgba(255,255,255,0.25)"></div>
+          <div class="flex items-center px-3 py-2">
+            <span class="text-white font-bold text-sm md:text-base font-display uppercase tracking-wide leading-snug">${g.clues[j].text}</span>
+          </div>`;
         pastEl.appendChild(div);
       }
       pastEl.scrollTop = pastEl.scrollHeight;
