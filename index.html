@@ -499,12 +499,12 @@ document.addEventListener('focusout', function(e) {
       display: flex;
       align-items: center;
       justify-content: center;
-      color: rgba(226,232,240,0.78);
-      background: linear-gradient(180deg, rgba(15,23,42,0.82) 0%, rgba(15,23,42,0.68) 100%);
+      color: rgba(226,232,240,0.84);
+      background: linear-gradient(180deg, rgba(15,23,42,0.88) 0%, rgba(15,23,42,0.76) 100%);
       border-radius: 999px;
       cursor: pointer;
-      border: 1px solid rgba(148,163,184,0.18);
-      box-shadow: 0 10px 24px rgba(2,6,23,0.2);
+      border: 1px solid rgba(148,163,184,0.24);
+      box-shadow: 0 10px 24px rgba(2,6,23,0.24);
       backdrop-filter: blur(10px);
       transition: background 0.18s, color 0.18s, opacity 0.18s, transform 0.18s;
     }
@@ -519,7 +519,7 @@ document.addEventListener('focusout', function(e) {
     .db-side-scroll-button:disabled {
       cursor: default;
       transform: translateY(-50%);
-      opacity: 0.22;
+      opacity: 0.45;
     }
     .db-side-scroll-button .db-arrow-glyph {
       font-family: 'Oswald', sans-serif;
@@ -954,15 +954,18 @@ window.setupDatabaseScrollControls = function setupDatabaseScrollControls() {
     if (!showButtons) return;
 
     const centerY = Math.max(110, Math.min((visibleTop + visibleBottom) / 2, window.innerHeight - 110));
+    const leftInset = Math.max(12, window.innerWidth - rect.right + 10);
+    const rightInset = Math.max(12, window.innerWidth - rect.right + 10);
     const leftX = Math.max(12, Math.min(rect.left + 10, window.innerWidth - 64));
-    const rightX = Math.max(12, Math.min(rect.right - 52, window.innerWidth - 52));
 
     leftBtn.style.top = centerY + 'px';
     leftBtn.style.left = leftX + 'px';
+    leftBtn.style.right = 'auto';
     leftBtn.style.transform = 'translateY(-50%)';
 
     rightBtn.style.top = centerY + 'px';
-    rightBtn.style.left = rightX + 'px';
+    rightBtn.style.left = 'auto';
+    rightBtn.style.right = rightInset + 'px';
     rightBtn.style.transform = 'translateY(-50%)';
   };
 
