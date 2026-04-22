@@ -452,6 +452,7 @@ document.addEventListener('focusout', function(e) {
       width: 100%;
       overflow-x: auto;
       margin: 0 auto;
+      scrollbar-gutter: stable both-edges;
     }
     .db-table {
       min-width: 1200px;
@@ -489,6 +490,131 @@ document.addEventListener('focusout', function(e) {
         }
     }
     /* Removed max-width on containers to allow horizontal overflow for floating scrollbar */
+
+    /* Desktop scroll dock */
+    .db-scroll-dock {
+      position: sticky;
+      top: 4.5rem;
+      z-index: 30;
+      width: 100%;
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 0.9rem;
+      background: linear-gradient(180deg, rgba(15,23,42,0.97) 0%, rgba(15,23,42,0.92) 100%);
+      border-top: 1px solid rgba(96,165,250,0.18);
+      border-bottom: 1px solid rgba(148,163,184,0.14);
+      backdrop-filter: blur(12px);
+    }
+    .db-scroll-copy {
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      min-width: 170px;
+    }
+    .db-scroll-kicker {
+      font-size: 0.62rem;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #60a5fa;
+      font-weight: 800;
+    }
+    .db-scroll-caption {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-top: 0.18rem;
+      white-space: nowrap;
+    }
+    .db-scroll-shell {
+      position: relative;
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+    .db-scroll-shell::before,
+    .db-scroll-shell::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 28px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .db-scroll-shell::before {
+      left: 2.6rem;
+      background: linear-gradient(90deg, rgba(15,23,42,0.95), rgba(15,23,42,0));
+    }
+    .db-scroll-shell::after {
+      right: 2.6rem;
+      background: linear-gradient(270deg, rgba(15,23,42,0.95), rgba(15,23,42,0));
+    }
+    .db-scroll-track {
+      overflow-x: scroll;
+      width: 100%;
+      height: 16px;
+      padding: 2px 0;
+      border-radius: 999px;
+      background: rgba(30,41,59,0.95);
+      border: 1px solid rgba(71,85,105,0.85);
+      scrollbar-color: #60a5fa rgba(15,23,42,0.2);
+      scrollbar-width: thin;
+      position: relative;
+      z-index: 2;
+    }
+    .db-scroll-track > div {
+      height: 8px;
+      border-radius: 999px;
+    }
+    .db-scroll-track::-webkit-scrollbar {
+      height: 10px;
+    }
+    .db-scroll-track::-webkit-scrollbar-track {
+      background: rgba(15,23,42,0.28);
+      border-radius: 999px;
+    }
+    .db-scroll-track::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, #38bdf8, #60a5fa);
+      border-radius: 999px;
+      border: 1px solid rgba(15,23,42,0.18);
+    }
+    .db-scroll-track::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(90deg, #7dd3fc, #93c5fd);
+    }
+    .db-scroll-arrow {
+      height: 2rem;
+      width: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e2e8f0;
+      background: rgba(30,41,59,0.96);
+      border-radius: 999px;
+      cursor: pointer;
+      border: 1px solid rgba(96,165,250,0.35);
+      box-shadow: 0 4px 14px rgba(2,6,23,0.22);
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      position: relative;
+      z-index: 2;
+    }
+    .db-scroll-arrow:hover {
+      color: #60a5fa;
+      background: rgba(51,65,85,0.98);
+      transform: translateY(-1px);
+    }
+    .db-scroll-arrow:disabled {
+      cursor: default;
+      transform: none;
+    }
+    @media (min-width: 768px) {
+      .db-scroll-dock { display: flex; }
+    }
+    @media (max-width: 767px) {
+      .db-scroll-dock { display: none !important; }
+    }
 
     /* Floating horizontal scrollbar */
     #db-floating-scrollbar {
@@ -529,6 +655,9 @@ document.addEventListener('focusout', function(e) {
       color: #60a5fa;
       background: #334155;
     }
+    @media (min-width: 768px) {
+      #db-floating-scrollbar { display: none !important; }
+    }
     @media (max-width: 600px) {
       #db-floating-scrollbar { display: none !important; }
     }
@@ -559,16 +688,22 @@ document.addEventListener('focusout', function(e) {
         <tbody class="divide-y divide-slate-700/50" id="db-table-body"></tbody>
       </table>
     </div>
-    <div id="db-scrollbar" class="sticky top-[calc(56px+40px)] z-30 w-full bg-slate-900/90 border-b border-slate-700 flex items-center" style="height:28px; min-height:28px;">
-      <button id="db-scroll-left" class="h-7 w-7 flex items-center justify-center text-slate-100 hover:text-blue-400 bg-slate-800/90 rounded-full shadow transition mr-2 ml-2 border border-blue-400/40" style="display:none; position:relative; z-index:2; opacity:0.95;">
+    <div id="db-scrollbar" class="db-scroll-dock">
+      <div class="db-scroll-copy">
+        <span class="db-scroll-kicker">Desktop Scroll</span>
+        <span class="db-scroll-caption">Drag the bar or tap arrows to scan columns</span>
+      </div>
+      <div class="db-scroll-shell">
+      <button id="db-scroll-left" class="db-scroll-arrow" style="display:none; opacity:0.95;" aria-label="Scroll database left">
         <span class="material-symbols-outlined">arrow_back_ios_new</span>
       </button>
-      <div id="db-scrollbar-inner" style="overflow-x:auto; width:100%; height:20px;" class="scrollbar-thin">
-        <div style="height:1px;"></div>
+      <div id="db-scrollbar-inner" class="db-scroll-track">
+        <div></div>
       </div>
-      <button id="db-scroll-right" class="h-7 w-7 flex items-center justify-center text-slate-100 hover:text-blue-400 bg-slate-800/90 rounded-full shadow transition ml-2 mr-2 border border-blue-400/40" style="display:none; position:relative; z-index:2; opacity:0.95;">
+      <button id="db-scroll-right" class="db-scroll-arrow" style="display:none; opacity:0.95;" aria-label="Scroll database right">
         <span class="material-symbols-outlined">arrow_forward_ios</span>
       </button>
+      </div>
     </div>
     <div class="bg-slate-900/50 px-6 py-3 text-xs text-slate-500 flex justify-between items-center">
       <span id="db-count-display">Loading database...</span>
@@ -611,6 +746,10 @@ document.addEventListener('focusout', function(e) {
       function setupFloatingBar() {
         const { tableScroll, table, fakeScrollbar, leftBtn, rightBtn, floatBar, floatInner, floatLeft, floatRight } = getDbEls();
         if (!tableScroll || !table || !fakeScrollbar || !floatBar || !floatInner || !floatLeft || !floatRight) return;
+        if (typeof floatBar._dbCleanup === 'function') {
+          floatBar._dbCleanup();
+          floatBar._dbCleanup = null;
+        }
         function syncWidth() {
           fakeScrollbar.firstElementChild.style.width = table.scrollWidth + 'px';
           floatInner.firstElementChild.style.width = table.scrollWidth + 'px';
@@ -661,38 +800,57 @@ document.addEventListener('focusout', function(e) {
           const needsScroll = tableScroll.scrollWidth > tableScroll.clientWidth + 10;
           floatBar.style.display = needsScroll ? 'flex' : 'none';
         }
-        // Event listeners
-        fakeScrollbar.addEventListener('scroll', syncFakeScroll);
-        floatInner.addEventListener('scroll', syncFloatScroll);
-        tableScroll.addEventListener('scroll', syncScroll);
-        leftBtn && leftBtn.addEventListener('click', function() {
-          tableScroll.scrollBy({ left: -300, behavior: 'smooth' });
-        });
-        rightBtn && rightBtn.addEventListener('click', function() {
-          tableScroll.scrollBy({ left: 300, behavior: 'smooth' });
-        });
-        floatLeft.addEventListener('click', function() {
-          tableScroll.scrollBy({ left: -300, behavior: 'smooth' });
-        });
-        floatRight.addEventListener('click', function() {
-          tableScroll.scrollBy({ left: 300, behavior: 'smooth' });
-        });
-        window.addEventListener('resize', function() {
+        const onFakeScroll = syncFakeScroll;
+        const onFloatScroll = syncFloatScroll;
+        const onTableScroll = function() {
+          syncScroll();
+          updateFloatBarVisibility();
+        };
+        const onLeftClick = function() {
+          tableScroll.scrollBy({ left: -320, behavior: 'smooth' });
+        };
+        const onRightClick = function() {
+          tableScroll.scrollBy({ left: 320, behavior: 'smooth' });
+        };
+        const onFloatLeftClick = function() {
+          tableScroll.scrollBy({ left: -320, behavior: 'smooth' });
+        };
+        const onFloatRightClick = function() {
+          tableScroll.scrollBy({ left: 320, behavior: 'smooth' });
+        };
+        const onResize = function() {
           syncWidth();
           updateFloatBarVisibility();
-        });
+          updateArrows();
+        };
+        // Event listeners
+        fakeScrollbar.addEventListener('scroll', onFakeScroll);
+        floatInner.addEventListener('scroll', onFloatScroll);
+        tableScroll.addEventListener('scroll', onTableScroll);
+        leftBtn && leftBtn.addEventListener('click', onLeftClick);
+        rightBtn && rightBtn.addEventListener('click', onRightClick);
+        floatLeft.addEventListener('click', onFloatLeftClick);
+        floatRight.addEventListener('click', onFloatRightClick);
+        window.addEventListener('resize', onResize);
         setTimeout(syncWidth, 100);
         syncWidth();
         setTimeout(updateArrows, 200);
         setTimeout(updateArrows, 1000);
         setTimeout(updateFloatBarVisibility, 200);
         setTimeout(updateFloatBarVisibility, 1000);
-        tableScroll.addEventListener('scroll', function() {
-          updateArrows();
-          updateFloatBarVisibility();
-        });
         // Show bar
         updateFloatBarVisibility();
+        updateArrows();
+        floatBar._dbCleanup = function() {
+          fakeScrollbar.removeEventListener('scroll', onFakeScroll);
+          floatInner.removeEventListener('scroll', onFloatScroll);
+          tableScroll.removeEventListener('scroll', onTableScroll);
+          leftBtn && leftBtn.removeEventListener('click', onLeftClick);
+          rightBtn && rightBtn.removeEventListener('click', onRightClick);
+          floatLeft.removeEventListener('click', onFloatLeftClick);
+          floatRight.removeEventListener('click', onFloatRightClick);
+          window.removeEventListener('resize', onResize);
+        };
       }
       // Show/hide floating bar on view change
       const origSetView = app.setView.bind(app);
@@ -701,8 +859,11 @@ document.addEventListener('focusout', function(e) {
         const floatBar = document.getElementById('db-floating-scrollbar');
         if (name === 'database') {
           setTimeout(setupFloatingBar, 200);
-          if (floatBar) floatBar.style.display = '';
         } else {
+          if (floatBar && typeof floatBar._dbCleanup === 'function') {
+            floatBar._dbCleanup();
+            floatBar._dbCleanup = null;
+          }
           if (floatBar) floatBar.style.display = 'none';
         }
       };
