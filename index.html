@@ -378,7 +378,7 @@ document.addEventListener('focusout', function(e) {
           BROWSE DATABASE
         </button>
       </div>
-      <button class="mt-3 mx-auto text-blue-300 hover:text-blue-100 underline text-sm font-bold" onclick="app.openHowToPlay()">
+      <button class="mt-3 mx-auto text-blue-300 hover:text-blue-100 text-sm font-bold" onclick="app.openHowToPlay()">
         <span class="material-symbols-outlined align-middle text-base mr-1">help</span> How to Play
       </button>
       <a href="https://forms.gle/zzTwMu8wpZpC5zR58" target="_blank" rel="noopener" class="mx-auto text-pink-300 hover:text-pink-100 text-sm font-bold flex items-center justify-center gap-1">
@@ -602,6 +602,14 @@ document.addEventListener('focusout', function(e) {
     .db-table td {
       vertical-align: middle;
     }
+    .db-col-date {
+      width: 16.5rem;
+      min-width: 16.5rem;
+      max-width: 16.5rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .db-side-scroll-button {
       position: fixed;
       z-index: 140;
@@ -653,7 +661,7 @@ document.addEventListener('focusout', function(e) {
         <table class="db-table w-full text-left text-xs text-slate-300 leading-tight">
         <thead class="bg-slate-900/80 text-[11px] uppercase font-semibold text-slate-400 sticky top-0 z-20">
           <tr>
-            <th class="px-4 py-2 cursor-pointer hover:text-white" onclick="app.sortDatabase('date')">Date</th>
+            <th class="px-4 py-2 cursor-pointer hover:text-white db-col-date" onclick="app.sortDatabase('date')">Date</th>
             <th class="px-4 py-2">Secret Item</th>
             <th class="px-4 py-2 cursor-pointer hover:text-white" onclick="app.sortDatabase('pot')">Pot</th>
             <th class="px-4 py-2">Clue 1</th>
@@ -1854,7 +1862,7 @@ class App {
       // Cancelled / stub entry — no game was played
       if (g.note && g.clues.length === 0) {
         return `<tr class="border-b border-red-900/40 bg-red-950/20">
-          <td class="pl-4 pr-1 py-4 text-slate-400 font-mono text-xs whitespace-nowrap">${g.date}</td>
+          <td class="pl-4 pr-1 py-4 text-slate-400 font-mono text-xs db-col-date">${g.date}</td>
           <td colspan="13" class="px-4 py-4">
             <span class="inline-flex items-center gap-2 text-sm font-bold text-red-400">
               <span class="material-symbols-outlined" style="font-size:18px">cancel</span>
@@ -1918,7 +1926,7 @@ class App {
       // Winner names
 
       return `<tr class="hover:bg-slate-800/30 transition border-b border-slate-800/60 last:border-0">
-        <td class="pl-4 pr-1 py-1 text-slate-400 font-mono text-[11px] align-middle" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;">${g.date}</td>
+        <td class="pl-4 pr-1 py-1 text-slate-400 font-mono text-[11px] align-middle db-col-date">${g.date}</td>
         <td class="px-1 py-1 font-semibold text-white align-middle" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">
           <span style="white-space:nowrap;">${g.secretItem}</span>
           ${g.note ? `<div class="mt-0.5"><span class="inline-flex items-center gap-1 text-[9px] font-bold bg-red-900/40 text-red-400 border border-red-600/40 px-1 py-0.5 rounded-full uppercase tracking-wide"><span class="material-symbols-outlined" style="font-size:10px">warning</span>${g.note}</span></div>` : ''}
