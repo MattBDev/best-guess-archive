@@ -340,13 +340,13 @@ document.addEventListener('focusout', function(e) {
     </div>
   </div>
 
-  <!-- Active clue — pinned at top, always visible as the highlighted pill -->
-  <div class="flex-shrink-0 px-3 pt-2 pb-1" id="active-clue-area">
+  <!-- Past clues — scrollable above active, oldest at top, newest just above active -->
+  <div class="flex-grow overflow-y-auto px-3 pt-1 pb-2 space-y-2 min-h-0" id="past-clues"></div>
+
+  <!-- Active clue — pinned at bottom, always visible as the highlighted pill -->
+  <div class="flex-shrink-0 px-3 pt-1 pb-2" id="active-clue-area">
     <div class="text-slate-500 text-sm">Preparing...</div>
   </div>
-
-  <!-- Past clues — scrollable below active, newest first -->
-  <div class="flex-grow overflow-y-auto px-3 pt-1 pb-2 space-y-2 min-h-0" id="past-clues"></div>
 
   <!-- Input bar — always at bottom, part of normal flow (not fixed) -->
   <div class="flex-shrink-0 border-t border-white/10 bg-slate-900 px-3 pt-3 pb-4" id="input-container" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
@@ -1373,11 +1373,11 @@ class App {
         </div>
       </div>`;
 
-    // Past clues — darker pill cards below, newest first
+    // Past clues — darker pill cards above active, oldest at top (clue 1 at top when multiple exist)
     const pastEl = document.getElementById('past-clues');
     if (pastEl) {
       pastEl.innerHTML = '';
-      for (let j = ci - 1; j >= 0; j--) {
+      for (let j = 0; j < ci; j++) {
         const div = document.createElement('div');
         div.className = 'flex items-stretch rounded-xl overflow-hidden';
         div.style.background = 'linear-gradient(90deg, #1a3a7a 0%, #1e4ea8 40%, #1a3a7a 100%)';
@@ -1392,7 +1392,8 @@ class App {
           </div>`;
         pastEl.appendChild(div);
       }
-      pastEl.scrollTop = 0;
+      // Scroll to bottom so the most recent past clue is visible just above the active pill
+      pastEl.scrollTop = pastEl.scrollHeight;
     }
 
     this._clueTimeout = setTimeout(() => {
