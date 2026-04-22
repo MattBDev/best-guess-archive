@@ -1041,6 +1041,11 @@ window.setupDatabaseScrollControls = function setupDatabaseScrollControls() {
   const rightBtn = document.getElementById('db-scroll-right');
   if (!tableShell || !tableScroll || !leftBtn || !rightBtn) return;
 
+  // Move buttons to <body> so no ancestor (e.g. .fade-in transform, backdrop-filter)
+  // can create a containing block that traps position:fixed.
+  if (leftBtn.parentElement !== document.body) document.body.appendChild(leftBtn);
+  if (rightBtn.parentElement !== document.body) document.body.appendChild(rightBtn);
+
   window.cleanupDatabaseScrollControls();
 
   const scrollStep = () => Math.max(320, Math.round(tableScroll.clientWidth * 0.72));
