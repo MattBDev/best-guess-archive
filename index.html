@@ -490,104 +490,52 @@ document.addEventListener('focusout', function(e) {
     .db-table td {
       vertical-align: middle;
     }
-    .db-desktop-scroll-controls {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.9rem 1rem;
-      border-bottom: 1px solid rgba(96,165,250,0.18);
-      background: linear-gradient(180deg, rgba(15,23,42,0.96) 0%, rgba(15,23,42,0.88) 100%);
-      backdrop-filter: blur(12px);
-    }
-    .db-desktop-scroll-controls[hidden] {
-      display: none !important;
-    }
-    .db-scroll-copy {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-      min-width: 0;
-    }
-    .db-scroll-kicker {
-      font-size: 0.62rem;
-      line-height: 1;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: #60a5fa;
-      font-weight: 800;
-    }
-    .db-scroll-caption {
-      font-size: 0.78rem;
-      color: #94a3b8;
-    }
-    .db-scroll-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    .db-scroll-arrow {
-      min-width: 8.5rem;
-      height: 2.75rem;
-      padding: 0 1rem;
+    .db-side-scroll-button {
+      position: fixed;
+      z-index: 140;
+      width: 2.6rem;
+      height: 3.6rem;
+      padding: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.55rem;
-      color: #e2e8f0;
-      background: linear-gradient(180deg, rgba(30,41,59,0.98) 0%, rgba(15,23,42,0.95) 100%);
+      color: rgba(226,232,240,0.78);
+      background: linear-gradient(180deg, rgba(15,23,42,0.82) 0%, rgba(15,23,42,0.68) 100%);
       border-radius: 999px;
       cursor: pointer;
-      border: 1px solid rgba(96,165,250,0.4);
-      box-shadow: 0 8px 18px rgba(2,6,23,0.22);
-      transition: background 0.2s, color 0.2s, transform 0.2s;
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
+      border: 1px solid rgba(148,163,184,0.18);
+      box-shadow: 0 10px 24px rgba(2,6,23,0.2);
+      backdrop-filter: blur(10px);
+      transition: background 0.18s, color 0.18s, opacity 0.18s, transform 0.18s;
     }
-    .db-scroll-arrow:hover {
-      color: #7dd3fc;
-      background: linear-gradient(180deg, rgba(51,65,85,0.98) 0%, rgba(30,41,59,0.98) 100%);
-      transform: translateY(-1px);
+    .db-side-scroll-button[hidden] {
+      display: none !important;
     }
-    .db-scroll-arrow:disabled {
+    .db-side-scroll-button:hover {
+      color: rgba(226,232,240,0.96);
+      background: linear-gradient(180deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.78) 100%);
+      transform: translateY(-50%) scale(1.02);
+    }
+    .db-side-scroll-button:disabled {
       cursor: default;
-      transform: none;
-      opacity: 0.35;
+      transform: translateY(-50%);
+      opacity: 0.22;
     }
-    .db-scroll-arrow .db-arrow-glyph {
+    .db-side-scroll-button .db-arrow-glyph {
       font-family: 'Oswald', sans-serif;
-      font-size: 1.2rem;
+      font-size: 1.35rem;
       line-height: 1;
       letter-spacing: 0;
     }
     @media (min-width: 768px) {
-      .db-desktop-scroll-controls { display: flex; }
+      .db-side-scroll-button { display: flex; }
     }
     @media (max-width: 767px) {
-      .db-desktop-scroll-controls { display: none !important; }
+      .db-side-scroll-button { display: none !important; }
     }
   </style>
 
   <div class="glass-panel rounded-xl overflow-hidden shadow-xl border border-slate-700 db-responsive-container">
-    <div id="db-desktop-controls" class="db-desktop-scroll-controls" hidden>
-      <div class="db-scroll-copy">
-        <span class="db-scroll-kicker">Desktop Column Scroll</span>
-        <span class="db-scroll-caption">Use the clear &lt; and &gt; buttons to move across the table.</span>
-      </div>
-      <div class="db-scroll-actions">
-        <button id="db-scroll-left" class="db-scroll-arrow" aria-label="Scroll database left">
-          <span class="db-arrow-glyph" aria-hidden="true">&lt;</span>
-          <span>LEFT</span>
-        </button>
-        <button id="db-scroll-right" class="db-scroll-arrow" aria-label="Scroll database right">
-          <span>RIGHT</span>
-          <span class="db-arrow-glyph" aria-hidden="true">&gt;</span>
-        </button>
-      </div>
-    </div>
     <div class="relative db-responsive-inner db-table-shell" id="db-table-shell">
       <div class="db-table-scroll" id="db-table-scroll" style="transition: transform 0.2s;">
         <table class="db-table w-full text-left text-xs text-slate-300 leading-tight">
@@ -616,6 +564,12 @@ document.addEventListener('focusout', function(e) {
       <span id="db-count-display">Loading database...</span>
     </div>
   </div>
+  <button id="db-scroll-left" class="db-side-scroll-button" aria-label="Scroll database left" hidden>
+    <span class="db-arrow-glyph" aria-hidden="true">&lt;</span>
+  </button>
+  <button id="db-scroll-right" class="db-side-scroll-button" aria-label="Scroll database right" hidden>
+    <span class="db-arrow-glyph" aria-hidden="true">&gt;</span>
+  </button>
 </div>
 </template>
 
@@ -958,19 +912,22 @@ async function sha256hex(str) {
 
 window.cleanupDatabaseScrollControls = function cleanupDatabaseScrollControls() {
   const tableScroll = document.getElementById('db-table-scroll');
+  const leftBtn = document.getElementById('db-scroll-left');
+  const rightBtn = document.getElementById('db-scroll-right');
   if (tableScroll && typeof tableScroll._dbScrollCleanup === 'function') {
     tableScroll._dbScrollCleanup();
     tableScroll._dbScrollCleanup = null;
   }
+  if (leftBtn) leftBtn.hidden = true;
+  if (rightBtn) rightBtn.hidden = true;
 };
 
 window.setupDatabaseScrollControls = function setupDatabaseScrollControls() {
-  const controls = document.getElementById('db-desktop-controls');
   const tableShell = document.getElementById('db-table-shell');
   const tableScroll = document.getElementById('db-table-scroll');
   const leftBtn = document.getElementById('db-scroll-left');
   const rightBtn = document.getElementById('db-scroll-right');
-  if (!controls || !tableShell || !tableScroll || !leftBtn || !rightBtn) return;
+  if (!tableShell || !tableScroll || !leftBtn || !rightBtn) return;
 
   window.cleanupDatabaseScrollControls();
 
@@ -981,12 +938,32 @@ window.setupDatabaseScrollControls = function setupDatabaseScrollControls() {
     const canScrollLeft = tableScroll.scrollLeft > 10;
     const canScrollRight = tableScroll.scrollLeft < maxScroll - 10;
     const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+    const rect = tableShell.getBoundingClientRect();
+    const visibleTop = Math.max(rect.top, 110);
+    const visibleBottom = Math.min(rect.bottom, window.innerHeight - 110);
+    const verticallyVisible = visibleBottom > visibleTop;
+    const showButtons = isDesktop && needsScroll && verticallyVisible;
 
-    controls.hidden = !(isDesktop && needsScroll);
+    leftBtn.hidden = !showButtons;
+    rightBtn.hidden = !showButtons;
     leftBtn.disabled = !canScrollLeft;
     rightBtn.disabled = !canScrollRight;
     tableShell.classList.toggle('can-scroll-left', canScrollLeft);
     tableShell.classList.toggle('can-scroll-right', canScrollRight);
+
+    if (!showButtons) return;
+
+    const centerY = Math.max(110, Math.min((visibleTop + visibleBottom) / 2, window.innerHeight - 110));
+    const leftX = Math.max(12, Math.min(rect.left + 10, window.innerWidth - 64));
+    const rightX = Math.max(12, Math.min(rect.right - 52, window.innerWidth - 52));
+
+    leftBtn.style.top = centerY + 'px';
+    leftBtn.style.left = leftX + 'px';
+    leftBtn.style.transform = 'translateY(-50%)';
+
+    rightBtn.style.top = centerY + 'px';
+    rightBtn.style.left = rightX + 'px';
+    rightBtn.style.transform = 'translateY(-50%)';
   };
 
   const onLeftClick = () => {
@@ -997,11 +974,13 @@ window.setupDatabaseScrollControls = function setupDatabaseScrollControls() {
   };
   const onResize = () => updateControls();
   const onScroll = () => updateControls();
+  const onWindowScroll = () => updateControls();
 
   leftBtn.addEventListener('click', onLeftClick);
   rightBtn.addEventListener('click', onRightClick);
   tableScroll.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onResize);
+  window.addEventListener('scroll', onWindowScroll, { passive: true });
 
   updateControls();
   requestAnimationFrame(updateControls);
@@ -1012,6 +991,7 @@ window.setupDatabaseScrollControls = function setupDatabaseScrollControls() {
     rightBtn.removeEventListener('click', onRightClick);
     tableScroll.removeEventListener('scroll', onScroll);
     window.removeEventListener('resize', onResize);
+    window.removeEventListener('scroll', onWindowScroll);
   };
 };
 
