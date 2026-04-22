@@ -1068,18 +1068,19 @@ window.setupDatabaseScrollControls = function setupDatabaseScrollControls() {
     if (!showButtons) return;
 
     const centerY = Math.max(110, Math.min((visibleTop + visibleBottom) / 2, window.innerHeight - 110));
-    const leftInset = Math.max(12, window.innerWidth - rect.right + 10);
-    const rightInset = Math.max(12, window.innerWidth - rect.right + 10);
-    const leftX = Math.max(12, Math.min(rect.left + 10, window.innerWidth - 64));
+    const btnW = 44; // px — matches 2.6rem button width
+    const gap  = 10; // px gap between arrow and table edge
 
+    // Left arrow: sits to the LEFT of the table panel
     leftBtn.style.top = centerY + 'px';
-    leftBtn.style.left = leftX + 'px';
+    leftBtn.style.left = Math.max(4, rect.left - btnW - gap) + 'px';
     leftBtn.style.right = 'auto';
     leftBtn.style.transform = 'translateY(-50%)';
 
+    // Right arrow: sits to the RIGHT of the table panel
     rightBtn.style.top = centerY + 'px';
     rightBtn.style.left = 'auto';
-    rightBtn.style.right = rightInset + 'px';
+    rightBtn.style.right = Math.max(4, window.innerWidth - rect.right - btnW - gap) + 'px';
     rightBtn.style.transform = 'translateY(-50%)';
   };
 
