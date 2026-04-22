@@ -1498,15 +1498,15 @@ class App {
             const share = 2000 / (Number(bronzeWinners) + 1);
             this.endGame(true, `🥉 Bronze! You matched ${Number(bronzeWinners).toLocaleString()} bronze winner${bronzeWinners != 1 ? 's' : ''} on Clue ${bronzeClue}. You'd share the $2,000 bronze pot!`, share, 'bronze');
           } else if (n < lastMedalClue) {
-            this.endGame(false, `Correct answer, wrong clue! You guessed on Clue ${n}, but medal tiers were set at Clue ${goldClue} (🥇 gold)${silverClue ? ', Clue ' + silverClue + ' (🥈 silver)' : ''}${bronzeClue ? ', Clue ' + bronzeClue + ' (🥉 bronze)' : ''}. You needed to hold your guess for a medal clue.`);
+            this.endGame('close', `You were right, but a little too late! You guessed on Clue ${n}, but the medal clues were ${goldClue} (🥇 gold)${silverClue ? ', ' + silverClue + ' (🥈 silver)' : ''}${bronzeClue ? ', ' + bronzeClue + ' (🥉 bronze)' : ''}. Hold off until a medal clue next time!`);
           } else {
-            this.endGame(false, `You were right, but too late! All medals were awarded by Clue ${lastMedalClue}. You answered on Clue ${n}.`);
+            this.endGame('close', `You were right, but a little too late! All medals were awarded by Clue ${lastMedalClue} and you answered on Clue ${n}.`);
           }
         } else {
           const winningClue = g.winningClue || g.goldClue;
           const winnerCount = g.totalWinners || g.winnerCount || 0;
           if (n > winningClue) {
-            this.endGame(false, `You were right! But too late — the game ended on Clue ${winningClue}.`);
+            this.endGame('close', `You were right, but a little too late! The game was already decided on Clue ${winningClue}.`);
           } else if (n < winningClue) {
             this.endGame(true, `You got it early! Real players didn't solve it until Clue ${winningClue}. You win the whole pot!`, g.pot);
           } else {
@@ -1548,15 +1548,20 @@ class App {
 
     const colors = { gold: 'text-yellow-400', silver: 'text-slate-300', bronze: 'text-orange-400' };
     const winColor = medal ? colors[medal] : 'text-green-400';
+    const isClose = won === 'close';
 
-    document.getElementById('result-title').innerText = won ? (medal ? `YOU WIN ${medal.toUpperCase()}!` : 'YOU WON!') : 'GAME OVER';
-    document.getElementById('result-title').className = won
+    document.getElementById('result-title').innerText = won === true ? (medal ? `YOU WIN ${medal.toUpperCase()}!` : 'YOU WON!') : isClose ? 'SO CLOSE!' : 'GAME OVER';
+    document.getElementById('result-title').className = won === true
       ? `text-5xl font-display font-bold ${winColor}`
-      : 'text-5xl font-display font-bold text-red-500';
-    document.getElementById('result-icon').innerText = won ? 'emoji_events' : 'cancel';
-    document.getElementById('result-icon').className = won
+      : isClose
+        ? 'text-5xl font-display font-bold text-yellow-400'
+        : 'text-5xl font-display font-bold text-red-500';
+    document.getElementById('result-icon').innerText = won === true ? 'emoji_events' : isClose ? 'task_alt' : 'cancel';
+    document.getElementById('result-icon').className = won === true
       ? `material-symbols-outlined text-8xl mb-4 animate-bounce ${winColor}`
-      : 'material-symbols-outlined text-8xl mb-4 text-red-500';
+      : isClose
+        ? 'material-symbols-outlined text-8xl mb-4 text-yellow-400'
+        : 'material-symbols-outlined text-8xl mb-4 text-red-500';
 
     document.getElementById('result-message').innerHTML =
       `${message}<br><span class="text-white font-bold block mt-4 text-2xl">Your Payout: $${amount.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</span>`;
