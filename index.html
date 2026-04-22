@@ -381,7 +381,7 @@ document.addEventListener('focusout', function(e) {
       <button class="mt-3 mx-auto text-blue-300 hover:text-blue-100 underline text-sm font-bold" onclick="app.openHowToPlay()">
         <span class="material-symbols-outlined align-middle text-base mr-1">help</span> How to Play
       </button>
-      <a href="https://forms.gle/zzTwMu8wpZpC5zR58" target="_blank" rel="noopener" class="mx-auto text-pink-300 hover:text-pink-100 underline text-sm font-bold flex items-center justify-center gap-1">
+      <a href="https://forms.gle/zzTwMu8wpZpC5zR58" target="_blank" rel="noopener" class="mx-auto text-pink-300 hover:text-pink-100 text-sm font-bold flex items-center justify-center gap-1">
         <span class="material-symbols-outlined align-middle text-base mr-1">bug_report</span> Report a Bug / Feedback
       </a>
     </div>
@@ -1324,22 +1324,42 @@ class App {
   }
 
   // ==================== HOME ====================
+  _animateHomeStat(el, endValue, formatter, duration = 850) {
+    if (!el) return;
+    if (el._countRaf) cancelAnimationFrame(el._countRaf);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion || !Number.isFinite(endValue)) {
+      el.innerText = formatter(endValue);
+      return;
+    }
+    const start = performance.now();
+    const tick = (now) => {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.round(endValue * eased);
+      el.innerText = formatter(value);
+      if (progress < 1) {
+        el._countRaf = requestAnimationFrame(tick);
+      } else {
+        el._countRaf = null;
+      }
+    };
+    el._countRaf = requestAnimationFrame(tick);
+  }
+
   renderHomeStats() {
     if (!this.games.length) return;
     const playableGames = this._getPlayableGames();
     const totalPot     = playableGames.reduce((a, g) => a + g.pot, 0);
     const totalWinners = playableGames.reduce((a, g) => a + (g.totalWinners), 0);
+    const uniqueDatesCount = new Set(playableGames.map(game => game.date)).size;
     setTimeout(() => {
       const m = document.getElementById('total-money-display');
       const g = document.getElementById('total-games-display');
       const w = document.getElementById('total-winners-display');
-      if (m) m.innerText = '$' + totalPot.toLocaleString();
-      if (g) {
-        // Count unique dates where a game was actually played.
-        const uniqueDates = new Set(playableGames.map(game => game.date));
-        g.innerText = uniqueDates.size;
-      }
-      if (w) w.innerText = totalWinners.toLocaleString();
+      if (m) this._animateHomeStat(m, totalPot, v => '$' + v.toLocaleString(), 900);
+      if (g) this._animateHomeStat(g, uniqueDatesCount, v => v.toLocaleString(), 700);
+      if (w) this._animateHomeStat(w, totalWinners, v => v.toLocaleString(), 850);
     }, 50);
   }
 
