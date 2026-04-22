@@ -1327,9 +1327,15 @@ class App {
   _animateHomeStat(el, endValue, formatter, duration = 850) {
     if (!el) return;
     if (el._countRaf) cancelAnimationFrame(el._countRaf);
+    const finalText = formatter(endValue);
+    // Reserve final width up front so cards don't "shake" while digits grow.
+    el.style.display = 'inline-block';
+    el.style.minWidth = `${finalText.length}ch`;
+    el.style.whiteSpace = 'nowrap';
+    el.style.fontVariantNumeric = 'tabular-nums';
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduceMotion || !Number.isFinite(endValue)) {
-      el.innerText = formatter(endValue);
+      el.innerText = finalText;
       return;
     }
     const start = performance.now();
@@ -1341,6 +1347,7 @@ class App {
       if (progress < 1) {
         el._countRaf = requestAnimationFrame(tick);
       } else {
+        el.innerText = finalText;
         el._countRaf = null;
       }
     };
