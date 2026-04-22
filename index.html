@@ -2495,18 +2495,20 @@ class App {
         }
       }
 
-      // Duplicate within this import batch
+      // Duplicate within this import batch.
+      // Same date with different answers is fine (two games per day is normal).
+      // Only block if BOTH date AND secretItem are identical.
       if (g.date && g.secretItem) {
         const key = g.date + '||' + g.secretItem;
         if (seenKeys.has(key)) {
-          errors.push(`${label}: duplicate date+secretItem within this import ("${g.date}", "${g.secretItem}")`);
+          errors.push(`${label}: same answer ("${g.secretItem}") already used for date "${g.date}" earlier in this import — two games on the same date is fine, but both cannot have the same secretItem`);
         }
         seenKeys.add(key);
       }
 
       // Collision with existing database
       if (g.date && g.secretItem && existingKeys.has(g.date + '||' + g.secretItem)) {
-        errors.push(`${label}: already exists in database ("${g.date}", "${g.secretItem}")`);
+        errors.push(`${label}: a game with answer "${g.secretItem}" on date "${g.date}" already exists in the database — remove this duplicate from the import`);
       }
     });
 
