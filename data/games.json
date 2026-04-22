@@ -546,7 +546,7 @@
       },
       {
         "text": "HELP THE CITRUS DROP",
-        "correct": "1,050",
+        "correct": "1,005",
         "guesses": "5,066",
         "explanation": "Citrus drop refers to a lemon; 'help' is a synonym for 'aid' (Lemon-aid)."
       },
@@ -605,7 +605,7 @@
       {
         "text": "TV'S ANIMATED MIXED UP BRAT",
         "correct": "1,179",
-        "guesses": "3,967",
+        "guesses": "3,987",
         "explanation": "Bart is an animated character and his name is an anagram of 'brat'."
       }
     ],
@@ -2224,7 +2224,7 @@
         "text": "MIND READERS UNITE",
         "correct": "0",
         "guesses": "?",
-        "explanation": "Mind Readers Unite - 'Because you’re trying to guess what America thinks!'"
+        "explanation": "Mind Readers Unite - 'Because you\u2019re trying to guess what America thinks!'"
       },
       {
         "text": "RIVALRY FOR DNA",
@@ -2386,7 +2386,7 @@
         "text": "TRENDY POPUP",
         "correct": "2",
         "guesses": "8948",
-        "explanation": "Trendy Popup - 'They pop up above your lip and lately they’ve been very trendy.'"
+        "explanation": "Trendy Popup - 'They pop up above your lip and lately they\u2019ve been very trendy.'"
       },
       {
         "text": "MID COVER BAND",
@@ -2500,7 +2500,7 @@
         "text": "ALL FOR NOTHING",
         "correct": "5",
         "guesses": "5237",
-        "explanation": "All For Nothing - 'It’s all the information in the world almost all of it available at no cost.'"
+        "explanation": "All For Nothing - 'It\u2019s all the information in the world almost all of it available at no cost.'"
       },
       {
         "text": "GREAT WORK EVERYBODY",
@@ -2518,7 +2518,7 @@
         "text": "ONLINE BRATANNICA BUT EVEN MORE GIGANTICA",
         "correct": "3063",
         "guesses": "8361",
-        "explanation": "Online Bratannica But Even More Gigantica - 'It’s like the encyclopedia but with way more articles and it’s online.'"
+        "explanation": "Online Bratannica But Even More Gigantica - 'It\u2019s like the encyclopedia but with way more articles and it\u2019s online.'"
       }
     ],
     "goldClue": 1,
@@ -2560,7 +2560,7 @@
         "text": "A BLAST FROM THE PAST",
         "correct": "8",
         "guesses": "7604",
-        "explanation": "A Blast From The Past - 'You were having a good time last night and now you’re suffering the consequences.'"
+        "explanation": "A Blast From The Past - 'You were having a good time last night and now you\u2019re suffering the consequences.'"
       },
       {
         "text": "CAN HAPPEN IN VEGAS JUST LIKE \"THE\" MOVIE",
@@ -2602,7 +2602,7 @@
         "text": "MAKEUP WITH NO MAKEUP",
         "correct": "0",
         "guesses": "9408",
-        "explanation": "Makeup With No Makeup - 'The dad’s trying to make up with his son... and they’re both clown fish clowns that don’t wear makeup.'"
+        "explanation": "Makeup With No Makeup - 'The dad\u2019s trying to make up with his son... and they\u2019re both clown fish clowns that don\u2019t wear makeup.'"
       },
       {
         "text": "A GUILT TRIP",
@@ -4456,7 +4456,7 @@
         "text": "MIX DILL HERBS AND MAYO AND VEGGIES SAY HEYO",
         "correct": "6320",
         "guesses": "10439",
-        "explanation": "Mix Dill Herbs And Mayo And Veggies Say Heyo - 'That's the recipe. And many people use ranch on a crudité platter.'"
+        "explanation": "Mix Dill Herbs And Mayo And Veggies Say Heyo - 'That's the recipe. And many people use ranch on a crudit\u00e9 platter.'"
       },
       {
         "text": "HIDDEN VALLEY MADE VALID TO POUR ON YOUR SALAD",
@@ -6691,7 +6691,7 @@
     "bronzePayout": 0,
     "winnerPayout": "$769.23",
     "winnerNames": "Names not read",
-    "wrongGuesses": "PIñATA, BEETHOVEN'S FIFTH, INK, GIFT, SALMONELLA, DEBT, TICKET, ADVICE, TIME, MONEY, SPEEDING",
+    "wrongGuesses": "PI\u00f1ATA, BEETHOVEN'S FIFTH, INK, GIFT, SALMONELLA, DEBT, TICKET, ADVICE, TIME, MONEY, SPEEDING",
     "winningClue": 1,
     "winnerCount": 13
   },
@@ -7258,7 +7258,7 @@
         "text": "ALL THE RIGHT MOVES",
         "correct": "53",
         "guesses": "16,000",
-        "explanation": "All the right moves - \"Pac-man is a 90° right angles it's always right you It's always a right angle a 90° angle is all the moves are right angles\""
+        "explanation": "All the right moves - \"Pac-man is a 90\u00b0 right angles it's always right you It's always a right angle a 90\u00b0 angle is all the moves are right angles\""
       },
       {
         "text": "HIS WIFE TOOK HIS NAME",
@@ -9373,10 +9373,10 @@
         "explanation": "Arrives orderly in many shapes and sizes - \"arrives orderly in many shapes and sizes.\""
       },
       {
-        "text": "PASS THE KETCHUP S'IL VOUS PLAÎT",
+        "text": "PASS THE KETCHUP S'IL VOUS PLA\u00ceT",
         "correct": "1,800",
         "guesses": "N/A",
-        "explanation": "Pass the ketchup s'il vous plaît - 'well pass the ketchup, see, play French and fries.'"
+        "explanation": "Pass the ketchup s'il vous pla\u00eet - 'well pass the ketchup, see, play French and fries.'"
       }
     ],
     "goldClue": 3,
@@ -10294,7 +10294,7 @@
         "text": "WHETHER ON TOP OF THE WEATHER OR UNDER THE WEATHER",
         "correct": "1582",
         "guesses": "4,252",
-        "explanation": "Temperature, and a thermometer measures your temperature—and your body temperature—especially when you're sick. Are you under the weather? You get it."
+        "explanation": "Temperature, and a thermometer measures your temperature\u2014and your body temperature\u2014especially when you're sick. Are you under the weather? You get it."
       }
     ],
     "goldClue": 1,
@@ -10328,25 +10328,25 @@
         "text": "LOTS OF RIPS BUT NO HOLES",
         "correct": "5",
         "guesses": "10,074",
-        "explanation": "You can take big swings, but there is usually no hole to hit the ball into. That's the point—you're just driving; you're not trying to get to a hole."
+        "explanation": "You can take big swings, but there is usually no hole to hit the ball into. That's the point\u2014you're just driving; you're not trying to get to a hole."
       },
       {
         "text": "STOVE TOP IN A CAR",
         "correct": "11",
         "guesses": "4,965",
-        "explanation": "This is a riddle: you drive a car, and a stove top is often called a range—AKA driving range."
+        "explanation": "This is a riddle: you drive a car, and a stove top is often called a range\u2014AKA driving range."
       },
       {
         "text": "DISTANCE MAKES THE HEART GROW FONDER",
         "correct": "28",
         "guesses": "3,529",
-        "explanation": "You feel good the farther you hit it—that’s the whole point of a driving range."
+        "explanation": "You feel good the farther you hit it\u2014that\u2019s the whole point of a driving range."
       },
       {
         "text": "REHEARSAL IS IN FULL SWING",
         "correct": "103",
         "guesses": "6,097",
-        "explanation": "It's where you practice your golf swing. It's all about the rehearsal in your swing—that’s what a driving range is for."
+        "explanation": "It's where you practice your golf swing. It's all about the rehearsal in your swing\u2014that\u2019s what a driving range is for."
       }
     ],
     "goldClue": 1,
