@@ -289,15 +289,6 @@ document.addEventListener('focusout', function(e) {
       </div>
 <!-- How to Play Modal Template -->
 <template id="how-to-play-modal">
-<!-- Modal Backdrop/Content (for robustness if not present in main HTML) -->
-<div id="modal-backdrop" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4" onclick="if(event.target===this) app.closeModal()">
-  <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl relative fade-in">
-    <button class="absolute top-4 right-4 text-slate-400 hover:text-white" onclick="app.closeModal()">
-      <span class="material-symbols-outlined">close</span>
-    </button>
-    <div class="p-8" id="modal-content"></div>
-  </div>
-</div>
   <div class="space-y-6">
     <h2 class="text-3xl font-display font-bold text-yellow-400">How to Play</h2>
     <ol class="list-decimal list-inside text-slate-200 space-y-2 text-lg">
@@ -914,7 +905,7 @@ document.addEventListener('focusout', function(e) {
     <div class="glass-panel p-6 rounded-xl space-y-4">
       <h3 class="font-bold text-white flex items-center gap-2">
         <span class="material-symbols-outlined text-blue-400">settings</span> GitHub Settings
-        <span class="text-xs text-slate-500 font-normal ml-2">(stored in localStorage — never committed)</span>
+        <span class="text-xs text-slate-500 font-normal ml-2">(owner/repo saved locally; token kept only in this tab)</span>
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -927,7 +918,7 @@ document.addEventListener('focusout', function(e) {
         </div>
         <div class="md:col-span-2">
           <label class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Personal Access Token (contents:write scope only)</label>
-          <input id="gh-pat" type="password" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500" placeholder="ghp_...">
+          <input id="gh-pat" type="password" autocomplete="off" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500" placeholder="ghp_...">
         </div>
       </div>
       <div class="flex items-center gap-3">
@@ -1070,6 +1061,8 @@ class App {
     this.currentClueIndex = 0;
     this.timer = null;
     this._pendingGames = null;
+    this._ghPat = '';
+    this._dbSort = { key: 'date', dir: 'desc' };
     this.init();
   }
 
@@ -1085,6 +1078,44 @@ class App {
     let binary = '';
     bytes.forEach(b => binary += String.fromCharCode(b));
     return btoa(binary);
+  }
+
+  _parseArchiveDateParts(dateStr) {
+    const m = String(dateStr || '').trim().match(/^(?:[A-Za-z]+,\s+)?([A-Za-z]+)\s+(\d{1,2}),\s+(\d{4})$/);
+    if (!m) return null;
+    const monthMap = {
+      january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+      july: 6, august: 7, september: 8, october: 9, november: 10, december: 11
+    };
+    const monthIndex = monthMap[m[1].toLowerCase()];
+    if (monthIndex == null) return null;
+    return { monthIndex, day: Number(m[2]), year: Number(m[3]) };
+  }
+
+  _archiveDateValue(dateStr) {
+    const parts = this._parseArchiveDateParts(dateStr);
+    return parts ? (parts.year * 10000) + ((parts.monthIndex + 1) * 100) + parts.day : -Infinity;
+  }
+
+  _archiveDateObject(dateStr) {
+    const parts = this._parseArchiveDateParts(dateStr);
+    return parts ? new Date(parts.year, parts.monthIndex, parts.day, 12, 0, 0, 0) : null;
+  }
+
+  _compareArchiveDates(a, b) {
+    return this._archiveDateValue(a) - this._archiveDateValue(b);
+  }
+
+  _isStubGame(g) {
+    return !!(g && g.note && Array.isArray(g.clues) && g.clues.length === 0);
+  }
+
+  _isPlayableGame(g) {
+    return !!(g && Array.isArray(g.clues) && g.clues.length > 0 && !this._isStubGame(g));
+  }
+
+  _getPlayableGames() {
+    return this.games.filter(g => this._isPlayableGame(g));
   }
 
   async init() {
@@ -1221,16 +1252,17 @@ class App {
   // ==================== HOME ====================
   renderHomeStats() {
     if (!this.games.length) return;
-    const totalPot     = this.games.reduce((a, g) => a + g.pot, 0);
-    const totalWinners = this.games.reduce((a, g) => a + (g.totalWinners), 0);
+    const playableGames = this._getPlayableGames();
+    const totalPot     = playableGames.reduce((a, g) => a + g.pot, 0);
+    const totalWinners = playableGames.reduce((a, g) => a + (g.totalWinners), 0);
     setTimeout(() => {
       const m = document.getElementById('total-money-display');
       const g = document.getElementById('total-games-display');
       const w = document.getElementById('total-winners-display');
       if (m) m.innerText = '$' + totalPot.toLocaleString();
       if (g) {
-        // Count unique dates (games played per day)
-        const uniqueDates = new Set(this.games.map(game => game.date));
+        // Count unique dates where a game was actually played.
+        const uniqueDates = new Set(playableGames.map(game => game.date));
         g.innerText = uniqueDates.size;
       }
       if (w) w.innerText = totalWinners.toLocaleString();
@@ -1303,9 +1335,14 @@ class App {
 
   startRandomGame() {
     this.clearTimers();
+    const playableGames = this._getPlayableGames();
+    if (!playableGames.length) {
+      alert('No playable archived games are available right now.');
+      return;
+    }
     this.setView('play');
-    const idx = Math.floor(Math.random() * this.games.length);
-    this.currentGame = this.games[idx];
+    const idx = Math.floor(Math.random() * playableGames.length);
+    this.currentGame = playableGames[idx];
     this.currentClueIndex = 0;
     this.gameStarted = false;
 
@@ -1692,8 +1729,15 @@ class App {
     const fmtMoney = (n, decimals = 2) => '$' + Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
     const filter = (document.getElementById('db-search')?.value || '').toLowerCase();
 
-    // Always sort by date descending by default for database view (use a copy to avoid mutating this.games)
-    const sorted = [...this.games].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const sort = this._dbSort || { key: 'date', dir: 'desc' };
+    const dir = sort.dir === 'asc' ? 1 : -1;
+    const totalPlayersFor = g => g.clues.reduce((a, c) => a + parseN(c.guesses), 0);
+    const sorted = [...this.games].sort((a, b) => {
+      if (sort.key === 'pot') return dir * (a.pot - b.pot);
+      if (sort.key === 'players') return dir * (totalPlayersFor(a) - totalPlayersFor(b));
+      if (sort.key === 'winners') return dir * ((a.totalWinners || 0) - (b.totalWinners || 0));
+      return dir * this._compareArchiveDates(a.date, b.date);
+    });
 
     const filtered = sorted.filter(g =>
       g.secretItem.toLowerCase().includes(filter) ||
@@ -1800,22 +1844,9 @@ class App {
   filterDatabase() { this.renderDatabase(); }
 
   sortDatabase(key) {
-    if (!this._sortDir) this._sortDir = {};
-    this._sortDir[key] = this._sortDir[key] === 'asc' ? 'desc' : 'asc';
-    const dir = this._sortDir[key] === 'asc' ? 1 : -1;
-    if (key === 'pot') {
-      this.games.sort((a, b) => dir * (a.pot - b.pot));
-    } else if (key === 'date') {
-      // Sort ALL games (including cancelled) by actual date value for consistent order
-      this.games.sort((a, b) => {
-        return dir * (new Date(a.date) - new Date(b.date));
-      });
-    } else if (key === 'players') {
-      const tot = g => g.clues.reduce((a,c) => { const n=s=>parseInt(String(s||'0').replace(/[^0-9]/g,''),10)||0; return a+n(c.guesses); }, 0);
-      this.games.sort((a, b) => dir * (tot(a) - tot(b)));
-    } else if (key === 'winners') {
-      this.games.sort((a, b) => dir * (a.totalWinners - b.totalWinners));
-    }
+    const sameKey = this._dbSort && this._dbSort.key === key;
+    const nextDir = sameKey && this._dbSort.dir === 'asc' ? 'desc' : 'asc';
+    this._dbSort = { key, dir: nextDir };
     this.renderDatabase();
   }
 
@@ -1954,8 +1985,8 @@ class App {
     const v2Games = games.filter(g => g.format === 'v2');
     let daysSinceNewRules = 0;
     if (v2Games.length) {
-      const v2Dates = [...new Set(v2Games.map(g => g.date))].sort((a, b) => new Date(a) - new Date(b));
-      const firstV2Date = new Date(v2Dates[0]);
+      const v2Dates = [...new Set(v2Games.map(g => g.date))].sort((a, b) => this._compareArchiveDates(a, b));
+      const firstV2Date = this._archiveDateObject(v2Dates[0]);
       const today = new Date();
       daysSinceNewRules = Math.max(0, Math.ceil((today - firstV2Date) / (1000 * 60 * 60 * 24)));
     }
@@ -1963,7 +1994,7 @@ class App {
     // Days since launch (classic/v1)
     let daysSinceLaunch = 0;
     if (uniqueDates.length) {
-      const firstDate = new Date([...uniqueDates].sort((a, b) => new Date(a) - new Date(b))[0]);
+      const firstDate = this._archiveDateObject([...uniqueDates].sort((a, b) => this._compareArchiveDates(a, b))[0]);
       const today = new Date();
       daysSinceLaunch = Math.max(0, Math.ceil((today - firstDate) / (1000 * 60 * 60 * 24)));
     }
@@ -2009,8 +2040,11 @@ class App {
       Chart.defaults.borderColor = 'rgba(148,163,184,0.08)';
 
       // ---- Players Over Time ----
-      const sorted = [...games].sort((a,b) => new Date(a.date) - new Date(b.date));
-      const timeLabels = sorted.map(g => { try { const d = new Date(g.date); if (!isNaN(d)) return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); } catch(e){} return g.date.split(',')[1]?.trim() || g.date; });
+      const sorted = [...games].sort((a,b) => this._compareArchiveDates(a.date, b.date));
+      const timeLabels = sorted.map(g => {
+        const d = this._archiveDateObject(g.date);
+        return d ? d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) : (g.date.split(',')[1]?.trim() || g.date);
+      });
       const guessesData = sorted.map(g => g.clues.reduce((a, c) => a + parseNum(c.guesses), 0));
       const winnersData = sorted.map(g => g.totalWinners);
       this._charts.playersTime = new Chart(document.getElementById('chart-players-time'), {
@@ -2198,7 +2232,7 @@ class App {
     const shortestItem = games.reduce((a,b) => b.secretItem.length<a.secretItem.length ? b : a);
     const soloWinPct = Math.round(soloWins/games.length*100);
     const avgPotVal = Math.round(totalPot/games.length);
-    const dateSorted = [...games].sort((a,b)=>new Date(a.date)-new Date(b.date)).filter(g=>!isNaN(new Date(g.date)));
+    const dateSorted = [...games].sort((a,b)=>this._compareArchiveDates(a.date, b.date)).filter(g => !!this._archiveDateObject(g.date));
     const c1games = clueDist[1]; const c1pct = Math.round(c1games/games.length*100);
     const totalCorrect = games.reduce((a,g) => a+g.clues.reduce((b,c)=>b+parseNum(c.correct),0), 0);
 
@@ -2327,7 +2361,7 @@ class App {
     setTimeout(() => {
       const o  = document.getElementById('gh-owner');          if (o)  o.value  = localStorage.getItem('gh_owner')          || 'jeremydbean';
       const r  = document.getElementById('gh-repo');           if (r)  r.value  = localStorage.getItem('gh_repo')           || 'best-guess-archive';
-      const p  = document.getElementById('gh-pat');            if (p)  p.value  = localStorage.getItem('gh_pat')            || '';
+      const p  = document.getElementById('gh-pat');            if (p)  p.value  = this._ghPat || '';
       this.populateDeleteDates();
     }, 50);
   }
@@ -2337,7 +2371,7 @@ class App {
     if (!sel) return;
     
     // Get unique dates
-    const dates = [...new Set(this.games.map(g => g.date))].sort((a,b) => new Date(b) - new Date(a));
+    const dates = [...new Set(this.games.map(g => g.date))].sort((a,b) => this._compareArchiveDates(b, a));
     
     if (dates.length === 0) {
       sel.innerHTML = '<option value="">No games found</option>';
@@ -2370,7 +2404,7 @@ class App {
     const status = document.getElementById('delete-status');
     const owner = localStorage.getItem('gh_owner');
     const repo  = localStorage.getItem('gh_repo');
-    const pat   = localStorage.getItem('gh_pat');
+    const pat   = this._ghPat;
     
     if (!dateToDelete) {
       status.className = 'text-sm font-medium px-4 py-2 rounded bg-red-900/20 text-red-400 mt-2';
@@ -2453,7 +2487,7 @@ class App {
   saveGhSettings() {
     localStorage.setItem('gh_owner', document.getElementById('gh-owner').value.trim());
     localStorage.setItem('gh_repo',  document.getElementById('gh-repo').value.trim());
-    localStorage.setItem('gh_pat',   document.getElementById('gh-pat').value.trim());
+    this._ghPat = document.getElementById('gh-pat').value.trim();
     const ok = document.getElementById('gh-save-ok');
     ok.classList.remove('hidden');
     setTimeout(() => ok.classList.add('hidden'), 2500);
@@ -2487,7 +2521,7 @@ class App {
       // date — must be a non-empty string that parses as a real date
       if (!g.date || typeof g.date !== 'string' || g.date.trim() === '') {
         errors.push(`${label}: "date" is missing or empty`);
-      } else if (isNaN(new Date(g.date).getTime())) {
+      } else if (!this._parseArchiveDateParts(g.date)) {
         errors.push(`${label}: "date" is not a valid date (got ${JSON.stringify(g.date)})`);
       }
 
@@ -2715,7 +2749,7 @@ class App {
     }
     const owner = localStorage.getItem('gh_owner');
     const repo  = localStorage.getItem('gh_repo');
-    const pat   = localStorage.getItem('gh_pat');
+    const pat   = this._ghPat;
     const status = document.getElementById('import-status');
     const btn    = document.getElementById('btn-publish');
 
