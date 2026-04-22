@@ -8,7 +8,7 @@ Last updated: 2026-04-22
 
 ## Latest Known Commit
 
-- `9b375db` - Fix regressions from Codex commits
+- `4c62ad7` - Fix Lemonade and Bart Simpson clue winner/guess counts
 
 ## Current State
 
