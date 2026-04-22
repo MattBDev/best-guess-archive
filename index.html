@@ -15,7 +15,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
         /* Floating input preview for mobile */
         @media (max-width: 600px) {
@@ -53,7 +53,18 @@
       /* Removed keyboard-open layout rules — JS height tracking + flex handles compression */
       body.keyboard-open #input-container { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
     }
-  body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #fff; background-image: radial-gradient(circle at 50% 0%, #1e1b4b, #0f172a); min-height: 100vh; }
+  body {
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    background-color: #0a1021;
+    background-image:
+      linear-gradient(180deg, rgba(7,12,28,0.82) 0%, rgba(11,17,37,0.9) 100%),
+      linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255,255,255,0.018) 1px, transparent 1px),
+      radial-gradient(circle at 50% 0%, #1c2350 0%, #0a1021 58%);
+    background-size: auto, 100% 4px, 4px 100%, auto;
+  }
   body.in-play nav { display: none !important; }
   body.in-play { overflow: hidden; touch-action: none; }
   /* Play background: starry southwest night image, dimmed at top for clue readability,
@@ -78,11 +89,111 @@
   body.in-play #play-game-layout { background: transparent; }
   body.in-play #play-top-bar { background: transparent; }
   body.in-play #input-container { background: rgba(2,6,22,0.85) !important; backdrop-filter: blur(10px); }
-  .font-display { font-family: 'Oswald', sans-serif; }
-  .glass-panel { background: rgba(30,41,59,.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.1); }
-  .gold-gradient-text { background: linear-gradient(to bottom,#fde68a,#d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .btn-primary { background: linear-gradient(135deg,#3b82f6,#2563eb); transition: all .2s; }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,.5); }
+  .font-display { font-family: 'Barlow Condensed', sans-serif; }
+  .glass-panel {
+    background: linear-gradient(180deg, rgba(18,25,52,0.86) 0%, rgba(16,23,46,0.78) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(115,131,185,0.18);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 18px 40px rgba(3,7,18,0.24);
+  }
+  .gold-gradient-text {
+    background: linear-gradient(180deg, #ffd972 0%, #ffbb39 50%, #f4a91c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .site-nav {
+    background: rgba(9,15,33,0.9);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(97,113,160,0.18);
+    box-shadow: 0 10px 30px rgba(4,7,18,0.22);
+  }
+  .nav-link {
+    color: #9ca8c5;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition: color .18s ease;
+  }
+  .nav-link:hover,
+  .nav-link.active {
+    color: #ffbb39;
+  }
+  .nav-link--accent {
+    color: #8bbcff;
+  }
+  .nav-link--accent:hover {
+    color: #b5d5ff;
+  }
+  .nav-link--feedback {
+    color: #f28ab8;
+  }
+  .nav-link--feedback:hover {
+    color: #ffafd0;
+  }
+  .tip-jar-pill {
+    border: 1px solid rgba(185,88,142,0.55);
+    background: linear-gradient(180deg, rgba(72,28,55,0.92) 0%, rgba(58,24,45,0.82) 100%);
+    color: #f7bfd8;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .tip-jar-pill:hover {
+    background: linear-gradient(180deg, rgba(96,34,70,0.95) 0%, rgba(70,28,53,0.9) 100%);
+  }
+  .btn-primary {
+    background: linear-gradient(135deg,#2c63f6,#1f4fd4);
+    transition: all .2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 18px rgba(37,99,235,.32); }
+  .home-hero {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 90rem;
+    border-radius: 2.25rem;
+    padding: 2.25rem 1.5rem 0;
+  }
+  .home-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(60,77,154,0.22), transparent 34%),
+      linear-gradient(180deg, rgba(255,255,255,0.018), transparent 28%);
+    pointer-events: none;
+  }
+  .home-kicker {
+    color: #ffbb39;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+  .home-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+  }
+  .home-title-main {
+    color: #f8f6f1;
+    text-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  }
+  .home-logo-ring {
+    border: 5px solid #f7ae28;
+    box-shadow: 0 0 0 8px rgba(247,174,40,0.08);
+  }
+  .home-stat-panel {
+    background: linear-gradient(180deg, rgba(16,24,49,0.94) 0%, rgba(16,24,49,0.88) 100%);
+    border: 1px solid rgba(112,127,172,0.22);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+  .home-stat-label {
+    color: #98a3bf;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .home-actions .glass-panel {
+    background: linear-gradient(180deg, rgba(18,25,52,0.92) 0%, rgba(14,21,43,0.82) 100%);
+  }
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: #1e293b; }
   ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
@@ -168,24 +279,24 @@ document.addEventListener('focusout', function(e) {
 </script>
 
 <!-- Navigation -->
-<nav class="glass-panel sticky top-0 z-50 border-b border-white/10">
+<nav class="site-nav sticky top-0 z-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center gap-3 cursor-pointer" onclick="app.setView('home')">
         <img src="bestguessarchive.png" alt="Best Guess Archive Logo" class="h-10 w-10 rounded-full border-2 border-yellow-500 object-cover" loading="lazy" decoding="async">
-        <span class="font-display text-xl tracking-wider text-white">BEST GUESS <span class="text-yellow-500">ARCHIVE</span></span>
+        <span class="font-display text-2xl tracking-[0.05em] text-white leading-none">BEST GUESS <span class="text-[#ffbb39]">ARCHIVE</span></span>
       </div>
-      <div class="hidden md:flex items-center space-x-1">
-        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('home')">Home</button>
-        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.startRandomGame()">Play</button>
-        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('database')">Database</button>
+      <div class="hidden md:flex items-center space-x-3">
+        <button class="nav-link active px-3 py-2 rounded-md text-sm transition" onclick="app.setView('home')">Home</button>
+        <button class="nav-link px-3 py-2 rounded-md text-sm transition" onclick="app.startRandomGame()">Play</button>
+        <button class="nav-link px-3 py-2 rounded-md text-sm transition" onclick="app.setView('database')">Database</button>
         <!-- <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('archive')">Archive</button> -->
-        <button class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition" onclick="app.setView('stats')">Stats</button>
-        <a href="https://docs.google.com/document/d/1B0zI_zQSs3KjPKeih-MvGMOYWe5llT1EW-ZBK0gvGdQ/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition text-blue-400 font-bold">Transcripts</a>
-        <a href="https://forms.gle/zzTwMu8wpZpC5zR58" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition text-pink-400 font-bold flex items-center gap-1">
+        <button class="nav-link px-3 py-2 rounded-md text-sm transition" onclick="app.setView('stats')">Stats</button>
+        <a href="https://docs.google.com/document/d/1B0zI_zQSs3KjPKeih-MvGMOYWe5llT1EW-ZBK0gvGdQ/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="nav-link nav-link--accent px-3 py-2 rounded-md text-sm transition font-bold">Transcripts</a>
+        <a href="https://forms.gle/zzTwMu8wpZpC5zR58" target="_blank" rel="noopener noreferrer" class="nav-link nav-link--feedback px-3 py-2 rounded-md text-sm transition font-bold flex items-center gap-1">
           <span class="material-symbols-outlined align-middle text-base">bug_report</span> Report a Bug / Feedback
         </a>
-        <button class="ml-2 flex items-center gap-1.5 bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-500 hover:to-rose-400 text-white text-xs font-bold px-3 py-1.5 rounded-full transition shadow-lg shadow-pink-900/30" onclick="app.openTipJar()">
+        <button class="tip-jar-pill ml-2 flex items-center gap-1.5 text-sm font-bold px-5 py-2 rounded-full transition" onclick="app.openTipJar()">
           <span class="material-symbols-outlined" style="font-size:14px;line-height:1">volunteer_activism</span> TIP JAR
         </button>
       </div>
@@ -242,51 +353,54 @@ document.addEventListener('focusout', function(e) {
 
 <!-- HOME -->
 <template id="view-home">
-<div class="flex flex-col items-center justify-center space-y-12 fade-in py-10">
-  <div class="text-center space-y-6 max-w-3xl">
+<div class="home-hero flex flex-col items-center justify-center space-y-12 fade-in py-10">
+  <div class="text-center space-y-8 max-w-5xl">
     <div class="relative inline-block group cursor-pointer" onclick="app.startRandomGame()">
-      <div class="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-blue-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-      <img src="bestguessarchive.png" alt="Best Guess Logo" class="relative w-48 h-48 mx-auto rounded-full border-4 border-slate-800 shadow-2xl hover:scale-105 transition transform duration-300 object-cover" loading="lazy" decoding="async">
+      <div class="absolute -inset-3 bg-gradient-to-r from-[#f7ae28] via-[#385dff] to-[#1a2559] rounded-full blur-2xl opacity-25 group-hover:opacity-45 transition duration-700"></div>
+      <img src="bestguessarchive.png" alt="Best Guess Logo" class="home-logo-ring relative w-52 h-52 mx-auto rounded-full shadow-2xl hover:scale-[1.02] transition transform duration-300 object-cover" loading="lazy" decoding="async">
     </div>
-    <h1 class="text-5xl md:text-7xl font-display font-bold tracking-tight">
-      <span class="text-white">THE COMPLETE</span><br>
-      <span class="gold-gradient-text">ARCHIVE</span>
-    </h1>
-    <p class="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto">
+    <div class="space-y-4">
+      <div class="home-kicker text-sm md:text-[1.05rem]">Fan-Made Archive · Best Guess Live</div>
+      <h1 class="home-title text-[5rem] sm:text-[6.8rem] md:text-[10rem]">
+        <span class="home-title-main block">THE COMPLETE</span>
+        <span class="gold-gradient-text block">ARCHIVE</span>
+      </h1>
+    </div>
+    <p class="text-slate-300 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed">
       Relive the intensity. Search every clue, analyze the data, or play a simulation of random old episodes against the clock.
     </p>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-      <div class="glass-panel p-6 rounded-xl text-center">
-        <div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Total Prize Money</div>
-        <div class="text-3xl font-bold text-green-400 font-display" id="total-money-display">...</div>
+    <div class="home-actions flex flex-col gap-4 justify-center mt-10">
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button class="btn-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 group shadow-lg shadow-blue-950/30" onclick="app.startRandomGame()">
+          <span class="material-symbols-outlined group-hover:rotate-12 transition">play_circle</span>
+          PLAY RANDOM GAME
+        </button>
+        <button class="glass-panel px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition flex items-center justify-center gap-2" onclick="app.setView('database')">
+          <span class="material-symbols-outlined">database</span>
+          BROWSE DATABASE
+        </button>
       </div>
-      <div class="glass-panel p-6 rounded-xl text-center">
-        <div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Games Archived</div>
-        <div class="text-3xl font-bold text-blue-400 font-display" id="total-games-display">...</div>
+      <button class="mt-3 mx-auto text-blue-300 hover:text-blue-100 underline text-sm font-bold" onclick="app.openHowToPlay()">
+        <span class="material-symbols-outlined align-middle text-base mr-1">help</span> How to Play
+      </button>
+      <a href="https://forms.gle/zzTwMu8wpZpC5zR58" target="_blank" rel="noopener" class="mx-auto text-pink-300 hover:text-pink-100 underline text-sm font-bold flex items-center justify-center gap-1">
+        <span class="material-symbols-outlined align-middle text-base mr-1">bug_report</span> Report a Bug / Feedback
+      </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-0 mt-10 overflow-hidden rounded-[2rem] border border-[rgba(112,127,172,0.26)]">
+      <div class="home-stat-panel p-7 text-center md:border-r md:border-[rgba(112,127,172,0.22)]">
+        <div class="home-stat-label text-sm mb-3">Total Prize Money</div>
+        <div class="text-5xl md:text-6xl font-bold text-[#4be781] font-display leading-none" id="total-money-display">...</div>
       </div>
-      <div class="glass-panel p-6 rounded-xl text-center">
-        <div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Total Winners</div>
-        <div class="text-3xl font-bold text-yellow-400 font-display" id="total-winners-display">...</div>
+      <div class="home-stat-panel p-7 text-center md:border-r md:border-[rgba(112,127,172,0.22)] border-t md:border-t-0 border-[rgba(112,127,172,0.22)]">
+        <div class="home-stat-label text-sm mb-3">Games Archived</div>
+        <div class="text-5xl md:text-6xl font-bold text-[#68a7ff] font-display leading-none" id="total-games-display">...</div>
+      </div>
+      <div class="home-stat-panel p-7 text-center border-t md:border-t-0 border-[rgba(112,127,172,0.22)]">
+        <div class="home-stat-label text-sm mb-3">Total Winners</div>
+        <div class="text-5xl md:text-6xl font-bold text-[#ffbb39] font-display leading-none" id="total-winners-display">...</div>
       </div>
     </div>
-    <div class="flex flex-col gap-4 justify-center mt-10">
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <button class="btn-primary px-8 py-4 rounded-lg font-bold text-lg flex items-center justify-center gap-2 group" onclick="app.startRandomGame()">
-            <span class="material-symbols-outlined group-hover:rotate-12 transition">play_circle</span>
-            PLAY RANDOM GAME
-          </button>
-          <button class="glass-panel px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition flex items-center justify-center gap-2" onclick="app.setView('database')">
-            <span class="material-symbols-outlined">database</span>
-            BROWSE DATABASE
-          </button>
-        </div>
-        <button class="mt-4 mx-auto text-blue-400 hover:text-blue-200 underline text-sm font-bold" onclick="app.openHowToPlay()">
-          <span class="material-symbols-outlined align-middle text-base mr-1">help</span> How to Play
-        </button>
-        <a href="https://forms.gle/zzTwMu8wpZpC5zR58" target="_blank" rel="noopener" class="mt-2 mx-auto text-pink-400 hover:text-pink-200 underline text-sm font-bold flex items-center justify-center gap-1">
-          <span class="material-symbols-outlined align-middle text-base mr-1">bug_report</span> Report a Bug / Feedback
-        </a>
-      </div>
 <!-- How to Play Modal Template -->
 <template id="how-to-play-modal">
   <div class="space-y-6">
