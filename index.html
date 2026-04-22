@@ -78,7 +78,7 @@
        where dvh !== window.innerHeight - navHeight by even 1px. */
     #past-clues { background: transparent; }
     #input-container { background: rgba(15,23,42,0.97); }
-    #active-clue-area { min-height: 120px; }
+    #active-clue-area { background: transparent; }
     input#guess-input { font-size: 18px; padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
   }
 </style>
@@ -340,13 +340,13 @@ document.addEventListener('focusout', function(e) {
     </div>
   </div>
 
-  <!-- Past clues — sticky on mobile, always visible, scrollable if overflow -->
-  <div class="flex-shrink-0 px-3 pt-2 pb-1 space-y-2 overflow-y-auto" style="max-height:35%" id="past-clues"></div>
-
-  <!-- Active clue — takes all remaining height, card stretches to fill it -->
-  <div class="flex-grow flex items-stretch px-3 py-2 min-h-0 overflow-hidden" id="active-clue-area">
+  <!-- Active clue — pinned at top, always visible as the highlighted pill -->
+  <div class="flex-shrink-0 px-3 pt-2 pb-1" id="active-clue-area">
     <div class="text-slate-500 text-sm">Preparing...</div>
   </div>
+
+  <!-- Past clues — scrollable below active, newest first -->
+  <div class="flex-grow overflow-y-auto px-3 pt-1 pb-2 space-y-2 min-h-0" id="past-clues"></div>
 
   <!-- Input bar — always at bottom, part of normal flow (not fixed) -->
   <div class="flex-shrink-0 border-t border-white/10 bg-slate-900 px-3 pt-3 pb-4" id="input-container" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
@@ -1297,16 +1297,17 @@ class App {
       ? 'Win gold on earliest clue · silver next · bronze third'
       : 'One guess only. Earliest correct clue takes the pot.';
 
-    document.getElementById('past-clues').innerHTML = '';
+    const activeEl = document.getElementById('active-clue-area');
+    if (activeEl) activeEl.innerHTML = '';
     const inputEl = document.getElementById('guess-input');
     if (inputEl) {
       inputEl.value = '';
       inputEl.disabled = true;
     }
-    
-    const activeEl = document.getElementById('active-clue-area');
-    if (activeEl) {
-      activeEl.innerHTML = `
+
+    const pastEl = document.getElementById('past-clues');
+    if (pastEl) {
+      pastEl.innerHTML = `
         <div class="flex flex-col items-center justify-center space-y-6 w-full h-full pb-8">
           <div class="text-slate-400 font-medium text-lg tracking-widest uppercase">Ready to play?</div>
           <button class="bg-blue-600 hover:bg-blue-500 text-white px-10 py-5 rounded-2xl font-bold text-xl md:text-2xl flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(37,99,235,0.4)] hover:shadow-[0_0_40px_rgba(37,99,235,0.6)] transition transform hover:scale-105" onclick="app.startGameplay()">
@@ -1340,62 +1341,59 @@ class App {
     const g = this.currentGame;
     const ci = this.currentClueIndex;
 
-    // Past clues — compact rows, always visible above active clue
-    const pastEl = document.getElementById('past-clues');
-    if (pastEl) {
-      pastEl.innerHTML = '';
-      for (let j = 0; j < ci; j++) {
-        const div = document.createElement('div');
-        div.className = 'flex items-stretch rounded-xl overflow-hidden clue-stack-enter';
-        div.style.background = 'linear-gradient(90deg, #1a3a7a 0%, #1e4ea8 40%, #1a3a7a 100%)';
-        div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.4)';
-        div.innerHTML = `
-          <div class="flex items-center justify-center px-3 flex-shrink-0" style="background:rgba(0,0,0,0.18); min-width:2.5rem;">
-            <span class="text-white font-bold text-sm font-display">${j+1}</span>
-          </div>
-          <div class="w-px self-stretch flex-shrink-0" style="background:rgba(255,255,255,0.25)"></div>
-          <div class="flex items-center px-3 py-2">
-            <span class="text-white font-bold text-sm md:text-base font-display uppercase tracking-wide leading-snug">${g.clues[j].text}</span>
-          </div>`;
-        pastEl.appendChild(div);
-      }
-      pastEl.scrollTop = pastEl.scrollHeight;
-    }
-
     const durOpt = localStorage.getItem('clue_time') || '20';
     const clueSecs = parseInt(durOpt, 10);
 
-    // Active clue card — takes the remaining space
     const activeEl = document.getElementById('active-clue-area');
     if (!activeEl) return;
 
     const _tl = g.clues[ci].text.length;
-    const _clueFsClass   = _tl > 30 ? 'text-lg md:text-2xl'  : _tl > 20 ? 'text-xl md:text-3xl'  : _tl > 12 ? 'text-2xl md:text-4xl' : 'text-3xl md:text-5xl';
-    const _clueTrack     = _tl > 20 ? 'tracking-wide'         : 'tracking-widest';
+    const _clueFsClass   = _tl > 35 ? 'text-sm md:text-base' : _tl > 22 ? 'text-base md:text-lg' : _tl > 14 ? 'text-lg md:text-xl' : 'text-xl md:text-2xl';
+    const _clueTrack     = _tl > 22 ? 'tracking-wide'        : 'tracking-wider';
+
+    // Active clue — pill card, lighter blue gradient + person icon (like the show)
     activeEl.innerHTML = `
-      <div class="w-full bg-slate-800 rounded-2xl border border-slate-700 shadow-[0_0_20px_rgba(0,0,0,0.5)] overflow-hidden clue-stack-enter relative flex flex-col">
-        <div class="flex justify-between items-center flex-shrink-0 px-3 pt-3 md:px-6 md:pt-4">
-          <span class="text-xs font-bold text-blue-400 bg-blue-900/30 px-3 py-1 bg-opacity-50 rounded-full border border-blue-500/30 shadow-sm tracking-wider">CLUE ${ci+1} of 5</span>
-          <span class="text-xs font-bold font-mono text-slate-300 bg-slate-900/50 px-2 py-1 rounded" id="timer-text-${ci}"></span>
+      <div class="flex items-stretch rounded-xl overflow-hidden relative clue-stack-enter" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%); box-shadow: 0 0 15px rgba(59,130,246,0.55);">
+        <div class="flex items-center justify-center px-3 flex-shrink-0" style="background:rgba(0,0,0,0.28); min-width:3rem;">
+          <span class="material-symbols-outlined text-white" style="font-size:26px">account_circle</span>
         </div>
-        <div class="flex-grow min-h-0 px-3 pt-3 pb-5 md:px-6 md:pt-3 md:pb-6 flex flex-col">
-          <div id="loading-state-${ci}" class="flex-grow flex flex-col items-center justify-center gap-3">
-            <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin shadow-lg"></div>
-            <span class="text-blue-500 font-display tracking-widest text-sm md:text-base animate-pulse uppercase">Incoming...</span>
-          </div>
-          <div id="text-state-${ci}" class="hidden flex-grow min-h-0 flex w-full">
-            <div class="bg-gradient-to-br from-[#001D4A] via-[#003087] to-[#001D4A] border-[3px] border-[#FFA300] rounded-xl shadow-2xl px-4 py-4 md:px-8 md:py-6 w-full h-full flex items-center justify-center relative overflow-hidden">
-              <div class="absolute inset-0 bg-[#0047AB] opacity-30 mix-blend-screen blur-xl"></div>
-              <h2 class="${_clueFsClass} font-extrabold text-white font-display uppercase ${_clueTrack} text-center relative z-10" style="text-shadow: 2px 3px 0px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; line-height: 1.2; overflow-wrap: break-word; word-break: break-word;">
-                ${g.clues[ci].text}
-              </h2>
+        <div class="w-px self-stretch flex-shrink-0" style="background:rgba(255,255,255,0.4)"></div>
+        <div class="flex-grow flex items-center justify-between px-3 py-3 min-w-0 gap-2">
+          <div class="flex-grow min-w-0">
+            <div id="loading-state-${ci}" class="flex items-center gap-2">
+              <div class="w-3.5 h-3.5 border-2 border-white/80 border-t-transparent rounded-full animate-spin"></div>
+              <span class="text-white/90 font-display tracking-widest text-xs animate-pulse uppercase">Incoming...</span>
             </div>
+            <h2 id="text-state-${ci}" class="hidden ${_clueFsClass} font-bold text-white font-display uppercase ${_clueTrack} leading-tight" style="text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; overflow-wrap: break-word; word-break: break-word;">${g.clues[ci].text}</h2>
           </div>
+          <span class="text-[10px] font-bold font-mono text-white flex-shrink-0 bg-black/30 px-1.5 py-0.5 rounded" id="timer-text-${ci}"></span>
         </div>
-        <div class="h-2 w-full bg-slate-900 absolute bottom-0 left-0">
-          <div id="timer-bar-${ci}" class="h-full bg-yellow-400 w-full shadow-[0_0_10px_rgba(250,204,21,0.8)]"></div>
+        <div class="h-1 w-full absolute bottom-0 left-0 pointer-events-none" style="background:rgba(0,0,0,0.35)">
+          <div id="timer-bar-${ci}" class="h-full bg-yellow-400 w-full" style="box-shadow: 0 0 6px rgba(250,204,21,0.8)"></div>
         </div>
       </div>`;
+
+    // Past clues — darker pill cards below, newest first
+    const pastEl = document.getElementById('past-clues');
+    if (pastEl) {
+      pastEl.innerHTML = '';
+      for (let j = ci - 1; j >= 0; j--) {
+        const div = document.createElement('div');
+        div.className = 'flex items-stretch rounded-xl overflow-hidden';
+        div.style.background = 'linear-gradient(90deg, #1a3a7a 0%, #1e4ea8 40%, #1a3a7a 100%)';
+        div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.4)';
+        div.innerHTML = `
+          <div class="flex items-center justify-center px-3 flex-shrink-0" style="background:rgba(0,0,0,0.28); min-width:3rem;">
+            <span class="text-white font-bold text-base font-display">${j+1}</span>
+          </div>
+          <div class="w-px self-stretch flex-shrink-0" style="background:rgba(255,255,255,0.25)"></div>
+          <div class="flex items-center px-3 py-2.5">
+            <span class="text-white font-bold text-sm md:text-base font-display uppercase tracking-wide leading-snug">${g.clues[j].text}</span>
+          </div>`;
+        pastEl.appendChild(div);
+      }
+      pastEl.scrollTop = 0;
+    }
 
     this._clueTimeout = setTimeout(() => {
       const loading = document.getElementById(`loading-state-${ci}`);
@@ -1412,23 +1410,11 @@ class App {
   }
 
   fitClueText(ci) {
-    const textState = document.getElementById(`text-state-${ci}`);
-    if (!textState || textState.classList.contains('hidden')) return;
-    const blueBox = textState.firstElementChild;
-    const h2 = blueBox && blueBox.querySelector('h2');
-    if (!h2 || !blueBox) return;
+    // Pill-style cards wrap text naturally and grow to accommodate it.
+    // Step-function font sizing via _clueFsClass + word-break handles fit.
+    const h2 = document.getElementById(`text-state-${ci}`);
+    if (!h2 || h2.classList.contains('hidden')) return;
     h2.style.fontSize = '';
-    requestAnimationFrame(() => {
-      const boxW = blueBox.clientWidth, boxH = blueBox.clientHeight;
-      if (!boxW || !boxH) return;
-      let fs = parseFloat(getComputedStyle(h2).fontSize);
-      for (let i = 0; i < 40; i++) {
-        if (h2.scrollHeight <= boxH - 4 && h2.scrollWidth <= boxW - 4) break;
-        fs *= 0.93;
-        if (fs < 9) { h2.style.fontSize = '9px'; break; }
-        h2.style.fontSize = fs + 'px';
-      }
-    });
   }
 
   runClueTimer(seconds, barEl, textEl) {
