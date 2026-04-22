@@ -10287,13 +10287,13 @@
       {
         "text": "TEMP WORKER WITH A DEGREE",
         "correct": "3344",
-        "guesses": "6000",
+        "guesses": "5,922",
         "explanation": "Its job is to tell you the temperature in degrees."
       },
       {
         "text": "WHETHER ON TOP OF THE WEATHER OR UNDER THE WEATHER",
         "correct": "1582",
-        "guesses": "4,205",
+        "guesses": "4,252",
         "explanation": "Temperature, and a thermometer measures your temperature—and your body temperature—especially when you're sick. Are you under the weather? You get it."
       }
     ],
