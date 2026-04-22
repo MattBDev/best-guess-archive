@@ -98,9 +98,8 @@
        sticky would resolve to <body> (overflow:hidden is not a scroll container),
        causing #past-clues to float up and overlap the game header on devices
        where dvh !== window.innerHeight - navHeight by even 1px. */
-    #past-clues { background: transparent; }
+    #clue-stack { background: transparent; }
     #input-container { background: rgba(2,6,22,0.92); backdrop-filter: blur(10px); }
-    #active-clue-area { background: transparent; }
     input#guess-input { font-size: 18px; padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
   }
 </style>
@@ -362,11 +361,9 @@ document.addEventListener('focusout', function(e) {
     </div>
   </div>
 
-  <!-- Past clues — flex-grow area, clues pile at the BOTTOM (just above active pill) -->
-  <div class="flex-grow overflow-y-auto px-3 pt-1 pb-1 min-h-0 flex flex-col justify-end space-y-2" id="past-clues"></div>
-
-  <!-- Active clue — pinned just above the timer row -->
-  <div class="flex-shrink-0 px-3 pt-1 pb-1" id="active-clue-area"></div>
+  <!-- Clue stack — all clues, chronological: clue 1 at the bottom, newest clue at the top.
+       flex-col-reverse pins items at the bottom and renders the LAST DOM child at the visual top. -->
+  <div class="flex-grow overflow-y-auto px-3 pt-2 pb-2 min-h-0 flex flex-col-reverse gap-3" id="clue-stack"></div>
 
   <!-- Timer row — transparent grey pill wrapping the orange bar + countdown -->
   <div class="flex-shrink-0 px-3 pt-1 pb-2" id="timer-row" style="display:none">
@@ -1327,8 +1324,6 @@ class App {
       ? `$${this.currentGame.pot.toLocaleString()} pot · Gold/Silver/Bronze tiers`
       : `$${this.currentGame.pot.toLocaleString()} pot · earliest correct wins`;
 
-    const activeEl = document.getElementById('active-clue-area');
-    if (activeEl) activeEl.innerHTML = '';
     const timerRow = document.getElementById('timer-row');
     if (timerRow) timerRow.style.display = 'none';
     const inputEl = document.getElementById('guess-input');
@@ -1337,9 +1332,9 @@ class App {
       inputEl.disabled = true;
     }
 
-    const pastEl = document.getElementById('past-clues');
-    if (pastEl) {
-      pastEl.innerHTML = `
+    const stackEl = document.getElementById('clue-stack');
+    if (stackEl) {
+      stackEl.innerHTML = `
         <div class="flex flex-col items-center justify-center space-y-6 w-full h-full pb-8">
           <div class="text-slate-400 font-medium text-lg tracking-widest uppercase">Ready to play?</div>
           <button class="bg-blue-600 hover:bg-blue-500 text-white px-10 py-5 rounded-2xl font-bold text-xl md:text-2xl flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(37,99,235,0.4)] hover:shadow-[0_0_40px_rgba(37,99,235,0.6)] transition transform hover:scale-105" onclick="app.startGameplay()">
@@ -1376,52 +1371,44 @@ class App {
     const durOpt = localStorage.getItem('clue_time') || '20';
     const clueSecs = parseInt(durOpt, 10);
 
-    const activeEl = document.getElementById('active-clue-area');
-    if (!activeEl) return;
+    const stackEl = document.getElementById('clue-stack');
+    if (!stackEl) return;
 
-    const _tl = g.clues[ci].text.length;
-    const _clueFsClass   = _tl > 35 ? 'text-sm md:text-base' : _tl > 22 ? 'text-base md:text-lg' : _tl > 14 ? 'text-lg md:text-xl' : 'text-xl md:text-2xl';
-    const _clueTrack     = _tl > 22 ? 'tracking-wide'        : 'tracking-wider';
-
-    // Active clue — lighter blue pill with person icon. Timer/countdown live below in #timer-row.
-    activeEl.innerHTML = `
-      <div class="flex items-stretch rounded-xl overflow-hidden relative clue-stack-enter" style="background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 45%, #2563eb 100%); box-shadow: 0 0 22px rgba(96,165,250,0.6), 0 0 8px rgba(255,255,255,0.15) inset;">
-        <div class="flex items-center justify-center px-3 flex-shrink-0" style="background:rgba(0,0,0,0.3); min-width:3rem;">
-          <span class="material-symbols-outlined text-white" style="font-size:26px">account_circle</span>
-        </div>
-        <div class="w-px self-stretch flex-shrink-0" style="background:rgba(255,255,255,0.45)"></div>
-        <div class="flex-grow flex items-center px-3 py-3 min-w-0">
-          <div class="flex-grow min-w-0">
-            <div id="loading-state-${ci}" class="flex items-center gap-2">
-              <div class="w-3.5 h-3.5 border-2 border-white/80 border-t-transparent rounded-full animate-spin"></div>
-              <span class="text-white/90 font-display tracking-widest text-xs animate-pulse uppercase">Incoming...</span>
-            </div>
-            <h2 id="text-state-${ci}" class="hidden ${_clueFsClass} font-bold text-white font-display uppercase ${_clueTrack} leading-tight" style="text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; overflow-wrap: break-word; word-break: break-word;">${g.clues[ci].text}</h2>
-          </div>
-        </div>
-      </div>`;
-
-    // Past clues — darker pill cards above active, oldest at top (clue 1 at top when multiple exist)
-    const pastEl = document.getElementById('past-clues');
-    if (pastEl) {
-      pastEl.innerHTML = '';
-      for (let j = 0; j < ci; j++) {
-        const div = document.createElement('div');
-        div.className = 'flex items-stretch rounded-xl overflow-hidden';
+    // Render all clues 0..ci in chronological DOM order. flex-col-reverse on the
+    // container pins them at the bottom and draws clue ci at the visual TOP,
+    // with clue 1 at the bottom. The active clue (ci) gets the lighter gradient
+    // plus the white "shine" border. Past clues keep a darker gradient. Pills
+    // use a consistent font size and wrap to multiple lines for longer text.
+    stackEl.innerHTML = '';
+    for (let j = 0; j <= ci; j++) {
+      const isActive = j === ci;
+      const div = document.createElement('div');
+      div.className = 'flex items-stretch rounded-xl overflow-hidden' + (isActive ? ' clue-stack-enter' : '');
+      if (isActive) {
+        div.style.background = 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 45%, #2563eb 100%)';
+        // White shine: thin bright outline, soft white halo, plus outer blue glow
+        div.style.boxShadow = '0 0 0 1.5px rgba(255,255,255,0.55), 0 0 14px rgba(255,255,255,0.35), 0 0 26px rgba(147,197,253,0.5), inset 0 1px 0 rgba(255,255,255,0.3)';
+      } else {
         div.style.background = 'linear-gradient(90deg, #1a3a7a 0%, #1e4ea8 40%, #1a3a7a 100%)';
         div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.4)';
-        div.innerHTML = `
-          <div class="flex items-center justify-center px-3 flex-shrink-0" style="background:rgba(0,0,0,0.28); min-width:3rem;">
-            <span class="text-white font-bold text-base font-display">${j+1}</span>
-          </div>
-          <div class="w-px self-stretch flex-shrink-0" style="background:rgba(255,255,255,0.25)"></div>
-          <div class="flex items-center px-3 py-2.5">
-            <span class="text-white font-bold text-sm md:text-base font-display uppercase tracking-wide leading-snug">${g.clues[j].text}</span>
-          </div>`;
-        pastEl.appendChild(div);
       }
-      // Scroll to bottom so the most recent past clue is visible just above the active pill
-      pastEl.scrollTop = pastEl.scrollHeight;
+      const clueText = g.clues[j].text;
+      const textBlock = isActive
+        ? `<div id="loading-state-${ci}" class="flex items-center gap-2">
+             <div class="w-3.5 h-3.5 border-2 border-white/80 border-t-transparent rounded-full animate-spin"></div>
+             <span class="text-white/90 font-display tracking-widest text-xs animate-pulse uppercase">Incoming...</span>
+           </div>
+           <span id="text-state-${ci}" class="hidden text-base md:text-lg font-bold text-white font-display uppercase tracking-wide leading-snug" style="text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; overflow-wrap: break-word;">${clueText}</span>`
+        : `<span class="text-base md:text-lg font-bold text-white font-display uppercase tracking-wide leading-snug" style="overflow-wrap: break-word;">${clueText}</span>`;
+      div.innerHTML = `
+        <div class="flex items-center justify-center px-3 flex-shrink-0" style="background:rgba(0,0,0,0.28); min-width:3rem;">
+          <span class="text-white font-bold text-base font-display">${j+1}</span>
+        </div>
+        <div class="w-px self-stretch flex-shrink-0" style="background:rgba(255,255,255,0.3)"></div>
+        <div class="flex items-center flex-grow min-w-0 px-3 py-3">
+          <div class="flex-grow min-w-0">${textBlock}</div>
+        </div>`;
+      stackEl.appendChild(div);
     }
 
     // Hide the timer row during the brief "Incoming..." reveal
@@ -1433,7 +1420,6 @@ class App {
       const text = document.getElementById(`text-state-${ci}`);
       if (loading) loading.classList.add('hidden');
       if (text) text.classList.remove('hidden');
-      this.fitClueText(ci);
       if (timerRow) timerRow.style.display = '';
       this.runClueTimer(
         clueSecs,
