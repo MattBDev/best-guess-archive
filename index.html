@@ -1156,7 +1156,187 @@ class App {
     this._fullGamesLoading = null;
     this._homeStatsCache = null;
     this._statsCache = null;
+    this._dataVersion = 0;
+    this._gameMetaCache = new WeakMap();
+    this._dbRowHtmlCache = new WeakMap();
+    this._dbSortedCache = new Map();
+    this._dbFilteredCache = new Map();
+    this._viewNodes = {};
+    this._charts = {};
+    this._statsChartsRendered = false;
+    this._statsChartsVersion = '';
+    this._statsChartObserver = null;
+    this._statsChartLoadPromise = null;
+    this._adminDateGroupsCache = null;
     this.init();
+  }
+
+  _parseCount(value) {
+    if (typeof value === 'number') return value;
+    return parseInt(String(value || '0').replace(/[^0-9]/g, ''), 10) || 0;
+  }
+
+  _parseMoneyString(value) {
+    return Number(String(value || '0').replace(/[$,]/g, '')) || 0;
+  }
+
+  _invalidateDerivedDataCaches() {
+    this._dataVersion += 1;
+    this._gameMetaCache = new WeakMap();
+    this._dbRowHtmlCache = new WeakMap();
+    this._dbSortedCache.clear();
+    this._dbFilteredCache.clear();
+    this._homeStatsCache = null;
+    this._statsCache = null;
+    this._adminDateGroupsCache = null;
+    this._statsChartsRendered = false;
+    this._statsChartsVersion = '';
+  }
+
+  _cacheViewNodes(name) {
+    const nodes = {};
+    if (name === 'database') {
+      nodes.search = document.getElementById('db-search');
+      nodes.count = document.getElementById('db-count-display');
+      nodes.body = document.getElementById('db-table-body');
+    } else if (name === 'stats') {
+      nodes.refresh = document.getElementById('refresh-stats-btn');
+      nodes.kpis = document.getElementById('stats-kpi-grid');
+      nodes.hostTable = document.getElementById('stats-host-table');
+      nodes.records = document.getElementById('stats-records-grid');
+      nodes.hardest = document.getElementById('stats-hardest-list');
+      nodes.easiest = document.getElementById('stats-easiest-list');
+      nodes.fewest = document.getElementById('stats-fewest-list');
+      nodes.bigpots = document.getElementById('stats-bigpots-list');
+      nodes.statHunter = document.getElementById('stat-hunter-games');
+      nodes.statHowie = document.getElementById('stat-howie-games');
+      nodes.statV2 = document.getElementById('stat-v2-games');
+      nodes.statPot = document.getElementById('stat-total-pot');
+      nodes.statAvgWinners = document.getElementById('stat-avg-winners');
+      nodes.statAvgClue = document.getElementById('stat-avg-clue');
+      nodes.chartPlayersTime = document.getElementById('chart-players-time');
+      nodes.chartClueDist = document.getElementById('chart-clue-dist');
+      nodes.chartAvgWinners = document.getElementById('chart-avg-winners-clue');
+      nodes.chartPotDist = document.getElementById('chart-pot-dist');
+      nodes.chartPayoutClue = document.getElementById('chart-payout-clue');
+    } else if (name === 'admin') {
+      nodes.owner = document.getElementById('gh-owner');
+      nodes.repo = document.getElementById('gh-repo');
+      nodes.pat = document.getElementById('gh-pat');
+      nodes.deleteSelect = document.getElementById('delete-date-select');
+      nodes.datePreview = document.getElementById('date-preview-container');
+      nodes.importJson = document.getElementById('import-json');
+      nodes.publish = document.getElementById('btn-publish');
+      nodes.importStatus = document.getElementById('import-status');
+    }
+    this._viewNodes[name] = nodes;
+    return nodes;
+  }
+
+  _getViewNodes(name) {
+    return this._viewNodes[name] || this._cacheViewNodes(name);
+  }
+
+  _getGameMeta(g) {
+    const cached = this._gameMetaCache.get(g);
+    if (cached) return cached;
+
+    const clues = Array.isArray(g.clues) ? g.clues : [];
+    const clueStats = clues.map((clue, index) => {
+      const correct = this._parseCount(clue.correct);
+      const guesses = this._parseCount(clue.guesses);
+      const pct = guesses > 0 ? ((correct / guesses) * 100).toFixed(3) : '0.000';
+      return {
+        clue,
+        clueNumber: index + 1,
+        correct,
+        guesses,
+        pct
+      };
+    });
+    const totalPlayers = clueStats.reduce((sum, entry) => sum + entry.guesses, 0);
+    const winningClueNum = Number(g.winningClue || g.goldClue || 0);
+    const hostHtml = (g.host || '—').replace('Hunter/Anthony Anderson', 'Hunter/<br>Anthony Anderson');
+    const searchText = [
+      g.secretItem,
+      g.date,
+      g.host,
+      g.winnerNames,
+      g.wrongGuesses,
+      ...clues.map(c => c.text)
+    ].filter(Boolean).join('\n').toLowerCase();
+
+    const meta = {
+      clueStats,
+      totalPlayers,
+      winningClueNum,
+      hostHtml,
+      dateValue: this._archiveDateValue(g.date),
+      searchText,
+      isStub: this._isStubGame(g)
+    };
+    this._gameMetaCache.set(g, meta);
+    return meta;
+  }
+
+  _getSortedGames(sort) {
+    const sortKey = `${this._dataVersion}|${sort.key}|${sort.dir}`;
+    if (this._dbSortedCache.has(sortKey)) return this._dbSortedCache.get(sortKey);
+
+    const dir = sort.dir === 'asc' ? 1 : -1;
+    const sorted = [...this.games].sort((a, b) => {
+      const metaA = this._getGameMeta(a);
+      const metaB = this._getGameMeta(b);
+      if (sort.key === 'pot') return dir * (a.pot - b.pot);
+      if (sort.key === 'players') return dir * (metaA.totalPlayers - metaB.totalPlayers);
+      if (sort.key === 'winners') return dir * ((a.totalWinners || 0) - (b.totalWinners || 0));
+      return dir * (metaA.dateValue - metaB.dateValue);
+    });
+
+    this._dbSortedCache.set(sortKey, sorted);
+    return sorted;
+  }
+
+  _getFilteredGames(filter, sort) {
+    const filterKey = `${this._dataVersion}|${sort.key}|${sort.dir}|${filter}`;
+    if (this._dbFilteredCache.has(filterKey)) return this._dbFilteredCache.get(filterKey);
+
+    const filtered = filter
+      ? this._getSortedGames(sort).filter(g => this._getGameMeta(g).searchText.includes(filter))
+      : this._getSortedGames(sort);
+
+    this._dbFilteredCache.set(filterKey, filtered);
+    return filtered;
+  }
+
+  _teardownStatsCharts() {
+    if (this._statsChartObserver) {
+      this._statsChartObserver.disconnect();
+      this._statsChartObserver = null;
+    }
+    if (this._charts) {
+      Object.values(this._charts).forEach(chart => {
+        try { if (chart) chart.destroy(); } catch (e) {}
+      });
+    }
+    this._charts = {};
+    this._statsChartsRendered = false;
+    this._statsChartsVersion = '';
+  }
+
+  _ensureChartJs() {
+    if (typeof Chart !== 'undefined') return Promise.resolve();
+    if (this._statsChartLoadPromise) return this._statsChartLoadPromise;
+    this._statsChartLoadPromise = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('Failed to load Chart.js'));
+      document.head.appendChild(s);
+    }).finally(() => {
+      this._statsChartLoadPromise = null;
+    });
+    return this._statsChartLoadPromise;
   }
 
   _b64DecodeUTF8(b64) {
@@ -1239,8 +1419,6 @@ class App {
         this._normalizeGames(this.games);
         this._fullGamesLoaded = true;
         this._fullGamesLoading = null;
-        this._homeStatsCache = null;
-        this._statsCache = null;
       })
       .catch(err => {
         console.error('Could not load games.json:', err);
@@ -1258,6 +1436,7 @@ class App {
   }
 
   setView(name) {
+    this._activeView = name;
     this.updateNavActiveState(name);
     if (name !== 'home') {
       if (this._homeStatsFrame1) cancelAnimationFrame(this._homeStatsFrame1);
@@ -1272,10 +1451,14 @@ class App {
     if (name !== 'database' && typeof window.cleanupDatabaseScrollControls === 'function') {
       window.cleanupDatabaseScrollControls();
     }
+    if (name !== 'stats') {
+      this._teardownStatsCharts();
+    }
     const tpl = document.getElementById(`view-${name}`);
     if (!tpl) return;
     const container = document.getElementById('app-container');
     container.innerHTML = tpl.innerHTML;
+    this._cacheViewNodes(name);
     // Play mode: absolute full-viewport layout using position:fixed so no
     // part of the page (including the sticky nav) can appear behind or
     // around the game. Inline styles are used (not just the in-play class)
@@ -1908,131 +2091,107 @@ class App {
   }
 
   // ==================== DATABASE ====================
-  renderDatabase() {
-    const parseN = s => parseInt(String(s || '0').replace(/[^0-9]/g, ''), 10) || 0;
+  _renderDatabaseRow(g) {
+    const cached = this._dbRowHtmlCache.get(g);
+    if (cached) return cached;
+
     const fmtMoney = (n, decimals = 2) => '$' + Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
-    const filter = (document.getElementById('db-search')?.value || '').toLowerCase();
+    const meta = this._getGameMeta(g);
 
-    const sort = this._dbSort || { key: 'date', dir: 'desc' };
-    const dir = sort.dir === 'asc' ? 1 : -1;
-    const totalPlayersFor = g => g.clues.reduce((a, c) => a + parseN(c.guesses), 0);
-    const sorted = [...this.games].sort((a, b) => {
-      if (sort.key === 'pot') return dir * (a.pot - b.pot);
-      if (sort.key === 'players') return dir * (totalPlayersFor(a) - totalPlayersFor(b));
-      if (sort.key === 'winners') return dir * ((a.totalWinners || 0) - (b.totalWinners || 0));
-      return dir * this._compareArchiveDates(a.date, b.date);
-    });
-
-    const filtered = sorted.filter(g =>
-      g.secretItem.toLowerCase().includes(filter) ||
-      g.date.toLowerCase().includes(filter) ||
-      (g.host && g.host.toLowerCase().includes(filter)) ||
-      (g.winnerNames && g.winnerNames.toLowerCase().includes(filter)) ||
-      (g.wrongGuesses && g.wrongGuesses.toLowerCase().includes(filter)) ||
-      g.clues.some(c => c.text.toLowerCase().includes(filter))
-    );
-    document.getElementById('db-count-display').innerText = `Showing ${filtered.length} of ${this.games.length} games`;
-
-    document.getElementById('db-table-body').innerHTML = filtered.map(g => {
-      // Cancelled / stub entry — no game was played
-      if (g.note && g.clues.length === 0) {
-        return `<tr class="border-b border-red-900/40 bg-red-950/20">
-          <td class="pl-4 pr-1 py-4 text-slate-400 font-mono text-xs db-col-date" title="${g.date}">${g.date}</td>
-          <td colspan="13" class="px-4 py-4">
-            <span class="inline-flex items-center gap-2 text-sm font-bold text-red-400">
-              <span class="material-symbols-outlined" style="font-size:18px">cancel</span>
-              ${g.note} — no episode aired
-            </span>
-          </td>
-        </tr>`;
-      }
-      const isV2 = g.format === 'v2';
-
-      // Medal map: clue number (1-5) → emoji
-      const medalMap = {};
-      if (g.goldClue) medalMap[Number(g.goldClue)] = '🥇';
-      if (isV2 && g.silverClue) medalMap[Number(g.silverClue)] = (medalMap[Number(g.silverClue)] || '') + '🥈';
-      if (isV2 && g.bronzeClue) medalMap[Number(g.bronzeClue)] = (medalMap[Number(g.bronzeClue)] || '') + '🥉';
-
-      // Clue cells
-      const winningClueNum = g.winningClue || g.goldClue;
-      const clueCells = Array.from({ length: 5 }, (_, i) => {
-        const clue = g.clues[i];
-        const medal = medalMap[i + 1] || '';
-        const isWinning = (i + 1) === Number(winningClueNum);
-        if (!clue) return `<td class="px-4 py-3 text-slate-700 text-center align-middle">—</td>`;
-        const correct = parseN(clue.correct);
-        const guesses = parseN(clue.guesses);
-        const pct = guesses > 0 ? ((correct / guesses) * 100).toFixed(3) : '0.000';
-        // For classic games (not v2), highlight only the clue text for the winning clue, no star or gold coloring on the clue number column
-        return `<td class="px-4 py-3 align-middle" style="min-width:200px">
-          <div class="font-medium ${isWinning && !isV2 ? 'bg-yellow-900/30 border border-yellow-400/40 rounded px-1 py-0.5 shadow-sm text-yellow-300' : 'text-slate-200'} leading-snug">${clue.text}</div>
-          <div class="text-xs font-mono mt-0.5 flex items-center flex-wrap gap-x-1"><span class="text-green-500">${correct.toLocaleString()}</span><span class="text-slate-600"> / </span><span class="text-slate-400">${guesses.toLocaleString()}</span><span class="text-slate-600"> (${pct}%)${(isV2 && medal) ? `&nbsp;<span class="ml-1 text-sm whitespace-nowrap">${medal}</span>` : ''}</span></div>
-        </td>`;
-      }).join('');
-
-      // Total players
-      const totalPlayers = g.clues.reduce((a, c) => a + parseN(c.guesses), 0);
-
-      // Winners
-      const totalW = g.totalWinners;
-      const winnersHtml = isV2
-        ? `<div class="text-xs text-center space-y-0.5">
-            <div>🥇 <span class="font-mono text-yellow-400">${(g.goldWinners || 0).toLocaleString()}</span></div>
-            <div>🥈 <span class="font-mono text-slate-300">${(g.silverWinners || 0).toLocaleString()}</span></div>
-            <div>🥉 <span class="font-mono text-amber-600">${(g.bronzeWinners || 0).toLocaleString()}</span></div>
-            <div class="border-t border-slate-700 pt-0.5 text-slate-400 font-mono">${totalW.toLocaleString()} total</div>
-          </div>`
-        : `<div class="text-center font-mono text-slate-300">${totalW.toLocaleString()}</div>`;
-
-      // Payouts
-      const payoutsHtml = isV2
-        ? `<div class="text-xs font-mono space-y-0.5" style="min-width:150px">
-            <div>🥇 <span class="text-yellow-400">${fmtMoney(g.goldPayout)}</span></div>
-            <div>🥈 <span class="text-slate-300">${fmtMoney(g.silverPayout)}</span></div>
-            <div>🥉 <span class="text-amber-600">${fmtMoney(g.bronzePayout)}</span></div>
-            <div class="border-t border-slate-700 pt-0.5 text-green-400">${g.winnerPayout || ''} total</div>
-          </div>`
-        : `<div class="font-mono" style="min-width:110px">
-            <span class="text-green-400">${g.winnerPayout || '—'}</span>
-            <div class="text-xs text-slate-500">per winner</div>
-          </div>`;
-
-      // Winner names
-
-      return `<tr class="hover:bg-slate-800/30 transition border-b border-slate-800/60 last:border-0">
-        <td class="pl-4 pr-1 py-1 text-slate-400 font-mono text-[11px] align-middle db-col-date" title="${g.date}">${g.date}</td>
-        <td class="px-1 py-1 font-semibold text-white align-middle" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">
-          <span style="white-space:nowrap;">${g.secretItem}</span>
-          ${g.note ? `<div class="mt-0.5"><span class="inline-flex items-center gap-1 text-[9px] font-bold bg-red-900/40 text-red-400 border border-red-600/40 px-1 py-0.5 rounded-full uppercase tracking-wide"><span class="material-symbols-outlined" style="font-size:10px">warning</span>${g.note}</span></div>` : ''}
-        </td>
-        <td class="px-2 py-1 text-green-400 font-mono whitespace-nowrap align-middle">$${g.pot.toLocaleString()}</td>
-        ${clueCells}
-        <td class="px-2 py-1 text-center font-bold text-slate-400 align-middle">${winningClueNum || ''}</td>
-        <td class="px-2 py-1 align-middle"><span class="font-mono text-blue-300">${totalPlayers.toLocaleString()}</span></td>
-        <td class="px-2 py-1 align-middle">${winnersHtml}</td>
-        <td class="px-2 py-1 align-middle">${payoutsHtml}</td>
-        <td class="px-1 py-1 text-slate-400 align-middle" style="max-width:90px;overflow:hidden;text-overflow:ellipsis;">${(g.host || '—').replace('Hunter/Anthony Anderson', 'Hunter/<br>Anthony Anderson')}</td>
-        <td class="px-1 py-1 text-right align-middle" style="position:sticky;right:0;background:#0f172a;">
-          <button onclick="app.showDetails('${g.date.replace(/'/g,"\\'")}', '${(g.secretItem + '').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" class="inline-flex items-center justify-center rounded-full border border-blue-400/25 bg-slate-900/55 text-blue-300 hover:text-blue-100 hover:border-blue-300/40 hover:bg-slate-900/75 transition" title="View details" style="padding:4px;">
-            <span class="material-symbols-outlined" style="font-size:18px;">visibility</span>
-          </button>
+    if (meta.isStub) {
+      const html = `<tr class="border-b border-red-900/40 bg-red-950/20">
+        <td class="pl-4 pr-1 py-4 text-slate-400 font-mono text-xs db-col-date" title="${g.date}">${g.date}</td>
+        <td colspan="13" class="px-4 py-4">
+          <span class="inline-flex items-center gap-2 text-sm font-bold text-red-400">
+            <span class="material-symbols-outlined" style="font-size:18px">cancel</span>
+            ${g.note} — no episode aired
+          </span>
         </td>
       </tr>`;
+      this._dbRowHtmlCache.set(g, html);
+      return html;
+    }
+
+    const isV2 = g.format === 'v2';
+    const medalMap = {};
+    if (g.goldClue) medalMap[Number(g.goldClue)] = '🥇';
+    if (isV2 && g.silverClue) medalMap[Number(g.silverClue)] = (medalMap[Number(g.silverClue)] || '') + '🥈';
+    if (isV2 && g.bronzeClue) medalMap[Number(g.bronzeClue)] = (medalMap[Number(g.bronzeClue)] || '') + '🥉';
+
+    const clueCells = Array.from({ length: 5 }, (_, i) => {
+      const clueMeta = meta.clueStats[i];
+      const medal = medalMap[i + 1] || '';
+      const isWinning = (i + 1) === meta.winningClueNum;
+      if (!clueMeta) return `<td class="px-4 py-3 text-slate-700 text-center align-middle">—</td>`;
+      return `<td class="px-4 py-3 align-middle" style="min-width:200px">
+        <div class="font-medium ${isWinning && !isV2 ? 'bg-yellow-900/30 border border-yellow-400/40 rounded px-1 py-0.5 shadow-sm text-yellow-300' : 'text-slate-200'} leading-snug">${clueMeta.clue.text}</div>
+        <div class="text-xs font-mono mt-0.5 flex items-center flex-wrap gap-x-1"><span class="text-green-500">${clueMeta.correct.toLocaleString()}</span><span class="text-slate-600"> / </span><span class="text-slate-400">${clueMeta.guesses.toLocaleString()}</span><span class="text-slate-600"> (${clueMeta.pct}%)${(isV2 && medal) ? `&nbsp;<span class="ml-1 text-sm whitespace-nowrap">${medal}</span>` : ''}</span></div>
+      </td>`;
     }).join('');
-    setTimeout(() => {
+
+    const totalW = g.totalWinners || 0;
+    const winnersHtml = isV2
+      ? `<div class="text-xs text-center space-y-0.5">
+          <div>🥇 <span class="font-mono text-yellow-400">${(g.goldWinners || 0).toLocaleString()}</span></div>
+          <div>🥈 <span class="font-mono text-slate-300">${(g.silverWinners || 0).toLocaleString()}</span></div>
+          <div>🥉 <span class="font-mono text-amber-600">${(g.bronzeWinners || 0).toLocaleString()}</span></div>
+          <div class="border-t border-slate-700 pt-0.5 text-slate-400 font-mono">${totalW.toLocaleString()} total</div>
+        </div>`
+      : `<div class="text-center font-mono text-slate-300">${totalW.toLocaleString()}</div>`;
+
+    const payoutsHtml = isV2
+      ? `<div class="text-xs font-mono space-y-0.5" style="min-width:150px">
+          <div>🥇 <span class="text-yellow-400">${fmtMoney(g.goldPayout)}</span></div>
+          <div>🥈 <span class="text-slate-300">${fmtMoney(g.silverPayout)}</span></div>
+          <div>🥉 <span class="text-amber-600">${fmtMoney(g.bronzePayout)}</span></div>
+          <div class="border-t border-slate-700 pt-0.5 text-green-400">${g.winnerPayout || ''} total</div>
+        </div>`
+      : `<div class="font-mono" style="min-width:110px">
+          <span class="text-green-400">${g.winnerPayout || '—'}</span>
+          <div class="text-xs text-slate-500">per winner</div>
+        </div>`;
+
+    const html = `<tr class="hover:bg-slate-800/30 transition border-b border-slate-800/60 last:border-0">
+      <td class="pl-4 pr-1 py-1 text-slate-400 font-mono text-[11px] align-middle db-col-date" title="${g.date}">${g.date}</td>
+      <td class="px-1 py-1 font-semibold text-white align-middle" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">
+        <span style="white-space:nowrap;">${g.secretItem}</span>
+        ${g.note ? `<div class="mt-0.5"><span class="inline-flex items-center gap-1 text-[9px] font-bold bg-red-900/40 text-red-400 border border-red-600/40 px-1 py-0.5 rounded-full uppercase tracking-wide"><span class="material-symbols-outlined" style="font-size:10px">warning</span>${g.note}</span></div>` : ''}
+      </td>
+      <td class="px-2 py-1 text-green-400 font-mono whitespace-nowrap align-middle">$${g.pot.toLocaleString()}</td>
+      ${clueCells}
+      <td class="px-2 py-1 text-center font-bold text-slate-400 align-middle">${meta.winningClueNum || ''}</td>
+      <td class="px-2 py-1 align-middle"><span class="font-mono text-blue-300">${meta.totalPlayers.toLocaleString()}</span></td>
+      <td class="px-2 py-1 align-middle">${winnersHtml}</td>
+      <td class="px-2 py-1 align-middle">${payoutsHtml}</td>
+      <td class="px-1 py-1 text-slate-400 align-middle" style="max-width:90px;overflow:hidden;text-overflow:ellipsis;">${meta.hostHtml}</td>
+      <td class="px-1 py-1 text-right align-middle" style="position:sticky;right:0;background:#0f172a;">
+        <button onclick="app.showDetails('${g.date.replace(/'/g,"\\'")}', '${(g.secretItem + '').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" class="inline-flex items-center justify-center rounded-full border border-blue-400/25 bg-slate-900/55 text-blue-300 hover:text-blue-100 hover:border-blue-300/40 hover:bg-slate-900/75 transition" title="View details" style="padding:4px;">
+          <span class="material-symbols-outlined" style="font-size:18px;">visibility</span>
+        </button>
+      </td>
+    </tr>`;
+
+    this._dbRowHtmlCache.set(g, html);
+    return html;
+  }
+
+  renderDatabase() {
+    const nodes = this._getViewNodes('database');
+    const filter = (nodes.search?.value || '').toLowerCase().trim();
+    const sort = this._dbSort || { key: 'date', dir: 'desc' };
+    const filtered = this._getFilteredGames(filter, sort);
+    if (nodes.count) nodes.count.innerText = `Showing ${filtered.length} of ${this.games.length} games`;
+    if (nodes.body) nodes.body.innerHTML = filtered.map(g => this._renderDatabaseRow(g)).join('');
+    requestAnimationFrame(() => {
       if (typeof window.setupDatabaseScrollControls === 'function') {
         window.setupDatabaseScrollControls();
       }
-    }, 0);
+    });
   }
 
 
 
-  filterDatabase() {
-    clearTimeout(this._filterTimer);
-    this._filterTimer = setTimeout(() => this.renderDatabase(), 150);
-  }
+  filterDatabase() { this.scheduleDatabaseFilter(); }
 
   scheduleDatabaseFilter() {
     if (this._dbFilterTimer) clearTimeout(this._dbFilterTimer);
@@ -2170,7 +2329,285 @@ class App {
   closeModal() { document.getElementById('modal-backdrop').classList.add('hidden'); }
 
   // ==================== STATS ====================
+  _getStatsData() {
+    const cacheKey = `${this._dataVersion}|${new Date().toDateString()}`;
+    if (this._statsCache && this._statsCache.cacheKey === cacheKey) return this._statsCache;
+
+    const games = this.games.filter(g => !this._getGameMeta(g).isStub);
+    const uniqueDates = [...new Set(games.map(g => g.date))];
+    const totalGames = uniqueDates.length;
+    const totalRounds = games.length;
+    const today = new Date();
+    const v2Dates = [...new Set(games.filter(g => g.format === 'v2').map(g => g.date))].sort((a, b) => this._compareArchiveDates(a, b));
+    const firstV2Date = v2Dates.length ? this._archiveDateObject(v2Dates[0]) : null;
+    const firstDate = uniqueDates.length ? this._archiveDateObject([...uniqueDates].sort((a, b) => this._compareArchiveDates(a, b))[0]) : null;
+    const daysSinceNewRules = firstV2Date ? Math.max(0, Math.ceil((today - firstV2Date) / (1000 * 60 * 60 * 24))) : 0;
+    const daysSinceLaunch = firstDate ? Math.max(0, Math.ceil((today - firstDate) / (1000 * 60 * 60 * 24))) : 0;
+    const totalPot = games.reduce((sum, g) => sum + g.pot, 0);
+    const totalWinners = games.reduce((sum, g) => sum + g.totalWinners, 0);
+    const soloWins = games.filter(g => g.totalWinners === 1).length;
+    const totalGuesses = games.reduce((sum, g) => sum + this._getGameMeta(g).totalPlayers, 0);
+    const clueDist = {1:0,2:0,3:0,4:0,5:0};
+    games.forEach(g => {
+      const wc = Number(g.winningClue || g.goldClue);
+      if (wc >= 1 && wc <= 5) clueDist[wc] += 1;
+    });
+    const mostCommonWinClue = Object.entries(clueDist).sort((a, b) => b[1] - a[1])[0]?.[0] || '1';
+    const sortedByDate = [...games].sort((a, b) => this._getGameMeta(a).dateValue - this._getGameMeta(b).dateValue);
+    const timeLabels = sortedByDate.map(g => {
+      const d = this._archiveDateObject(g.date);
+      return d ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : (g.date.split(',')[1]?.trim() || g.date);
+    });
+    const guessesData = sortedByDate.map(g => this._getGameMeta(g).totalPlayers);
+    const winnersData = sortedByDate.map(g => g.totalWinners);
+    const wcWinnersMap = {1:[],2:[],3:[],4:[],5:[]};
+    games.forEach(g => {
+      if (g.format === 'v2') {
+        if (g.goldClue && Number(g.goldWinners) > 0) wcWinnersMap[Number(g.goldClue)].push(Number(g.goldWinners));
+        if (g.silverClue && Number(g.silverWinners) > 0) wcWinnersMap[Number(g.silverClue)].push(Number(g.silverWinners));
+        if (g.bronzeClue && Number(g.bronzeWinners) > 0) wcWinnersMap[Number(g.bronzeClue)].push(Number(g.bronzeWinners));
+      } else {
+        const wc = Number(g.winningClue || g.goldClue);
+        if (wc >= 1 && wc <= 5 && g.totalWinners > 0) wcWinnersMap[wc].push(g.totalWinners);
+      }
+    });
+    const avgWinnersByClue = [1,2,3,4,5].map(n => {
+      const values = wcWinnersMap[n];
+      return values.length ? Math.round(values.reduce((a, b) => a + b, 0) / values.length) : 0;
+    });
+    const potBuckets = {'$5K':0,'$6-7.5K':0,'$10K':0,'$15-25K':0,'$50K+':0};
+    games.forEach(g => {
+      if (g.pot <= 5000) potBuckets['$5K'] += 1;
+      else if (g.pot <= 7500) potBuckets['$6-7.5K'] += 1;
+      else if (g.pot <= 10000) potBuckets['$10K'] += 1;
+      else if (g.pot <= 25000) potBuckets['$15-25K'] += 1;
+      else potBuckets['$50K+'] += 1;
+    });
+    const payoutByClue = {1:[],2:[],3:[],4:[],5:[]};
+    games.forEach(g => {
+      const wc = Number(g.winningClue || g.goldClue);
+      if (wc < 1 || wc > 5) return;
+      const payout = g.format === 'v2' ? Number(g.goldPayout || 0) : this._parseMoneyString(g.winnerPayout);
+      if (payout > 0) payoutByClue[wc].push(payout);
+    });
+    const avgPayoutByClue = [1,2,3,4,5].map(n => {
+      const values = payoutByClue[n];
+      return values.length ? Math.round(values.reduce((a, b) => a + b, 0) / values.length) : 0;
+    });
+    const hostMap = {};
+    games.forEach(g => {
+      const host = g.host || 'Unknown';
+      if (!hostMap[host]) hostMap[host] = { games: 0, winners: 0, pot: 0, clues: [] };
+      hostMap[host].games += 1;
+      hostMap[host].winners += g.totalWinners;
+      hostMap[host].pot += g.pot;
+      const wc = Number(g.winningClue || g.goldClue) || 0;
+      if (wc) hostMap[host].clues.push(wc);
+    });
+    const hostRows = Object.entries(hostMap).sort((a, b) => b[1].games - a[1].games).map(([host, d]) => {
+      const avgClue = d.clues.length ? (d.clues.reduce((a, b) => a + b, 0) / d.clues.length).toFixed(1) : '-';
+      const c1 = d.clues.filter(c => c === 1).length;
+      const c1pct = d.clues.length ? Math.round((c1 / d.clues.length) * 100) : 0;
+      return { host, games: d.games, avgPot: Math.round(d.pot / d.games), avgWinners: Math.round(d.winners / d.games), avgClue, c1, c1pct };
+    });
+    const tierMin = (g) => {
+      if (g.format === 'v2') {
+        const tiers = [];
+        if ((g.goldWinners || 0) > 0 && (g.goldPayout || 0) > 0) tiers.push({ amt: g.goldPayout, tier: 'Gold', w: g.goldWinners });
+        if ((g.silverWinners || 0) > 0 && (g.silverPayout || 0) > 0) tiers.push({ amt: g.silverPayout, tier: 'Silver', w: g.silverWinners });
+        if ((g.bronzeWinners || 0) > 0 && (g.bronzePayout || 0) > 0) tiers.push({ amt: g.bronzePayout, tier: 'Bronze', w: g.bronzeWinners });
+        return tiers.length ? tiers.reduce((a, b) => b.amt < a.amt ? b : a) : null;
+      }
+      return (g.totalWinners > 0 && g.pot > 0) ? { amt: g.pot / g.totalWinners, tier: null, w: g.totalWinners } : null;
+    };
+    const tierMax = (g) => {
+      if (g.format === 'v2') {
+        const tiers = [];
+        if ((g.goldWinners || 0) > 0 && (g.goldPayout || 0) > 0) tiers.push({ amt: g.goldPayout, tier: 'Gold', w: g.goldWinners });
+        if ((g.silverWinners || 0) > 0 && (g.silverPayout || 0) > 0) tiers.push({ amt: g.silverPayout, tier: 'Silver', w: g.silverWinners });
+        if ((g.bronzeWinners || 0) > 0 && (g.bronzePayout || 0) > 0) tiers.push({ amt: g.bronzePayout, tier: 'Bronze', w: g.bronzeWinners });
+        return tiers.length ? tiers.reduce((a, b) => b.amt > a.amt ? b : a) : null;
+      }
+      return (g.totalWinners > 0 && g.pot > 0) ? { amt: g.pot / g.totalWinners, tier: null, w: g.totalWinners } : null;
+    };
+    const biggestPot = games.reduce((a, b) => b.pot > a.pot ? b : a);
+    const lowestWonEntry = games.map(g => ({ g, r: tierMin(g) })).filter(x => x.r).reduce((a, b) => b.r.amt < a.r.amt ? b : a);
+    const mostWinnersGame = games.reduce((a, b) => b.totalWinners > a.totalWinners ? b : a);
+    const mostGuessesGame = games.reduce((a, g) => this._getGameMeta(g).totalPlayers > a.t ? { t: this._getGameMeta(g).totalPlayers, g } : a, { t: 0, g: null });
+    const longestItem = games.reduce((a, b) => b.secretItem.length > a.secretItem.length ? b : a);
+    const shortestItem = games.reduce((a, b) => b.secretItem.length < a.secretItem.length ? b : a);
+    const soloWinPct = games.length ? Math.round((soloWins / games.length) * 100) : 0;
+    const avgPotVal = games.length ? Math.round(totalPot / games.length) : 0;
+    const c1games = clueDist[1];
+    const c1pct = games.length ? Math.round((c1games / games.length) * 100) : 0;
+    const totalCorrect = games.reduce((sum, g) => sum + this._getGameMeta(g).clueStats.reduce((inner, clue) => inner + clue.correct, 0), 0);
+    let hardestClue = null;
+    let hardestCluePct = 1;
+    let hardestGame = null;
+    let hardestGamePct = 1;
+    games.forEach(g => {
+      const meta = this._getGameMeta(g);
+      const gameCorrect = meta.clueStats.reduce((sum, clue) => sum + clue.correct, 0);
+      if (meta.totalPlayers > 0) {
+        const pct = gameCorrect / meta.totalPlayers;
+        if (pct < hardestGamePct) {
+          hardestGamePct = pct;
+          hardestGame = { game: g, pct, totalCorrect: gameCorrect, totalGuesses: meta.totalPlayers };
+        }
+      }
+      meta.clueStats.forEach(clue => {
+        if (clue.guesses > 0) {
+          const pct = clue.correct / clue.guesses;
+          if (pct < hardestCluePct) {
+            hardestCluePct = pct;
+            hardestClue = { game: g, clue, pct };
+          }
+        }
+      });
+    });
+    const records = [
+      {icon:'monetization_on', color:'text-yellow-400', label:'Biggest Single Pot', val:'$' + biggestPot.pot.toLocaleString(), sub: biggestPot.secretItem + ' · ' + biggestPot.date},
+      {icon:'arrow_downward', color:'text-slate-400', label:'Lowest Amount Won', val: lowestWonEntry ? '$' + lowestWonEntry.r.amt.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'N/A', sub: lowestWonEntry ? (lowestWonEntry.r.tier ? lowestWonEntry.r.tier + ' · ' : '') + lowestWonEntry.g.secretItem + ' · ' + lowestWonEntry.g.date : ''},
+      {icon:'people', color:'text-green-400', label:'Most Winners in One Game', val: mostWinnersGame.totalWinners.toLocaleString(), sub: mostWinnersGame.secretItem + ' · ' + mostWinnersGame.date},
+      {icon:'dangerous', color:'text-red-400', label:'Hardest Clue (Lowest %)', val: hardestClue ? hardestClue.clue.clue.text : 'N/A', sub: hardestClue ? `Clue ${hardestClue.clue.clueNumber} · ${hardestClue.game.secretItem} · ${hardestClue.game.date} · ${(hardestClue.pct * 100).toFixed(3)}% correct (${hardestClue.clue.correct}/${hardestClue.clue.guesses})` : ''},
+      {icon:'lock', color:'text-blue-400', label:'Hardest Secret Item', val: hardestGame ? hardestGame.game.secretItem : 'N/A', sub: hardestGame ? `${hardestGame.game.date} · ${(hardestGame.pct * 100).toFixed(3)}% correct overall (${hardestGame.totalCorrect}/${hardestGame.totalGuesses})` : ''},
+      {icon:'person', color:'text-red-400', label:'Solo Wins', val: `${soloWins} games (${soloWinPct}%)`, sub:'Exactly 1 winner took the whole pot'},
+      {icon:'casino', color:'text-blue-400', label:'Most Guessed Episode', val: `${mostGuessesGame.t.toLocaleString()} guesses`, sub: `${mostGuessesGame.g?.secretItem || ''} · ${mostGuessesGame.g?.date || ''}`.trim()},
+      {icon:'bolt', color:'text-yellow-300', label:'Clue 1 Wins', val: `${c1games} games (${c1pct}%)`, sub:'More than half of all games are decided on the very first clue'},
+      {icon:'check', color:'text-emerald-400', label:'Total Correct Guesses', val: totalCorrect.toLocaleString(), sub:`Across all clues in all ${games.length} games`},
+      {icon:'trending_up', color:'text-orange-400', label:'Avg Prize Pot', val:'$' + avgPotVal.toLocaleString(), sub:`Across all ${games.length} archived episodes`},
+      {icon:'text_fields', color:'text-purple-400', label:'Longest Secret Item', val: longestItem.secretItem, sub:`${longestItem.secretItem.length} chars · ${longestItem.date}`},
+      {icon:'abc', color:'text-pink-400', label:'Shortest Secret Item', val: shortestItem.secretItem, sub:`${shortestItem.secretItem.length} chars · ${shortestItem.date}`}
+    ];
+    const hardest = [...games].sort((a, b) => {
+      const aLast = a.format === 'v2' ? (a.bronzeClue || a.goldClue) : (a.winningClue || a.goldClue || 0);
+      const bLast = b.format === 'v2' ? (b.bronzeClue || b.goldClue) : (b.winningClue || b.goldClue || 0);
+      return (bLast - aLast) || (a.totalWinners - b.totalWinners);
+    }).slice(0, 5);
+    const easiest = [...games].sort((a, b) => b.totalWinners - a.totalWinners).slice(0, 5);
+    const fewestEntries = games.map(g => ({ g, r: tierMin(g) })).filter(x => x.r).sort((a, b) => a.r.amt - b.r.amt).slice(0, 5);
+    const bigPayouts = games.map(g => ({ g, r: tierMax(g) })).filter(x => x.r).sort((a, b) => b.r.amt - a.r.amt).slice(0, 5);
+    const quickBreakdown = {
+      hunterGames: games.filter(g => g.host === 'Hunter March').length,
+      howieGames: games.filter(g => g.host === 'Howie Mandel').length,
+      v2Games: games.filter(g => g.format === 'v2').length,
+      totalPot,
+      avgWinners: games.length ? Math.round(totalWinners / games.length) : 0,
+      avgClue: (() => {
+        let totalClueSum = 0;
+        let gamesWithClue = 0;
+        games.forEach(g => {
+          const clue = g.format === 'v2' ? (g.bronzeClue || g.silverClue || g.goldClue) : (g.winningClue || g.goldClue);
+          if (clue) {
+            totalClueSum += Number(clue);
+            gamesWithClue += 1;
+          }
+        });
+        return gamesWithClue ? (totalClueSum / gamesWithClue).toFixed(1) : '0';
+      })()
+    };
+    const data = {
+      cacheKey,
+      kpis: [
+        {label:'Total Games', val: totalGames.toLocaleString(), color:'text-blue-400', icon:'sports_esports'},
+        {label:'Total Rounds', val: totalRounds.toLocaleString(), color:'text-blue-400', icon:'casino'},
+        {label:'Days Since New Rules Launch', val: daysSinceNewRules.toLocaleString(), color:'text-pink-400', icon:'calendar_month'},
+        {label:'Days Since Launch', val: daysSinceLaunch.toLocaleString(), color:'text-pink-400', icon:'calendar_month'},
+        {label:'Total Paid Out', val:'$' + totalPot.toLocaleString(), color:'text-green-400', icon:'payments'},
+        {label:'Total Winners', val: totalWinners.toLocaleString(), color:'text-yellow-400', icon:'emoji_events'},
+        {label:'Solo Wins', val: soloWins.toLocaleString(), color:'text-red-400', icon:'person'},
+        {label:'Total Guesses', val: totalGuesses.toLocaleString(), color:'text-pink-400', icon:'casino'},
+        {label:'Most Won On', val:'Clue ' + mostCommonWinClue, color:'text-orange-400', icon:'star'}
+      ],
+      hostRows,
+      records,
+      hardest,
+      easiest,
+      fewestEntries,
+      bigPayouts,
+      quickBreakdown,
+      charts: {
+        sortedByDate,
+        timeLabels,
+        guessesData,
+        winnersData,
+        clueDist,
+        clueColors: ['#FBBF24','#94A3B8','#F97316','#60A5FA','#F472B6'],
+        avgWinnersByClue,
+        potBuckets,
+        avgPayoutByClue
+      }
+    };
+    this._statsCache = data;
+    return data;
+  }
+
+  _renderStatsCharts(stats) {
+    if (this._activeView !== 'stats' || (this._statsChartsRendered && this._statsChartsVersion === stats.cacheKey)) return;
+    const nodes = this._getViewNodes('stats');
+    if (!nodes.chartPlayersTime || !nodes.chartPlayersTime.isConnected) return;
+    this._teardownStatsCharts();
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.borderColor = 'rgba(148,163,184,0.08)';
+    const charts = stats.charts;
+    this._charts.playersTime = new Chart(nodes.chartPlayersTime, { type:'line', data:{ labels: charts.timeLabels, datasets:[{label:'Total Guesses', data: charts.guessesData, borderColor:'#60A5FA', backgroundColor:'rgba(96,165,250,0.08)', fill:true, tension:0.3, yAxisID:'y', pointRadius:2, pointHoverRadius:5},{label:'Total Winners', data: charts.winnersData, borderColor:'#34D399', backgroundColor:'rgba(52,211,153,0.08)', fill:true, tension:0.3, yAxisID:'y1', pointRadius:2, pointHoverRadius:5}]}, options:{ responsive:true, maintainAspectRatio:false, interaction:{mode:'index',intersect:false}, plugins:{ legend:{labels:{color:'#94a3b8'}}, tooltip:{ callbacks:{ title: items => charts.sortedByDate[items[0].dataIndex]?.secretItem + ' · ' + charts.timeLabels[items[0].dataIndex] } } }, scales:{ x:{ticks:{color:'#64748b', maxTicksLimit:10}, grid:{color:'rgba(148,163,184,0.05)'}}, y:{ticks:{color:'#60A5FA'}, grid:{color:'rgba(148,163,184,0.05)'}, title:{display:true,text:'Guesses',color:'#60A5FA'}}, y1:{position:'right', ticks:{color:'#34D399'}, grid:{drawOnChartArea:false}, title:{display:true,text:'Winners',color:'#34D399'}} } } });
+    this._charts.clueDist = new Chart(nodes.chartClueDist, { type:'bar', data:{ labels:['Clue 1','Clue 2','Clue 3','Clue 4','Clue 5'], datasets:[{label:'Games Won On', data:[charts.clueDist[1], charts.clueDist[2], charts.clueDist[3], charts.clueDist[4], charts.clueDist[5]], backgroundColor: charts.clueColors.map(c => c + 'bb'), borderColor: charts.clueColors, borderWidth:2, borderRadius:6}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label: ctx => ctx.parsed.y + ' games'}}}, scales:{x:{ticks:{color:'#94a3b8'}}, y:{ticks:{color:'#94a3b8'}}} } });
+    this._charts.avgWinnersClue = new Chart(nodes.chartAvgWinners, { type:'bar', data:{ labels:['Clue 1','Clue 2','Clue 3','Clue 4','Clue 5'], datasets:[{label:'Avg Winners', data: charts.avgWinnersByClue, backgroundColor: charts.clueColors.map(c => c + 'bb'), borderColor: charts.clueColors, borderWidth:2, borderRadius:6}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label: ctx => ctx.parsed.y.toLocaleString() + ' avg winners'}}}, scales:{ x:{ticks:{color:'#94a3b8'}}, y:{type:'logarithmic', min: 1, ticks:{color:'#94a3b8', callback: v => v.toLocaleString(), stepSize: 1, autoSkip: true}, afterBuildTicks: axis => { axis.ticks = axis.ticks.filter(t => [1,10,100,1000,10000].includes(t.value)); }}} } });
+    this._charts.potDist = new Chart(nodes.chartPotDist, { type:'doughnut', data:{ labels: Object.keys(charts.potBuckets), datasets:[{data: Object.values(charts.potBuckets), backgroundColor:['#6366F1','#60A5FA','#34D399','#FBBF24','#F97316'], borderColor:'#0f172a', borderWidth:3}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:'#94a3b8'}, position:'right'}, tooltip:{callbacks:{label: ctx => ctx.label + ': ' + ctx.parsed + ' games'}}} } });
+    this._charts.payoutClue = new Chart(nodes.chartPayoutClue, { type:'bar', data:{ labels:['Clue 1','Clue 2','Clue 3','Clue 4','Clue 5'], datasets:[{label:'Avg Payout', data: charts.avgPayoutByClue, backgroundColor: charts.clueColors.map(c => c + 'bb'), borderColor: charts.clueColors, borderWidth:2, borderRadius:6}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label: ctx => '$' + ctx.parsed.y.toLocaleString()}}}, scales:{x:{ticks:{color:'#94a3b8'}}, y:{ticks:{color:'#94a3b8', callback: v => '$' + v.toLocaleString()}}} } });
+    this._statsChartsRendered = true;
+    this._statsChartsVersion = stats.cacheKey;
+  }
+
+  _queueStatsCharts(stats) {
+    const nodes = this._getViewNodes('stats');
+    const anchor = nodes.chartPlayersTime;
+    if (!anchor) return;
+    const render = () => {
+      if (this._activeView !== 'stats' || !anchor.isConnected) return;
+      this._ensureChartJs().then(() => {
+        if (this._activeView === 'stats' && anchor.isConnected) this._renderStatsCharts(stats);
+      }).catch(err => console.error('Could not load Chart.js:', err));
+    };
+    if (!('IntersectionObserver' in window)) {
+      render();
+      return;
+    }
+    if (this._statsChartObserver) this._statsChartObserver.disconnect();
+    this._statsChartObserver = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        if (this._statsChartObserver) {
+          this._statsChartObserver.disconnect();
+          this._statsChartObserver = null;
+        }
+        render();
+      }
+    }, { rootMargin: '160px 0px' });
+    this._statsChartObserver.observe(anchor);
+  }
+
   renderStats() {
+    const nodes = this._getViewNodes('stats');
+    const stats = this._getStatsData();
+    this._teardownStatsCharts();
+    if (nodes.refresh) nodes.refresh.onclick = () => this.refreshStats();
+    if (nodes.kpis) nodes.kpis.innerHTML = stats.kpis.map(k => `<div class="glass-panel p-4 rounded-xl text-center border border-slate-700/30"><span class="material-symbols-outlined ${k.color}" style="font-size:28px">${k.icon}</span><div class="text-xl md:text-2xl font-bold ${k.color} mt-1 leading-tight">${k.val}</div><div class="text-xs text-slate-400 uppercase tracking-widest mt-1 leading-snug">${k.label}</div></div>`).join('');
+    if (nodes.hostTable) nodes.hostTable.innerHTML = stats.hostRows.map(d => `<tr class="hover:bg-slate-800/30 transition"><td class="py-3 pr-6 font-medium text-white">${d.host}</td><td class="py-3 px-4 text-center text-slate-400">${d.games}</td><td class="py-3 px-4 text-center text-green-400 font-mono">$${d.avgPot.toLocaleString()}</td><td class="py-3 px-4 text-center text-pink-400">${d.avgWinners.toLocaleString()}</td><td class="py-3 px-4 text-center text-orange-400">C${d.avgClue}</td><td class="py-3 px-4 text-center"><div class="text-xs font-bold ${d.c1pct > 60 ? 'text-yellow-400' : 'text-slate-400'}">${d.c1pct}%</div><div class="text-xs text-slate-600">${d.c1}/${d.games} games</div></td></tr>`).join('');
+    if (nodes.records) nodes.records.innerHTML = stats.records.map(r => `<div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700/30"><div class="flex items-center gap-2 mb-1"><span class="material-symbols-outlined ${r.color}" style="font-size:18px">${r.icon}</span><span class="text-xs text-slate-500 uppercase tracking-widest">${r.label}</span></div><div class="font-bold text-white leading-snug">${r.val}</div><div class="text-xs text-slate-500 mt-1 leading-snug">${r.sub}</div></div>`).join('');
+    if (nodes.hardest) nodes.hardest.innerHTML = stats.hardest.map(g => { const last = g.format === 'v2' ? (g.bronzeClue || g.goldClue) : (g.winningClue || g.goldClue || '?'); return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div><div class="text-right shrink-0 ml-4"><div class="text-red-400 font-bold text-sm bg-red-900/20 px-2 py-1 rounded">Clue ${last}</div><div class="text-xs text-slate-500 mt-1">${g.totalWinners.toLocaleString()} winners</div></div></li>`; }).join('');
+    if (nodes.easiest) nodes.easiest.innerHTML = stats.easiest.map(g => `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div><div class="text-right shrink-0 ml-4"><div class="text-green-400 font-bold text-sm bg-green-900/20 px-2 py-1 rounded">${g.totalWinners.toLocaleString()}</div><div class="text-xs text-slate-500 mt-1">winners</div></div></li>`).join('');
+    if (nodes.fewest) nodes.fewest.innerHTML = stats.fewestEntries.map(({g,r}) => { const tierLabel = r.tier ? r.tier + ' · ' : ''; return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div class="min-w-0 flex-1"><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div><div class="text-right shrink-0 ml-4" style="min-width:10rem"><div class="text-slate-300 font-bold text-sm bg-slate-700/50 px-2 py-1 rounded inline-flex justify-end" style="width:12.5rem">$${r.amt.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}/winner</div><div class="text-xs text-slate-500 mt-1">${tierLabel}${r.w.toLocaleString()} winner${r.w===1?'':'s'} · $${g.pot.toLocaleString()} pot</div></div></li>`; }).join('');
+    if (nodes.bigpots) nodes.bigpots.innerHTML = stats.bigPayouts.map(({g,r}) => { const tierLabel = r.tier ? r.tier + ' · ' : ''; return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div class="min-w-0 flex-1"><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div><div class="text-right shrink-0 ml-4" style="min-width:10rem"><div class="text-yellow-400 font-bold text-sm bg-yellow-900/20 px-2 py-1 rounded inline-flex justify-end" style="width:12.5rem">$${Math.round(r.amt).toLocaleString()}/winner</div><div class="text-xs text-slate-500 mt-1">${tierLabel}${r.w.toLocaleString()} winner${r.w===1?'':'s'} · $${g.pot.toLocaleString()} pot</div></div></li>`; }).join('');
+    if (nodes.statHunter) nodes.statHunter.innerText = stats.quickBreakdown.hunterGames;
+    if (nodes.statHowie) nodes.statHowie.innerText = stats.quickBreakdown.howieGames;
+    if (nodes.statV2) nodes.statV2.innerText = stats.quickBreakdown.v2Games;
+    if (nodes.statPot) nodes.statPot.innerText = '$' + stats.quickBreakdown.totalPot.toLocaleString();
+    if (nodes.statAvgWinners) nodes.statAvgWinners.innerText = stats.quickBreakdown.avgWinners.toLocaleString();
+    if (nodes.statAvgClue) nodes.statAvgClue.innerText = 'C' + stats.quickBreakdown.avgClue;
+    this._queueStatsCharts(stats);
+    return;
+  }
+  _renderStatsLegacy() {
     // Exclude cancelled/unplayed games (note && clues.length === 0)
     // Attach refresh button event
     setTimeout(() => {
@@ -2567,6 +3004,7 @@ class App {
         g.totalWinners = Number(g.winnerCount) || 0;
       }
     }
+    this._invalidateDerivedDataCaches();
   }
 
   // ==================== ADMIN ====================
@@ -2579,44 +3017,56 @@ class App {
       .replace(/'/g, '&#39;');
   }
 
+  _getAdminDateGroups() {
+    if (this._adminDateGroupsCache) return this._adminDateGroupsCache;
+    const byDate = new Map();
+    this.games.forEach(g => {
+      if (!byDate.has(g.date)) byDate.set(g.date, []);
+      byDate.get(g.date).push(g);
+    });
+    const list = [...byDate.entries()]
+      .sort((a, b) => this._compareArchiveDates(b[0], a[0]))
+      .map(([date, games]) => ({ date, games }));
+    this._adminDateGroupsCache = { list, byDate };
+    return this._adminDateGroupsCache;
+  }
+
   initAdmin() {
-    setTimeout(() => {
-      const o  = document.getElementById('gh-owner');          if (o)  o.value  = localStorage.getItem('gh_owner')          || 'jeremydbean';
-      const r  = document.getElementById('gh-repo');           if (r)  r.value  = localStorage.getItem('gh_repo')           || 'best-guess-archive';
-      const p  = document.getElementById('gh-pat');            if (p)  p.value  = this._ghPat || '';
-      this.populateDeleteDates();
-    }, 50);
+    const nodes = this._getViewNodes('admin');
+    if (nodes.owner) nodes.owner.value = localStorage.getItem('gh_owner') || 'jeremydbean';
+    if (nodes.repo) nodes.repo.value = localStorage.getItem('gh_repo') || 'best-guess-archive';
+    if (nodes.pat) nodes.pat.value = this._ghPat || '';
+    this.populateDeleteDates();
   }
 
   populateDeleteDates() {
-    const sel = document.getElementById('delete-date-select');
+    const sel = this._getViewNodes('admin').deleteSelect;
     if (!sel) return;
-    
-    // Get unique dates
-    const dates = [...new Set(this.games.map(g => g.date))].sort((a,b) => this._compareArchiveDates(b, a));
-    
-    if (dates.length === 0) {
+
+    const groups = this._getAdminDateGroups().list;
+    if (groups.length === 0) {
       sel.innerHTML = '<option value="">No games found</option>';
       return;
     }
-    
-    sel.innerHTML = '<option value="">(None selected)</option>' + 
-      dates.map(d => {
-        const gamesOnDate = this.games.filter(g => g.date === d);
-        const esc = this._escapeHtml(d);
-        return `<option value="${esc}">${esc} (${gamesOnDate.length} game${gamesOnDate.length>1?'s':''})</option>`;
+
+    sel.innerHTML = '<option value="">(None selected)</option>' +
+      groups.map(({ date, games }) => {
+        const esc = this._escapeHtml(date);
+        return `<option value="${esc}">${esc} (${games.length} game${games.length > 1 ? 's' : ''})</option>`;
       }).join('');
   }
 
   renderSelectedDatePreview() {
-    const date = document.getElementById('delete-date-select').value;
-    const container = document.getElementById('date-preview-container');
+    const nodes = this._getViewNodes('admin');
+    const date = nodes.deleteSelect?.value;
+    const container = nodes.datePreview;
+    if (!container) return;
     if (!date) {
       container.classList.add('hidden');
       return;
     }
-    
-    const games = this.games.filter(g => g.date === date);
+
+    const games = this._getAdminDateGroups().byDate.get(date) || [];
     const esc = (v) => this._escapeHtml(v);
     container.innerHTML = `<div class="font-bold text-white mb-2">Existing items for ${esc(date)}:</div>` + 
       games.map((g, i) => `<div><span class="text-blue-400">Game ${i+1}:</span> <strong>${esc(g.secretItem)}</strong> <span class="opacity-50 mx-1">|</span> Hosted by ${esc(g.host || '?')}</div>`).join('');
@@ -2689,6 +3139,7 @@ class App {
 
       // 4. Update local state
       this.games = gamesToKeep;
+      this._normalizeGames(this.games);
       this.populateDeleteDates();
       document.getElementById('delete-date-select').value = '';
       const preview = document.getElementById('date-preview-container');
@@ -3066,6 +3517,7 @@ class App {
       // 4. Update local state
       const publishedCount = this._pendingGames.length;
       this.games = merged;
+      this._normalizeGames(this.games);
       this.populateDeleteDates();
       this._pendingGames = null;
       document.getElementById('import-json').value = '';
