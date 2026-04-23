@@ -8,7 +8,7 @@ Last updated: 2026-04-22
 
 ## Latest Known Commit
 
-- `4c62ad7` - Fix Lemonade and Bart Simpson clue winner/guess counts
+- `80e1919` - Performance improvements (lazy Chart.js, prebuilt Tailwind, split JSON, memoize stats)
 
 ## Current State
 
@@ -24,6 +24,14 @@ Last updated: 2026-04-22
 - Pull/rebase `origin/main` before making edits if remote has moved.
 - Leave all work on `main`.
 - Update this file after meaningful changes so the next agent can pick up quickly.
+
+## Performance Architecture (added 2026-04-23)
+
+- **Tailwind**: Static `tailwind.css` (33KB prebuilt). If new Tailwind classes are added to index.html, regenerate with: `npx tailwindcss@3 -i tailwind-input.css -o tailwind.css --minify`
+- **games-meta.json**: Lightweight (36KB) file loaded on init for home stats. Full `games.json` (358KB) lazy-loads when user first visits Database or Stats. If `games.json` changes, regenerate meta with the Python script in AI_HANDOFF history or reuse the pattern from the commit.
+- **Chart.js**: Injected dynamically on first Stats page visit only.
+- **filterDatabase**: Debounced 150ms.
+- **_homeStatsCache**: Invalidated when full games.json loads or refreshStats() runs.
 
 ## Things Worth Double-Checking After Future UI Edits
 
