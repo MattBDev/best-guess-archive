@@ -1,6 +1,6 @@
 # AI Handoff
 
-Last updated: 2026-04-22
+Last updated: 2026-04-23
 
 ## Current Branch
 
@@ -8,7 +8,7 @@ Last updated: 2026-04-22
 
 ## Latest Known Commit
 
-- `fcd728a` - Remove dead code from stats/database refactor
+- `e19d7ff` - Use Git database API for admin writes
 
 ## Current State
 
@@ -16,6 +16,7 @@ Last updated: 2026-04-22
 - Database side arrows are working on desktop.
 - Home page KPI counters animate on load without layout shift.
 - Admin import/delete flow has extra safety checks and preview escaping.
+- Admin import/delete now writes `data/games.json` through the Git database API (blob/tree/commit/ref) instead of the Contents API, which avoids the old contents-endpoint size ceiling.
 - Stats payout badges were corrected to avoid relying on Tailwind arbitrary classes inside JS-rendered HTML.
 - Database date column width was reduced from the earlier oversized value to better preserve secret-item alignment.
 
@@ -40,3 +41,4 @@ Last updated: 2026-04-22
 - Date column width still keeps secret items aligned.
 - Home KPI counters do not cause layout shift.
 - Admin import previews render safely and publish in the intended order.
+- Admin writes still target `main` and fail safely if GitHub advances between fetch and commit.
