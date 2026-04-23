@@ -8,7 +8,7 @@ Last updated: 2026-04-22
 
 ## Latest Known Commit
 
-- `80e1919` - Performance improvements (lazy Chart.js, prebuilt Tailwind, split JSON, memoize stats)
+- `fcd728a` - Remove dead code from stats/database refactor
 
 ## Current State
 
