@@ -1,6 +1,6 @@
 # AI Handoff
 
-Last updated: 2026-04-23
+Last updated: 2026-04-24
 
 ## Current Branch
 
@@ -8,7 +8,7 @@ Last updated: 2026-04-23
 
 ## Latest Known Commit
 
-- `68417b4` - Add April 23 CHOPSTICKS and TIME games
+- Pending this review pass - Harden archive rendering against injected markup
 
 ## Current State
 
@@ -18,6 +18,7 @@ Last updated: 2026-04-23
 - Admin import/delete flow has extra safety checks and preview escaping.
 - Admin import/delete now writes `data/games.json` and `data/games-meta.json` together through the Git database API (blob/tree/commit/ref), avoiding the old contents-endpoint size ceiling and keeping home-page totals in sync.
 - Latest imported episode: Thursday, April 23, 2026 with CHOPSTICKS and TIME, including the Fan Appreciation Week Netflix Shop voucher detail.
+- Review pass hardened database rows, details modals, result screens, stats lists, play clue rendering, and tip-jar URLs so imported/archive text is escaped before being rendered through `innerHTML`.
 - Stats payout badges were corrected to avoid relying on Tailwind arbitrary classes inside JS-rendered HTML.
 - Database date column width was reduced from the earlier oversized value to better preserve secret-item alignment.
 
@@ -43,3 +44,4 @@ Last updated: 2026-04-23
 - Home KPI counters do not cause layout shift.
 - Admin import previews render safely and publish in the intended order.
 - Admin writes still target `main`, update both JSON data files in one commit, and fail safely if GitHub advances between fetch and commit.
+- Re-check visible database details and play result screens after future `innerHTML` edits, especially any new fields that come from pasted/imported game JSON.

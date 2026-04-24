@@ -1256,7 +1256,7 @@ class App {
     });
     const totalPlayers = clueStats.reduce((sum, entry) => sum + entry.guesses, 0);
     const winningClueNum = Number(g.winningClue || g.goldClue || 0);
-    const hostHtml = (g.host || '—').replace('Hunter/Anthony Anderson', 'Hunter/<br>Anthony Anderson');
+    const hostHtml = this._escapeHtml(g.host || '—').replace('Hunter/Anthony Anderson', 'Hunter/<br>Anthony Anderson');
     const searchText = [
       g.secretItem,
       g.date,
@@ -1777,11 +1777,22 @@ class App {
     });
   }
 
+  _safeExternalUrl(value, fallback) {
+    try {
+      const url = new URL(String(value || ''), window.location.href);
+      return ['http:', 'https:'].includes(url.protocol) ? url.href : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
   // Default tip URLs (overridden by admin settings if saved)
   _tipDefaults() {
+    const cashappDefault = 'https://cash.app/$JeremyBean';
+    const paypalDefault = 'https://paypal.me/KindaCharming';
     return {
-      cashapp: localStorage.getItem('tip_cashapp') || 'https://cash.app/$JeremyBean',
-      paypal:  localStorage.getItem('tip_paypal')  || 'https://paypal.me/KindaCharming'
+      cashapp: this._safeExternalUrl(localStorage.getItem('tip_cashapp'), cashappDefault),
+      paypal:  this._safeExternalUrl(localStorage.getItem('tip_paypal'), paypalDefault)
     };
   }
 
@@ -1799,6 +1810,7 @@ class App {
   // Tip jar modal — opens from nav button
   openTipJar() {
     const { cashapp: cashApp, paypal } = this._tipDefaults();
+    const esc = (v) => this._escapeHtml(v);
     document.getElementById('modal-backdrop').classList.remove('hidden');
     document.getElementById('modal-content').innerHTML = `
       <div class="text-center space-y-5">
@@ -1811,12 +1823,12 @@ class App {
           Did this data help you win? If it brings you joy, consider leaving a tip! 💖
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center mt-2">
-          <a href="${cashApp}" target="_blank" rel="noopener noreferrer"
+          <a href="${esc(cashApp)}" target="_blank" rel="noopener noreferrer"
             class="flex items-center justify-center gap-2 bg-[#00D64F] hover:bg-[#00c047] text-black font-bold px-8 py-4 rounded-xl transition shadow-lg text-base">
             <span class="font-black text-xl leading-none" style="font-family:sans-serif">$</span>
             Cash App
           </a>
-          <a href="${paypal}" target="_blank" rel="noopener noreferrer"
+          <a href="${esc(paypal)}" target="_blank" rel="noopener noreferrer"
             class="flex items-center justify-center gap-2 bg-[#003087] hover:bg-[#002070] text-white font-bold px-8 py-4 rounded-xl transition shadow-lg text-base">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 4.643-5.813 4.643H12.55c-.526 0-.974.382-1.056.9l-1.188 7.528-.339 2.158a.67.67 0 0 0 .663.776h3.498c.459 0 .85-.334.922-.787l.038-.196.731-4.63.047-.256a.932.932 0 0 1 .921-.788h.58c3.76 0 6.701-1.528 7.559-5.946.36-1.847.174-3.388-.685-4.115z"/></svg>
             PayPal
@@ -1939,13 +1951,14 @@ class App {
         div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.4)';
       }
       const clueText = g.clues[j].text;
+      const safeClueText = this._escapeHtml(clueText);
       const textBlock = isActive
         ? `<div id="loading-state-${ci}" class="flex items-center gap-2">
              <div class="w-3.5 h-3.5 border-2 border-white/80 border-t-transparent rounded-full animate-spin"></div>
              <span class="text-white/90 font-display tracking-widest text-xs animate-pulse uppercase">Incoming...</span>
            </div>
-           <span id="text-state-${ci}" class="hidden text-base md:text-lg font-bold text-white font-display uppercase tracking-wide leading-snug" style="text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; overflow-wrap: break-word;">${clueText}</span>`
-        : `<span class="text-base md:text-lg font-bold text-white font-display uppercase tracking-wide leading-snug" style="overflow-wrap: break-word;">${clueText}</span>`;
+           <span id="text-state-${ci}" class="hidden text-base md:text-lg font-bold text-white font-display uppercase tracking-wide leading-snug" style="text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; overflow-wrap: break-word;">${safeClueText}</span>`
+        : `<span class="text-base md:text-lg font-bold text-white font-display uppercase tracking-wide leading-snug" style="overflow-wrap: break-word;">${safeClueText}</span>`;
       div.innerHTML = `
         <div class="flex items-center justify-center px-3 flex-shrink-0" style="background:rgba(0,0,0,0.28); min-width:3rem;">
           <span class="text-white font-bold text-base font-display">${j+1}</span>
@@ -2140,8 +2153,9 @@ class App {
         ? 'material-symbols-outlined text-8xl mb-4 text-yellow-400'
         : 'material-symbols-outlined text-8xl mb-4 text-red-500';
 
+    const esc = (v) => this._escapeHtml(v);
     document.getElementById('result-message').innerHTML =
-      `${message}<br><span class="text-white font-bold block mt-4 text-2xl">Your Payout: $${amount.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</span>`;
+      `${esc(message)}<br><span class="text-white font-bold block mt-4 text-2xl">Your Payout: $${amount.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</span>`;
 
     document.getElementById('result-answer').innerText = this.currentGame.secretItem;
 
@@ -2152,12 +2166,12 @@ class App {
     const clueNum = (this.currentClueIndex || 0) + 1;
     const totalPlayers = g.clues.reduce((a, c) => a + (parseInt(String(c.guesses).replace(/[^0-9]/g, '')) || 0), 0);
     const totalCorrect = g.clues.reduce((a, c) => a + (parseInt(String(c.correct).replace(/[^0-9]/g, '')) || 0), 0);
-    const clueStats = g.clues.map((c, i) => `<div class="flex justify-between text-xs"><span>Clue ${i+1}:</span><span>${c.correct} correct / ${c.guesses} guesses</span></div>`).join('');
+    const clueStats = g.clues.map((c, i) => `<div class="flex justify-between text-xs"><span>Clue ${i+1}:</span><span>${esc(c.correct)} correct / ${esc(c.guesses)} guesses</span></div>`).join('');
     // Show user's guess, clue guessed, and popular wrong guesses if available
     let extraStats = `<div class="mt-2 text-xs text-slate-400">Total guesses: <span class="text-white font-bold">${totalPlayers.toLocaleString()}</span> &nbsp;|&nbsp; Total correct: <span class="text-white font-bold">${totalCorrect.toLocaleString()}</span></div>`;
-    extraStats += `<div class="mt-2 text-xs text-slate-400">Your guess: <span class="text-white font-bold">${this.lastGuess ? this.lastGuess : '(none)'}${this.lastGuess && this.lastGuess.trim() === '' ? '(none)' : ''}</span> &nbsp;|&nbsp; Clue guessed: <span class="text-white font-bold">${clueNum}</span></div>`;
+    extraStats += `<div class="mt-2 text-xs text-slate-400">Your guess: <span class="text-white font-bold">${this.lastGuess && this.lastGuess.trim() !== '' ? esc(this.lastGuess) : '(none)'}</span> &nbsp;|&nbsp; Clue guessed: <span class="text-white font-bold">${clueNum}</span></div>`;
     if (g.wrongGuesses) {
-      extraStats += `<div class="mt-2 text-xs text-red-400">Popular wrong guesses: <span class="text-white font-bold">${g.wrongGuesses}</span></div>`;
+      extraStats += `<div class="mt-2 text-xs text-red-400">Popular wrong guesses: <span class="text-white font-bold">${esc(g.wrongGuesses)}</span></div>`;
     }
     extraStats += `<div class="mt-2 text-xs text-slate-400">Breakdown by clue:</div>${clueStats}`;
     if (g.format === 'v2') {
@@ -2180,7 +2194,7 @@ class App {
         </div>
         <div class="pt-1">
           <span class="text-slate-400 block text-xs mb-1">Winner Names</span>
-          <span class="text-slate-300 italic">${g.winnerNames || 'None listed'}</span>
+          <span class="text-slate-300 italic">${esc(g.winnerNames || 'None listed')}</span>
         </div>
         ${extraStats}
       `;
@@ -2196,11 +2210,11 @@ class App {
         </div>
         <div class="flex justify-between border-b border-white/5 pb-2">
           <span class="text-slate-400">Real Payout</span>
-          <span class="text-green-400 font-mono font-bold">${g.winnerPayout || '$0'}</span>
+          <span class="text-green-400 font-mono font-bold">${esc(g.winnerPayout || '$0')}</span>
         </div>
         <div class="pt-1">
           <span class="text-slate-400 block text-xs mb-1">Winner Names</span>
-          <span class="text-slate-300 italic">${g.winnerNames || 'None listed'}</span>
+          <span class="text-slate-300 italic">${esc(g.winnerNames || 'None listed')}</span>
         </div>
         ${extraStats}
       `;
@@ -2220,10 +2234,10 @@ class App {
         <div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
           <div class="flex items-start gap-2 mb-2">
             <span class="text-[10px] font-bold text-slate-400 bg-slate-700 px-1.5 py-0.5 rounded flex-shrink-0 mt-0.5">Clue ${i+1}</span>
-            <span class="text-sm font-medium text-slate-200">"${c.text}"</span>
+            <span class="text-sm font-medium text-slate-200">"${esc(c.text)}"</span>
           </div>
           <div class="text-sm text-yellow-500/90 italic pl-10">
-            ${e ? `"${e}"` : 'No explanation recorded.'}
+            ${e ? `"${esc(e)}"` : 'No explanation recorded.'}
           </div>
         </div>
       `;
@@ -2236,16 +2250,17 @@ class App {
     const cached = this._dbRowHtmlCache.get(g);
     if (cached) return cached;
 
+    const esc = (v) => this._escapeHtml(v);
     const fmtMoney = (n, decimals = 2) => '$' + Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
     const meta = this._getGameMeta(g);
 
     if (meta.isStub) {
       const html = `<tr class="border-b border-red-900/40 bg-red-950/20">
-        <td class="pl-4 pr-1 py-4 text-slate-400 font-mono text-xs db-col-date" title="${g.date}">${g.date}</td>
+        <td class="pl-4 pr-1 py-4 text-slate-400 font-mono text-xs db-col-date" title="${esc(g.date)}">${esc(g.date)}</td>
         <td colspan="13" class="px-4 py-4">
           <span class="inline-flex items-center gap-2 text-sm font-bold text-red-400">
             <span class="material-symbols-outlined" style="font-size:18px">cancel</span>
-            ${g.note} — no episode aired
+            ${esc(g.note)} — no episode aired
           </span>
         </td>
       </tr>`;
@@ -2265,7 +2280,7 @@ class App {
       const isWinning = (i + 1) === meta.winningClueNum;
       if (!clueMeta) return `<td class="px-4 py-3 text-slate-700 text-center align-middle">—</td>`;
       return `<td class="px-4 py-3 align-middle" style="min-width:200px">
-        <div class="font-medium ${isWinning && !isV2 ? 'bg-yellow-900/30 border border-yellow-400/40 rounded px-1 py-0.5 shadow-sm text-yellow-300' : 'text-slate-200'} leading-snug">${clueMeta.clue.text}</div>
+        <div class="font-medium ${isWinning && !isV2 ? 'bg-yellow-900/30 border border-yellow-400/40 rounded px-1 py-0.5 shadow-sm text-yellow-300' : 'text-slate-200'} leading-snug">${esc(clueMeta.clue.text)}</div>
         <div class="text-xs font-mono mt-0.5 flex items-center flex-wrap gap-x-1"><span class="text-green-500">${clueMeta.correct.toLocaleString()}</span><span class="text-slate-600"> / </span><span class="text-slate-400">${clueMeta.guesses.toLocaleString()}</span><span class="text-slate-600"> (${clueMeta.pct}%)${(isV2 && medal) ? `&nbsp;<span class="ml-1 text-sm whitespace-nowrap">${medal}</span>` : ''}</span></div>
       </td>`;
     }).join('');
@@ -2285,18 +2300,18 @@ class App {
           <div>🥇 <span class="text-yellow-400">${fmtMoney(g.goldPayout)}</span></div>
           <div>🥈 <span class="text-slate-300">${fmtMoney(g.silverPayout)}</span></div>
           <div>🥉 <span class="text-amber-600">${fmtMoney(g.bronzePayout)}</span></div>
-          <div class="border-t border-slate-700 pt-0.5 text-green-400">${g.winnerPayout || ''} total</div>
+          <div class="border-t border-slate-700 pt-0.5 text-green-400">${esc(g.winnerPayout || '')} total</div>
         </div>`
       : `<div class="font-mono" style="min-width:110px">
-          <span class="text-green-400">${g.winnerPayout || '—'}</span>
+          <span class="text-green-400">${esc(g.winnerPayout || '—')}</span>
           <div class="text-xs text-slate-500">per winner</div>
         </div>`;
 
     const html = `<tr class="hover:bg-slate-800/30 transition border-b border-slate-800/60 last:border-0">
-      <td class="pl-4 pr-1 py-1 text-slate-400 font-mono text-[11px] align-middle db-col-date" title="${g.date}">${g.date}</td>
+      <td class="pl-4 pr-1 py-1 text-slate-400 font-mono text-[11px] align-middle db-col-date" title="${esc(g.date)}">${esc(g.date)}</td>
       <td class="px-1 py-1 font-semibold text-white align-middle" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">
-        <span style="white-space:nowrap;">${g.secretItem}</span>
-        ${g.note ? `<div class="mt-0.5"><span class="inline-flex items-center gap-1 text-[9px] font-bold bg-red-900/40 text-red-400 border border-red-600/40 px-1 py-0.5 rounded-full uppercase tracking-wide"><span class="material-symbols-outlined" style="font-size:10px">warning</span>${g.note}</span></div>` : ''}
+        <span style="white-space:nowrap;">${esc(g.secretItem)}</span>
+        ${g.note ? `<div class="mt-0.5"><span class="inline-flex items-center gap-1 text-[9px] font-bold bg-red-900/40 text-red-400 border border-red-600/40 px-1 py-0.5 rounded-full uppercase tracking-wide"><span class="material-symbols-outlined" style="font-size:10px">warning</span>${esc(g.note)}</span></div>` : ''}
       </td>
       <td class="px-2 py-1 text-green-400 font-mono whitespace-nowrap align-middle">$${g.pot.toLocaleString()}</td>
       ${clueCells}
@@ -2306,7 +2321,7 @@ class App {
       <td class="px-2 py-1 align-middle">${payoutsHtml}</td>
       <td class="px-1 py-1 text-slate-400 align-middle" style="max-width:90px;overflow:hidden;text-overflow:ellipsis;">${meta.hostHtml}</td>
       <td class="px-1 py-1 text-right align-middle" style="position:sticky;right:0;background:#0f172a;">
-        <button onclick="app.showDetails('${g.date.replace(/'/g,"\\'")}', '${(g.secretItem + '').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" class="inline-flex items-center justify-center rounded-full border border-blue-400/25 bg-slate-900/55 text-blue-300 hover:text-blue-100 hover:border-blue-300/40 hover:bg-slate-900/75 transition" title="View details" style="padding:4px;">
+        <button onclick="app.showDetailsFromButton(this)" data-date="${esc(g.date)}" data-item="${esc(g.secretItem)}" class="inline-flex items-center justify-center rounded-full border border-blue-400/25 bg-slate-900/55 text-blue-300 hover:text-blue-100 hover:border-blue-300/40 hover:bg-slate-900/75 transition" title="View details" style="padding:4px;">
           <span class="material-symbols-outlined" style="font-size:18px;">visibility</span>
         </button>
       </td>
@@ -2353,10 +2368,15 @@ class App {
 
   // Archive filter/sort removed
 
+  showDetailsFromButton(button) {
+    this.showDetails(button?.dataset?.date || '', button?.dataset?.item || '');
+  }
+
   showDetails(date, item) {
     const g = this.games.find(x => x.date === date && x.secretItem === item);
     if (!g) return;
     document.getElementById('modal-backdrop').classList.remove('hidden');
+    const esc = (v) => this._escapeHtml(v);
 
     // Bonus/special gift mapping by date
     const bonusMap = {
@@ -2431,10 +2451,10 @@ class App {
         <div class="flex flex-wrap justify-between items-center mb-2 gap-2">
           <span class="text-xs font-bold ${isClassicWin ? 'text-yellow-400 bg-yellow-900/30 border border-yellow-400/40' : 'text-blue-400 bg-blue-900/30'} px-2 py-1 rounded">Clue ${n}</span>
           ${badge}
-          <span class="text-xs text-slate-500 ml-auto">${c.correct} correct / ${c.guesses} guesses</span>
+          <span class="text-xs text-slate-500 ml-auto">${esc(c.correct)} correct / ${esc(c.guesses)} guesses</span>
         </div>
-        <p class="text-xl font-medium mb-3 ${isClassicWin ? 'text-yellow-200' : 'text-white'}">"${c.text}"</p>
-        <div class="bg-slate-800 p-3 rounded-lg"><p class="text-sm text-slate-400 italic">"${e || 'No explanation recorded.'}"</p></div>
+        <p class="text-xl font-medium mb-3 ${isClassicWin ? 'text-yellow-200' : 'text-white'}">"${esc(c.text)}"</p>
+        <div class="bg-slate-800 p-3 rounded-lg"><p class="text-sm text-slate-400 italic">"${e ? esc(e) : 'No explanation recorded.'}"</p></div>
       </div>`;
     }).join('');
 
@@ -2446,26 +2466,26 @@ class App {
           <span class="bg-orange-900/30 text-orange-400 border border-orange-600/30 px-3 py-1 rounded-full text-xs font-bold">🥉 Clue ${g.bronzeClue} · ${Number(g.bronzeWinners).toLocaleString()} winners · $${fmt2(g.bronzePayout)} each</span>
         </div>`
       : `<div class="flex justify-center mt-4">
-          <span class="bg-blue-900/30 text-blue-400 border border-blue-600/30 px-3 py-1 rounded-full text-sm font-bold">Won on Clue ${g.winningClue || g.goldClue} · ${(g.totalWinners).toLocaleString()} winners · ${g.winnerPayout}</span>
+          <span class="bg-blue-900/30 text-blue-400 border border-blue-600/30 px-3 py-1 rounded-full text-sm font-bold">Won on Clue ${g.winningClue || g.goldClue} · ${(g.totalWinners).toLocaleString()} winners · ${esc(g.winnerPayout)}</span>
         </div>`;
 
     document.getElementById('modal-content').innerHTML = `
       <div class="text-center mb-8">
-        <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">${g.date}</div>
-        <h2 class="text-4xl font-display font-bold text-white">${g.secretItem}</h2>
+        <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">${esc(g.date)}</div>
+        <h2 class="text-4xl font-display font-bold text-white">${esc(g.secretItem)}</h2>
         <div class="flex justify-center gap-4 mt-4 flex-wrap">
           <span class="inline-flex items-center gap-1 bg-green-900/30 text-green-400 border border-green-500/30 px-3 py-1 rounded-full text-sm font-bold">$${g.pot.toLocaleString()}</span>
-          <span class="inline-flex items-center gap-1 bg-purple-900/30 text-purple-400 border border-purple-500/30 px-3 py-1 rounded-full text-sm font-bold">${g.host}</span>
+          <span class="inline-flex items-center gap-1 bg-purple-900/30 text-purple-400 border border-purple-500/30 px-3 py-1 rounded-full text-sm font-bold">${esc(g.host)}</span>
         </div>
         ${medalSummary}
         <div class="mt-4 text-xs text-slate-400 border-t border-slate-700 pt-3">
-          <span class="font-bold text-white">Winners:</span> ${(g.winnerNames || 'None listed').toUpperCase()}
+          <span class="font-bold text-white">Winners:</span> ${esc((g.winnerNames || 'None listed').toUpperCase())}
         </div>
-        ${bonus ? `<div class='mt-6 bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 text-left max-w-xl mx-auto'><span class='font-bold text-blue-300 block mb-1'>Special Bonus: ${bonus.title}</span><span class='text-blue-100 text-sm'>${bonus.desc}</span></div>` : ''}
+        ${bonus ? `<div class='mt-6 bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 text-left max-w-xl mx-auto'><span class='font-bold text-blue-300 block mb-1'>Special Bonus: ${esc(bonus.title)}</span><span class='text-blue-100 text-sm'>${bonus.desc}</span></div>` : ''}
       </div>
       <div class="bg-slate-900/50 rounded-xl p-2 mb-6 border border-white/5">${cluesHtml}</div>
       <div class="text-sm text-slate-400 bg-red-900/10 border border-red-500/20 p-4 rounded-lg">
-        <span class="font-bold text-red-400 block mb-1">Common Wrong Guesses:</span> ${g.wrongGuesses || 'N/A'}
+        <span class="font-bold text-red-400 block mb-1">Common Wrong Guesses:</span> ${esc(g.wrongGuesses || 'N/A')}
       </div>`;
   }
 
@@ -2732,15 +2752,16 @@ class App {
   renderStats() {
     const nodes = this._getViewNodes('stats');
     const stats = this._getStatsData();
+    const esc = (v) => this._escapeHtml(v);
     this._teardownStatsCharts();
     if (nodes.refresh) nodes.refresh.onclick = () => this.refreshStats();
-    if (nodes.kpis) nodes.kpis.innerHTML = stats.kpis.map(k => `<div class="glass-panel p-4 rounded-xl text-center border border-slate-700/30"><span class="material-symbols-outlined ${k.color}" style="font-size:28px">${k.icon}</span><div class="text-xl md:text-2xl font-bold ${k.color} mt-1 leading-tight">${k.val}</div><div class="text-xs text-slate-400 uppercase tracking-widest mt-1 leading-snug">${k.label}</div></div>`).join('');
-    if (nodes.hostTable) nodes.hostTable.innerHTML = stats.hostRows.map(d => `<tr class="hover:bg-slate-800/30 transition"><td class="py-3 pr-6 font-medium text-white">${d.host}</td><td class="py-3 px-4 text-center text-slate-400">${d.games}</td><td class="py-3 px-4 text-center text-green-400 font-mono">$${d.avgPot.toLocaleString()}</td><td class="py-3 px-4 text-center text-pink-400">${d.avgWinners.toLocaleString()}</td><td class="py-3 px-4 text-center text-orange-400">C${d.avgClue}</td><td class="py-3 px-4 text-center"><div class="text-xs font-bold ${d.c1pct > 60 ? 'text-yellow-400' : 'text-slate-400'}">${d.c1pct}%</div><div class="text-xs text-slate-600">${d.c1}/${d.games} games</div></td></tr>`).join('');
-    if (nodes.records) nodes.records.innerHTML = stats.records.map(r => `<div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700/30"><div class="flex items-center gap-2 mb-1"><span class="material-symbols-outlined ${r.color}" style="font-size:18px">${r.icon}</span><span class="text-xs text-slate-500 uppercase tracking-widest">${r.label}</span></div><div class="font-bold text-white leading-snug">${r.val}</div><div class="text-xs text-slate-500 mt-1 leading-snug">${r.sub}</div></div>`).join('');
-    if (nodes.hardest) nodes.hardest.innerHTML = stats.hardest.map(g => { const last = g.format === 'v2' ? (g.bronzeClue || g.goldClue) : (g.winningClue || g.goldClue || '?'); return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div><div class="text-right shrink-0 ml-4"><div class="text-red-400 font-bold text-sm bg-red-900/20 px-2 py-1 rounded">Clue ${last}</div><div class="text-xs text-slate-500 mt-1">${g.totalWinners.toLocaleString()} winners</div></div></li>`; }).join('');
-    if (nodes.easiest) nodes.easiest.innerHTML = stats.easiest.map(g => `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div><div class="text-right shrink-0 ml-4"><div class="text-green-400 font-bold text-sm bg-green-900/20 px-2 py-1 rounded">${g.totalWinners.toLocaleString()}</div><div class="text-xs text-slate-500 mt-1">winners</div></div></li>`).join('');
-    if (nodes.fewest) nodes.fewest.innerHTML = stats.fewestEntries.map(({g,r}) => { const tierLabel = r.tier ? r.tier + ' · ' : ''; return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div class="min-w-0 flex-1"><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div><div class="text-right shrink-0 ml-4" style="min-width:10rem"><div class="text-slate-300 font-bold text-sm bg-slate-700/50 px-2 py-1 rounded inline-flex justify-end" style="width:12.5rem">$${r.amt.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}/winner</div><div class="text-xs text-slate-500 mt-1">${tierLabel}${r.w.toLocaleString()} winner${r.w===1?'':'s'} · $${g.pot.toLocaleString()} pot</div></div></li>`; }).join('');
-    if (nodes.bigpots) nodes.bigpots.innerHTML = stats.bigPayouts.map(({g,r}) => { const tierLabel = r.tier ? r.tier + ' · ' : ''; return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div class="min-w-0 flex-1"><div class="font-bold text-white">${g.secretItem}</div><div class="text-xs text-slate-500">${g.date}</div></div><div class="text-right shrink-0 ml-4" style="min-width:10rem"><div class="text-yellow-400 font-bold text-sm bg-yellow-900/20 px-2 py-1 rounded inline-flex justify-end" style="width:12.5rem">$${Math.round(r.amt).toLocaleString()}/winner</div><div class="text-xs text-slate-500 mt-1">${tierLabel}${r.w.toLocaleString()} winner${r.w===1?'':'s'} · $${g.pot.toLocaleString()} pot</div></div></li>`; }).join('');
+    if (nodes.kpis) nodes.kpis.innerHTML = stats.kpis.map(k => `<div class="glass-panel p-4 rounded-xl text-center border border-slate-700/30"><span class="material-symbols-outlined ${k.color}" style="font-size:28px">${esc(k.icon)}</span><div class="text-xl md:text-2xl font-bold ${k.color} mt-1 leading-tight">${esc(k.val)}</div><div class="text-xs text-slate-400 uppercase tracking-widest mt-1 leading-snug">${esc(k.label)}</div></div>`).join('');
+    if (nodes.hostTable) nodes.hostTable.innerHTML = stats.hostRows.map(d => `<tr class="hover:bg-slate-800/30 transition"><td class="py-3 pr-6 font-medium text-white">${esc(d.host)}</td><td class="py-3 px-4 text-center text-slate-400">${d.games}</td><td class="py-3 px-4 text-center text-green-400 font-mono">$${d.avgPot.toLocaleString()}</td><td class="py-3 px-4 text-center text-pink-400">${d.avgWinners.toLocaleString()}</td><td class="py-3 px-4 text-center text-orange-400">C${esc(d.avgClue)}</td><td class="py-3 px-4 text-center"><div class="text-xs font-bold ${d.c1pct > 60 ? 'text-yellow-400' : 'text-slate-400'}">${d.c1pct}%</div><div class="text-xs text-slate-600">${d.c1}/${d.games} games</div></td></tr>`).join('');
+    if (nodes.records) nodes.records.innerHTML = stats.records.map(r => `<div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700/30"><div class="flex items-center gap-2 mb-1"><span class="material-symbols-outlined ${r.color}" style="font-size:18px">${esc(r.icon)}</span><span class="text-xs text-slate-500 uppercase tracking-widest">${esc(r.label)}</span></div><div class="font-bold text-white leading-snug">${esc(r.val)}</div><div class="text-xs text-slate-500 mt-1 leading-snug">${esc(r.sub)}</div></div>`).join('');
+    if (nodes.hardest) nodes.hardest.innerHTML = stats.hardest.map(g => { const last = g.format === 'v2' ? (g.bronzeClue || g.goldClue) : (g.winningClue || g.goldClue || '?'); return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div><div class="font-bold text-white">${esc(g.secretItem)}</div><div class="text-xs text-slate-500">${esc(g.date)}</div></div><div class="text-right shrink-0 ml-4"><div class="text-red-400 font-bold text-sm bg-red-900/20 px-2 py-1 rounded">Clue ${esc(last)}</div><div class="text-xs text-slate-500 mt-1">${g.totalWinners.toLocaleString()} winners</div></div></li>`; }).join('');
+    if (nodes.easiest) nodes.easiest.innerHTML = stats.easiest.map(g => `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div><div class="font-bold text-white">${esc(g.secretItem)}</div><div class="text-xs text-slate-500">${esc(g.date)}</div></div><div class="text-right shrink-0 ml-4"><div class="text-green-400 font-bold text-sm bg-green-900/20 px-2 py-1 rounded">${g.totalWinners.toLocaleString()}</div><div class="text-xs text-slate-500 mt-1">winners</div></div></li>`).join('');
+    if (nodes.fewest) nodes.fewest.innerHTML = stats.fewestEntries.map(({g,r}) => { const tierLabel = r.tier ? esc(r.tier) + ' · ' : ''; return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div class="min-w-0 flex-1"><div class="font-bold text-white">${esc(g.secretItem)}</div><div class="text-xs text-slate-500">${esc(g.date)}</div></div><div class="text-right shrink-0 ml-4" style="min-width:10rem"><div class="text-slate-300 font-bold text-sm bg-slate-700/50 px-2 py-1 rounded inline-flex justify-end" style="width:12.5rem">$${r.amt.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}/winner</div><div class="text-xs text-slate-500 mt-1">${tierLabel}${r.w.toLocaleString()} winner${r.w===1?'':'s'} · $${g.pot.toLocaleString()} pot</div></div></li>`; }).join('');
+    if (nodes.bigpots) nodes.bigpots.innerHTML = stats.bigPayouts.map(({g,r}) => { const tierLabel = r.tier ? esc(r.tier) + ' · ' : ''; return `<li class="flex justify-between items-center border-b border-slate-700/50 pb-3 last:border-0"><div class="min-w-0 flex-1"><div class="font-bold text-white">${esc(g.secretItem)}</div><div class="text-xs text-slate-500">${esc(g.date)}</div></div><div class="text-right shrink-0 ml-4" style="min-width:10rem"><div class="text-yellow-400 font-bold text-sm bg-yellow-900/20 px-2 py-1 rounded inline-flex justify-end" style="width:12.5rem">$${Math.round(r.amt).toLocaleString()}/winner</div><div class="text-xs text-slate-500 mt-1">${tierLabel}${r.w.toLocaleString()} winner${r.w===1?'':'s'} · $${g.pot.toLocaleString()} pot</div></div></li>`; }).join('');
     if (nodes.statHunter) nodes.statHunter.innerText = stats.quickBreakdown.hunterGames;
     if (nodes.statHowie) nodes.statHowie.innerText = stats.quickBreakdown.howieGames;
     if (nodes.statV2) nodes.statV2.innerText = stats.quickBreakdown.v2Games;
