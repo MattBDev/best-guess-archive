@@ -8,7 +8,7 @@ Last updated: 2026-04-24
 
 ## Latest Known Commit
 
-- `e1d4d6c` - Harden archive rendering paths; follow-up cleanup of `_commitGamesState` on feature branch
+- `6af60cf` - Fix play-feature data dependency; harden lazy-load error handling
 
 ## Current State
 
@@ -45,4 +45,7 @@ Last updated: 2026-04-24
 - Admin import previews render safely and publish in the intended order.
 - Admin writes still target `main`, update both JSON data files in one commit, and fail safely if GitHub advances between fetch and commit (ref PATCH is fast-forward-only, no explicit `force: false` needed).
 - `_commitGamesState` takes the pre-fetched state object instead of re-reading — one tree walk per admin action instead of two.
+- Play feature (`startRandomGame`) now awaits the full games.json load before starting — previously it would crash unless the user had opened Database or Stats first (which is what triggers the lazy load of clues data).
+- `_ensureFullGamesLoaded` now propagates fetch errors; all three call sites (database, stats, play) have `.catch` handlers that surface the failure. `_showDataLoadError` reuses the top-bar status indicator.
+- Clue-time `<select>` no longer has an inline onchange handler; calls `app.setClueDuration(value)`.
 - Re-check visible database details and play result screens after future `innerHTML` edits, especially any new fields that come from pasted/imported game JSON.
