@@ -8,7 +8,7 @@ Last updated: 2026-04-24
 
 ## Latest Known Commit
 
-- `1226608` - Update AI_HANDOFF after play-feature fix and lazy-load hardening
+- `c257cf7` - Document Codex verification and branch cleanup
 
 ## Current State
 
@@ -53,7 +53,7 @@ Last updated: 2026-04-24
 
 ## Codex Verification (2026-04-24)
 
-- Verified `main` includes Claude branch commit `6af60cf`; the remaining Claude remote branch is stale relative to `main` and should be deleted during cleanup.
+- Verified `main` includes Claude branch commit `6af60cf`; the stale remote branch `claude/code-review-improvements-TImSY` was deleted after verification.
 - `data/games.json` and `data/games-meta.json` parse cleanly and metadata regenerates exactly from the full games file.
 - Inline browser scripts in `index.html` pass syntax checks.
 - Static local asset references in the rendered HTML all exist.
