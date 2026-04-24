@@ -729,7 +729,7 @@ document.addEventListener('focusout', function(e) {
         <span class="material-symbols-outlined text-yellow-400">bar_chart</span> Winning Clue Distribution
       </h3>
       <p class="text-xs text-slate-400 mb-4">How many games were decided on each clue number.</p>
-      <div style="height:240px;position:relative">
+      <div style="height:280px;position:relative">
         <canvas id="chart-clue-dist"></canvas>
       </div>
     </div>
@@ -738,7 +738,7 @@ document.addEventListener('focusout', function(e) {
         <span class="material-symbols-outlined text-pink-400">people</span> Avg Winners by Winning Clue
       </h3>
       <p class="text-xs text-slate-400 mb-4">On average, how many players win when each clue number is the deciding one.</p>
-      <div style="height:240px;position:relative">
+      <div style="height:280px;position:relative">
         <canvas id="chart-avg-winners-clue"></canvas>
       </div>
     </div>
@@ -751,7 +751,7 @@ document.addEventListener('focusout', function(e) {
         <span class="material-symbols-outlined text-green-400">payments</span> Prize Pot Distribution
       </h3>
       <p class="text-xs text-slate-400 mb-4">How prize pots are spread across all episodes.</p>
-      <div style="height:240px;position:relative">
+      <div style="height:280px;position:relative">
         <canvas id="chart-pot-dist"></canvas>
       </div>
     </div>
@@ -760,7 +760,7 @@ document.addEventListener('focusout', function(e) {
         <span class="material-symbols-outlined text-orange-400">trending_down</span> Avg Payout Per Winner by Clue
       </h3>
       <p class="text-xs text-slate-400 mb-4">The earlier you guess correctly, the less you split the pot.</p>
-      <div style="height:240px;position:relative">
+      <div style="height:280px;position:relative">
         <canvas id="chart-payout-clue"></canvas>
       </div>
     </div>
@@ -2693,6 +2693,61 @@ class App {
     return data;
   }
 
+  _statsBarDataset(label, data, colors) {
+    return {
+      label,
+      data,
+      backgroundColor: colors.map(c => c + 'bb'),
+      borderColor: colors,
+      hoverBackgroundColor: colors.map(c => c + 'ee'),
+      borderWidth: 2,
+      hoverBorderWidth: 3,
+      borderRadius: 6,
+      borderSkipped: false,
+      minBarLength: 12,
+      maxBarThickness: 52,
+      categoryPercentage: 0.74,
+      barPercentage: 0.86
+    };
+  }
+
+  _statsBarOptions(yScale, tooltipCallbacks = {}) {
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', axis: 'x', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          intersect: false,
+          displayColors: true,
+          padding: 10,
+          callbacks: tooltipCallbacks
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#94a3b8' },
+          grid: { display: false }
+        },
+        y: yScale
+      }
+    };
+  }
+
+  _compactNumber(value) {
+    const n = Number(value) || 0;
+    if (Math.abs(n) >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    if (Math.abs(n) >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+    return n.toLocaleString();
+  }
+
+  _logTickFilter(values) {
+    return axis => {
+      axis.ticks = axis.ticks.filter(t => values.includes(t.value));
+    };
+  }
+
   _renderStatsCharts(stats) {
     if (this._activeView !== 'stats' || (this._statsChartsRendered && this._statsChartsVersion === stats.cacheKey)) return;
     const nodes = this._getViewNodes('stats');
@@ -2700,12 +2755,113 @@ class App {
     this._teardownStatsCharts();
     Chart.defaults.color = '#94a3b8';
     Chart.defaults.borderColor = 'rgba(148,163,184,0.08)';
+    Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.96)';
+    Chart.defaults.plugins.tooltip.borderColor = 'rgba(148, 163, 184, 0.24)';
+    Chart.defaults.plugins.tooltip.borderWidth = 1;
+    Chart.defaults.plugins.tooltip.titleColor = '#f8fafc';
+    Chart.defaults.plugins.tooltip.bodyColor = '#e2e8f0';
+
     const charts = stats.charts;
-    this._charts.playersTime = new Chart(nodes.chartPlayersTime, { type:'line', data:{ labels: charts.timeLabels, datasets:[{label:'Total Guesses', data: charts.guessesData, borderColor:'#60A5FA', backgroundColor:'rgba(96,165,250,0.08)', fill:true, tension:0.3, yAxisID:'y', pointRadius:2, pointHoverRadius:5},{label:'Total Winners', data: charts.winnersData, borderColor:'#34D399', backgroundColor:'rgba(52,211,153,0.08)', fill:true, tension:0.3, yAxisID:'y1', pointRadius:2, pointHoverRadius:5}]}, options:{ responsive:true, maintainAspectRatio:false, interaction:{mode:'index',intersect:false}, plugins:{ legend:{labels:{color:'#94a3b8'}}, tooltip:{ callbacks:{ title: items => charts.sortedByDate[items[0].dataIndex]?.secretItem + ' · ' + charts.timeLabels[items[0].dataIndex] } } }, scales:{ x:{ticks:{color:'#64748b', maxTicksLimit:10}, grid:{color:'rgba(148,163,184,0.05)'}}, y:{ticks:{color:'#60A5FA'}, grid:{color:'rgba(148,163,184,0.05)'}, title:{display:true,text:'Guesses',color:'#60A5FA'}}, y1:{position:'right', ticks:{color:'#34D399'}, grid:{drawOnChartArea:false}, title:{display:true,text:'Winners',color:'#34D399'}} } } });
-    this._charts.clueDist = new Chart(nodes.chartClueDist, { type:'bar', data:{ labels:['Clue 1','Clue 2','Clue 3','Clue 4','Clue 5'], datasets:[{label:'Games Won On', data:[charts.clueDist[1], charts.clueDist[2], charts.clueDist[3], charts.clueDist[4], charts.clueDist[5]], backgroundColor: charts.clueColors.map(c => c + 'bb'), borderColor: charts.clueColors, borderWidth:2, borderRadius:6}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label: ctx => ctx.parsed.y + ' games'}}}, scales:{x:{ticks:{color:'#94a3b8'}}, y:{ticks:{color:'#94a3b8'}}} } });
-    this._charts.avgWinnersClue = new Chart(nodes.chartAvgWinners, { type:'bar', data:{ labels:['Clue 1','Clue 2','Clue 3','Clue 4','Clue 5'], datasets:[{label:'Avg Winners', data: charts.avgWinnersByClue, backgroundColor: charts.clueColors.map(c => c + 'bb'), borderColor: charts.clueColors, borderWidth:2, borderRadius:6}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label: ctx => ctx.parsed.y.toLocaleString() + ' avg winners'}}}, scales:{ x:{ticks:{color:'#94a3b8'}}, y:{type:'logarithmic', min: 1, ticks:{color:'#94a3b8', callback: v => v.toLocaleString(), stepSize: 1, autoSkip: true}, afterBuildTicks: axis => { axis.ticks = axis.ticks.filter(t => [1,10,100,1000,10000].includes(t.value)); }}} } });
-    this._charts.potDist = new Chart(nodes.chartPotDist, { type:'doughnut', data:{ labels: Object.keys(charts.potBuckets), datasets:[{data: Object.values(charts.potBuckets), backgroundColor:['#6366F1','#60A5FA','#34D399','#FBBF24','#F97316'], borderColor:'#0f172a', borderWidth:3}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:'#94a3b8'}, position:'right'}, tooltip:{callbacks:{label: ctx => ctx.label + ': ' + ctx.parsed + ' games'}}} } });
-    this._charts.payoutClue = new Chart(nodes.chartPayoutClue, { type:'bar', data:{ labels:['Clue 1','Clue 2','Clue 3','Clue 4','Clue 5'], datasets:[{label:'Avg Payout', data: charts.avgPayoutByClue, backgroundColor: charts.clueColors.map(c => c + 'bb'), borderColor: charts.clueColors, borderWidth:2, borderRadius:6}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label: ctx => '$' + ctx.parsed.y.toLocaleString()}}}, scales:{x:{ticks:{color:'#94a3b8'}}, y:{ticks:{color:'#94a3b8', callback: v => '$' + v.toLocaleString()}}} } });
+    const clueLabels = ['Clue 1','Clue 2','Clue 3','Clue 4','Clue 5'];
+    const clueDistData = [charts.clueDist[1], charts.clueDist[2], charts.clueDist[3], charts.clueDist[4], charts.clueDist[5]];
+    const clueDistTotal = clueDistData.reduce((a, b) => a + b, 0);
+    const potLabels = Object.keys(charts.potBuckets);
+    const potValues = Object.values(charts.potBuckets);
+    const potTotal = potValues.reduce((a, b) => a + b, 0);
+
+    this._charts.playersTime = new Chart(nodes.chartPlayersTime, {
+      type: 'line',
+      data: {
+        labels: charts.timeLabels,
+        datasets: [
+          { label:'Total Guesses', data:charts.guessesData, borderColor:'#60A5FA', backgroundColor:'rgba(96,165,250,0.08)', fill:true, tension:0.3, yAxisID:'y', pointRadius:2, pointHoverRadius:7, pointHitRadius:14, borderWidth:2 },
+          { label:'Total Winners', data:charts.winnersData, borderColor:'#34D399', backgroundColor:'rgba(52,211,153,0.08)', fill:true, tension:0.3, yAxisID:'y1', pointRadius:2, pointHoverRadius:7, pointHitRadius:14, borderWidth:2 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode:'index', axis:'x', intersect:false },
+        plugins: {
+          legend: { labels:{ color:'#94a3b8', usePointStyle:true, boxWidth:8 } },
+          tooltip: {
+            intersect: false,
+            padding: 10,
+            callbacks: {
+              title: items => {
+                const item = items[0];
+                const game = charts.sortedByDate[item?.dataIndex];
+                return game ? `${game.secretItem} · ${game.date}` : (item?.label || '');
+              },
+              label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()}`
+            }
+          }
+        },
+        scales: {
+          x: { ticks:{ color:'#64748b', maxTicksLimit:10 }, grid:{ color:'rgba(148,163,184,0.05)' } },
+          y: { ticks:{ color:'#60A5FA', callback:v => this._compactNumber(v) }, grid:{ color:'rgba(148,163,184,0.05)' }, title:{ display:true, text:'Guesses', color:'#60A5FA' } },
+          y1: { position:'right', ticks:{ color:'#34D399', callback:v => this._compactNumber(v) }, grid:{ drawOnChartArea:false }, title:{ display:true, text:'Winners', color:'#34D399' } }
+        }
+      }
+    });
+
+    this._charts.clueDist = new Chart(nodes.chartClueDist, {
+      type: 'bar',
+      data: { labels: clueLabels, datasets: [this._statsBarDataset('Games Won On', clueDistData, charts.clueColors)] },
+      options: this._statsBarOptions(
+        { beginAtZero:true, ticks:{ color:'#94a3b8', precision:0 }, grid:{ color:'rgba(148,163,184,0.05)' }, title:{ display:true, text:'Games', color:'#94a3b8' } },
+        { label: ctx => {
+          const pct = clueDistTotal ? Math.round((ctx.parsed.y / clueDistTotal) * 100) : 0;
+          return `${ctx.parsed.y} games (${pct}%)`;
+        } }
+      )
+    });
+
+    this._charts.avgWinnersClue = new Chart(nodes.chartAvgWinners, {
+      type: 'bar',
+      data: { labels: clueLabels, datasets: [this._statsBarDataset('Avg Winners', charts.avgWinnersByClue, charts.clueColors)] },
+      options: this._statsBarOptions(
+        { type:'logarithmic', min:1, ticks:{ color:'#94a3b8', callback:v => this._compactNumber(v), stepSize:1, autoSkip:true }, grid:{ color:'rgba(148,163,184,0.05)' }, title:{ display:true, text:'Avg winners', color:'#94a3b8' }, afterBuildTicks:this._logTickFilter([1,10,100,1000,10000]) },
+        { label: ctx => `${ctx.parsed.y.toLocaleString()} avg winners` }
+      )
+    });
+
+    this._charts.potDist = new Chart(nodes.chartPotDist, {
+      type: 'doughnut',
+      data: {
+        labels: potLabels,
+        datasets: [{
+          data: potValues,
+          backgroundColor:['#6366F1','#60A5FA','#34D399','#FBBF24','#F97316'],
+          hoverBackgroundColor:['#818CF8','#93C5FD','#6EE7B7','#FCD34D','#FB923C'],
+          borderColor:'#0f172a',
+          borderWidth:3,
+          hoverOffset:12,
+          spacing:2
+        }]
+      },
+      options: {
+        responsive:true,
+        maintainAspectRatio:false,
+        cutout:'54%',
+        plugins:{
+          legend:{ labels:{ color:'#94a3b8', usePointStyle:true, boxWidth:8 }, position: window.matchMedia('(max-width: 640px)').matches ? 'bottom' : 'right' },
+          tooltip:{ padding:10, callbacks:{ label: ctx => {
+            const pct = potTotal ? Math.round((ctx.parsed / potTotal) * 100) : 0;
+            return `${ctx.label}: ${ctx.parsed} games (${pct}%)`;
+          }}}
+        }
+      }
+    });
+
+    this._charts.payoutClue = new Chart(nodes.chartPayoutClue, {
+      type: 'bar',
+      data: { labels: clueLabels, datasets: [this._statsBarDataset('Avg Payout', charts.avgPayoutByClue, charts.clueColors)] },
+      options: this._statsBarOptions(
+        { type:'logarithmic', min:1, ticks:{ color:'#94a3b8', callback:v => '$' + this._compactNumber(v), stepSize:1, autoSkip:true }, grid:{ color:'rgba(148,163,184,0.05)' }, title:{ display:true, text:'Avg payout', color:'#94a3b8' }, afterBuildTicks:this._logTickFilter([1,10,100,1000,10000,100000]) },
+        { label: ctx => `Avg payout: $${ctx.parsed.y.toLocaleString()}` }
+      )
+    });
     this._statsChartsRendered = true;
     this._statsChartsVersion = stats.cacheKey;
   }

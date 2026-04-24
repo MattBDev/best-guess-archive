@@ -8,7 +8,7 @@ Last updated: 2026-04-24
 
 ## Latest Known Commit
 
-- `c257cf7` - Document Codex verification and branch cleanup
+- `2a9190f` - Record branch cleanup completion
 
 ## Current State
 
@@ -21,6 +21,7 @@ Last updated: 2026-04-24
 - Latest imported episode: Thursday, April 23, 2026 with CHOPSTICKS and TIME, including the Fan Appreciation Week Netflix Shop voucher detail.
 - Review pass hardened database rows, details modals, result screens, stats lists, play clue rendering, and tip-jar URLs so imported/archive text is escaped before being rendered through `innerHTML`.
 - Stats payout badges were corrected to avoid relying on Tailwind arbitrary classes inside JS-rendered HTML.
+- Stats charts now use shared Chart.js usability defaults: taller chart panels, larger hover hit targets, x-column hover activation for bar charts, minimum visible bar lengths, improved tooltips, and logarithmic scales for high-spread clue charts.
 - Database date column width was reduced from the earlier oversized value to better preserve secret-item alignment.
 
 ## Working Agreement
@@ -50,6 +51,7 @@ Last updated: 2026-04-24
 - `_ensureFullGamesLoaded` now propagates fetch errors; all three call sites (database, stats, play) have `.catch` handlers that surface the failure. `_showDataLoadError` reuses the top-bar status indicator.
 - Clue-time `<select>` no longer has an inline onchange handler; calls `app.setClueDuration(value)`.
 - Re-check visible database details and play result screens after future `innerHTML` edits, especially any new fields that come from pasted/imported game JSON.
+- After future Stats chart edits, verify the Clue 5 bar in "Avg Payout Per Winner by Clue" remains visible and hoverable; current data has Clue 5 averaging only `$2` versus thousands for other clues.
 
 ## Codex Verification (2026-04-24)
 
@@ -62,3 +64,8 @@ Last updated: 2026-04-24
   - Play Random Game loaded full clues before selecting a game and rendered date/player count.
   - Database rendered 197 rows.
   - Stats rendered headline values including `$2,619,998` total paid out and `285` average winners.
+- Stats chart usability pass:
+  - JS syntax check passed after Chart.js config changes.
+  - `games-meta.json` still regenerates exactly from `games.json`.
+  - Local browser Stats page rendered all 5 canvases with no console errors.
+  - Hovering the Clue 5 bar in "Avg Payout Per Winner by Clue" shows the tooltip with `Avg payout: $2`.
