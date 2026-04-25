@@ -8,7 +8,7 @@ Last updated: 2026-04-25
 
 ## Latest Known Commit
 
-- Pending local commit - reconcile transcript dates and add transcript-to-database links
+- `9d568b3` - Reconcile transcript dates and database links
 
 ## Current State
 
