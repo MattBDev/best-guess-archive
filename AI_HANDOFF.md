@@ -6,9 +6,9 @@ Last updated: 2026-04-25
 
 - `main`
 
-## Latest Known Commit
+## Latest Known Implementation Commit
 
-- `686e9e7` - Fix transcript importer: handle all doc format variants, resolve duplicates
+- `fb57221` - Standardize transcript archive metadata
 
 ## Current State
 
@@ -27,19 +27,22 @@ Last updated: 2026-04-25
 ## Transcript Import Work
 
 - User wants the public Google Doc transcript link replaced with in-site transcripts, one transcript per air date.
-- Source file provided locally: `/Users/jeremybean/Downloads/KindaCharming's Best Guess Live Show Transcripts.docx`.
+- Source file in repo: `KindaCharming's Best Guess Live Show Transcripts.docx`.
 - Added local importer: `scripts/import_transcripts_from_docx.py`.
 - Importer reads `word/document.xml`, finds date headings, keeps only paragraphs under `Show Transcript`, and stops before `Explanation Table`, `Clue & Answer Results Table`, or JSON/table appendices.
-- Regenerated `data/transcripts.json` from the `.docx`: 90 transcripts, first `Monday, December 8, 2025`, last `Friday, April 24, 2026`.
+- Regenerated `data/transcripts.json` from the `.docx`: 100 transcripts, first `Monday, December 8, 2025`, last `Friday, April 24, 2026`.
 - `index.html` has internal transcript navigation and a lazy-loaded `view-transcripts` page with search, episode list, and detail panel.
 - Database details modals include a `View full episode transcript` button for the selected date.
 - Transcript detail pages include per-game database detail buttons for that transcript date.
+- Transcript list/detail UI now shows host metadata and round secret-item chips; canceled/no-game dates render as `No game played`.
 - Transcript text is escaped before rendering.
 - Validation passed after the transcript commit: Python importer compile/run, generated transcript JSON matches `data/transcripts.json`, inline JS syntax check, `games.json`/`games-meta.json` consistency, and no remaining Google Doc transcript link in `index.html`.
 - Corrected the source-doc date typo for the MANICURE/COASTER transcript: `Wednesday, February 5, 2025` maps to `Thursday, February 5, 2026`; all transcript dates now match a database date.
 - Importer now uses Title headings as the authoritative date (Heading1 can be mis-typed; Apr 15 and Apr 20 were previously duplicated as Apr 16 / Apr 21 due to this). Title immediately followed by Heading1/None date line → Heading1 is skipped.
 - Importer now accepts "Show Transcript" in any style (Heading1, Heading3, or None); early January 2026 episodes used Heading3 or None.
-- Full coverage: 100 transcripts, 0 duplicates, matching all 100 game dates.
+- Importer enriches each transcript with host, secret items, round metadata, and database clue text so unsectioned transcripts can be split by the actual game data.
+- Importer standardizes every transcript to exactly six sections: `Intro`, `Round 1`, `Round 1 Reveal`, `Round 2`, `Round 2 Reveal`, and `Outro`.
+- Full coverage: 100 transcripts, 0 duplicates, matching all 100 game dates. `Thursday, April 9, 2026` is the expected canceled/no-game transcript with empty round/item metadata.
 
 ## Working Agreement
 
@@ -88,3 +91,18 @@ Last updated: 2026-04-25
   - `games-meta.json` still regenerates exactly from `games.json`.
   - Local browser Stats page rendered all 5 canvases with no console errors.
   - Hovering the Clue 5 bar in "Avg Payout Per Winner by Clue" shows the tooltip with `Avg payout: $2`.
+
+## Codex Verification (2026-04-25)
+
+- Refreshed `main` and confirmed the remote has only `refs/heads/main`.
+- Regenerated transcripts from the checked-in `.docx`; output is deterministic and matches `data/transcripts.json`.
+- Transcript validation passed: 100 transcripts, 100 unique dates, expected six-section order for every transcript, no missing hosts, no missing secret items except the expected canceled `Thursday, April 9, 2026` entry.
+- January repair check passed for `Tuesday, January 6`, `Thursday, January 8`, `Friday, January 9`, and `Monday, January 12`: all now have populated Round 2 and Round 2 Reveal sections.
+- Speaker parsing cleanup passed: false speaker labels from clue sentences were removed; remaining speakers are real hosts/guests plus `Recap`.
+- Inline `index.html` scripts parse cleanly.
+- `data/games-meta.json` regenerates exactly from `data/games.json` using `_buildGamesMeta`.
+- Local browser smoke test at `http://127.0.0.1:5173/` passed with no console errors:
+  - Stats rendered all 5 canvases.
+  - Hovering the Clue 5 column in "Avg Payout Per Winner by Clue" shows `Avg payout: $2`.
+  - Transcripts search found `Tuesday, January 6, 2026` and rendered host, round chips, database detail buttons, and all six section headings.
+  - Canceled `Thursday, April 9, 2026` renders `No game played` with host metadata and the standardized section shape.
