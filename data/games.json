@@ -9,19 +9,19 @@
       {
         "text": "2 FOR 1",
         "correct": "24",
-        "guesses": "4,811 🥇",
+        "guesses": "4,811 \ud83e\udd47",
         "explanation": "With chopsticks, two sticks become one unit to help you eat."
       },
       {
         "text": "A FULFILLING PRACTICE",
         "correct": "42",
-        "guesses": "4,097 🥈",
+        "guesses": "4,097 \ud83e\udd48",
         "explanation": "Chopstick expertise is very fulfilling. It feels good to finally get good at it, and the practice is literally for filling your tummy."
       },
       {
         "text": "DESPITE THE NAME, THEY'RE NOT FOR CUTTING",
         "correct": "265",
-        "guesses": "3,571 🥉",
+        "guesses": "3,571 \ud83e\udd49",
         "explanation": "Even though they are called chopsticks, you should not try to chop anything with them; it would take forever."
       },
       {
@@ -61,19 +61,19 @@
       {
         "text": "INVISIBLE YET VISIBLE",
         "correct": "24",
-        "guesses": "8,442 🥇",
+        "guesses": "8,442 \ud83e\udd47",
         "explanation": "You cannot see time itself, but you can definitely see its effects on everything around you."
       },
       {
         "text": "NO MATTER WHERE, IT'S ALWAYS THERE",
         "correct": "260",
-        "guesses": "10,108 🥈",
+        "guesses": "10,108 \ud83e\udd48",
         "explanation": "Wherever you go, literally anywhere in the world, time is always passing."
       },
       {
         "text": "ONCE YOU'RE THERE, IT CHANGES",
         "correct": "676",
-        "guesses": "5,703 🥉",
+        "guesses": "5,703 \ud83e\udd49",
         "explanation": "As soon as you arrive at any given moment, that moment is already over and has changed."
       },
       {
@@ -2432,7 +2432,7 @@
         "text": "MIND READERS UNITE",
         "correct": "0",
         "guesses": "?",
-        "explanation": "Mind Readers Unite - 'Because you’re trying to guess what America thinks!'"
+        "explanation": "Mind Readers Unite - 'Because you\u2019re trying to guess what America thinks!'"
       },
       {
         "text": "RIVALRY FOR DNA",
@@ -2594,7 +2594,7 @@
         "text": "TRENDY POPUP",
         "correct": "2",
         "guesses": "8948",
-        "explanation": "Trendy Popup - 'They pop up above your lip and lately they’ve been very trendy.'"
+        "explanation": "Trendy Popup - 'They pop up above your lip and lately they\u2019ve been very trendy.'"
       },
       {
         "text": "MID COVER BAND",
@@ -2708,7 +2708,7 @@
         "text": "ALL FOR NOTHING",
         "correct": "5",
         "guesses": "5237",
-        "explanation": "All For Nothing - 'It’s all the information in the world almost all of it available at no cost.'"
+        "explanation": "All For Nothing - 'It\u2019s all the information in the world almost all of it available at no cost.'"
       },
       {
         "text": "GREAT WORK EVERYBODY",
@@ -2726,7 +2726,7 @@
         "text": "ONLINE BRATANNICA BUT EVEN MORE GIGANTICA",
         "correct": "3063",
         "guesses": "8361",
-        "explanation": "Online Bratannica But Even More Gigantica - 'It’s like the encyclopedia but with way more articles and it’s online.'"
+        "explanation": "Online Bratannica But Even More Gigantica - 'It\u2019s like the encyclopedia but with way more articles and it\u2019s online.'"
       }
     ],
     "goldClue": 1,
@@ -2768,7 +2768,7 @@
         "text": "A BLAST FROM THE PAST",
         "correct": "8",
         "guesses": "7604",
-        "explanation": "A Blast From The Past - 'You were having a good time last night and now you’re suffering the consequences.'"
+        "explanation": "A Blast From The Past - 'You were having a good time last night and now you\u2019re suffering the consequences.'"
       },
       {
         "text": "CAN HAPPEN IN VEGAS JUST LIKE \"THE\" MOVIE",
@@ -2810,7 +2810,7 @@
         "text": "MAKEUP WITH NO MAKEUP",
         "correct": "0",
         "guesses": "9408",
-        "explanation": "Makeup With No Makeup - 'The dad’s trying to make up with his son... and they’re both clown fish clowns that don’t wear makeup.'"
+        "explanation": "Makeup With No Makeup - 'The dad\u2019s trying to make up with his son... and they\u2019re both clown fish clowns that don\u2019t wear makeup.'"
       },
       {
         "text": "A GUILT TRIP",
@@ -4664,7 +4664,7 @@
         "text": "MIX DILL HERBS AND MAYO AND VEGGIES SAY HEYO",
         "correct": "6320",
         "guesses": "10439",
-        "explanation": "Mix Dill Herbs And Mayo And Veggies Say Heyo - 'That's the recipe. And many people use ranch on a crudité platter.'"
+        "explanation": "Mix Dill Herbs And Mayo And Veggies Say Heyo - 'That's the recipe. And many people use ranch on a crudit\u00e9 platter.'"
       },
       {
         "text": "HIDDEN VALLEY MADE VALID TO POUR ON YOUR SALAD",
@@ -6899,7 +6899,7 @@
     "bronzePayout": 0,
     "winnerPayout": "$769.23",
     "winnerNames": "Names not read",
-    "wrongGuesses": "PIñATA, BEETHOVEN'S FIFTH, INK, GIFT, SALMONELLA, DEBT, TICKET, ADVICE, TIME, MONEY, SPEEDING",
+    "wrongGuesses": "PI\u00f1ATA, BEETHOVEN'S FIFTH, INK, GIFT, SALMONELLA, DEBT, TICKET, ADVICE, TIME, MONEY, SPEEDING",
     "winningClue": 1,
     "winnerCount": 13
   },
@@ -7466,7 +7466,7 @@
         "text": "ALL THE RIGHT MOVES",
         "correct": "53",
         "guesses": "16,000",
-        "explanation": "All the right moves - \"Pac-man is a 90° right angles it's always right you It's always a right angle a 90° angle is all the moves are right angles\""
+        "explanation": "All the right moves - \"Pac-man is a 90\u00b0 right angles it's always right you It's always a right angle a 90\u00b0 angle is all the moves are right angles\""
       },
       {
         "text": "HIS WIFE TOOK HIS NAME",
@@ -9581,10 +9581,10 @@
         "explanation": "Arrives orderly in many shapes and sizes - \"arrives orderly in many shapes and sizes.\""
       },
       {
-        "text": "PASS THE KETCHUP S'IL VOUS PLAÎT",
+        "text": "PASS THE KETCHUP S'IL VOUS PLA\u00ceT",
         "correct": "1,800",
         "guesses": "N/A",
-        "explanation": "Pass the ketchup s'il vous plaît - 'well pass the ketchup, see, play French and fries.'"
+        "explanation": "Pass the ketchup s'il vous pla\u00eet - 'well pass the ketchup, see, play French and fries.'"
       }
     ],
     "goldClue": 3,
@@ -10502,7 +10502,7 @@
         "text": "WHETHER ON TOP OF THE WEATHER OR UNDER THE WEATHER",
         "correct": "1582",
         "guesses": "4,252",
-        "explanation": "Temperature, and a thermometer measures your temperature—and your body temperature—especially when you're sick. Are you under the weather? You get it."
+        "explanation": "Temperature, and a thermometer measures your temperature\u2014and your body temperature\u2014especially when you're sick. Are you under the weather? You get it."
       }
     ],
     "goldClue": 1,
@@ -10536,25 +10536,25 @@
         "text": "LOTS OF RIPS BUT NO HOLES",
         "correct": "5",
         "guesses": "10,074",
-        "explanation": "You can take big swings, but there is usually no hole to hit the ball into. That's the point—you're just driving; you're not trying to get to a hole."
+        "explanation": "You can take big swings, but there is usually no hole to hit the ball into. That's the point\u2014you're just driving; you're not trying to get to a hole."
       },
       {
         "text": "STOVE TOP IN A CAR",
         "correct": "11",
         "guesses": "4,965",
-        "explanation": "This is a riddle: you drive a car, and a stove top is often called a range—AKA driving range."
+        "explanation": "This is a riddle: you drive a car, and a stove top is often called a range\u2014AKA driving range."
       },
       {
         "text": "DISTANCE MAKES THE HEART GROW FONDER",
         "correct": "28",
         "guesses": "3,529",
-        "explanation": "You feel good the farther you hit it—that’s the whole point of a driving range."
+        "explanation": "You feel good the farther you hit it\u2014that\u2019s the whole point of a driving range."
       },
       {
         "text": "REHEARSAL IS IN FULL SWING",
         "correct": "103",
         "guesses": "6,097",
-        "explanation": "It's where you practice your golf swing. It's all about the rehearsal in your swing—that’s what a driving range is for."
+        "explanation": "It's where you practice your golf swing. It's all about the rehearsal in your swing\u2014that\u2019s what a driving range is for."
       }
     ],
     "goldClue": 1,
@@ -10570,5 +10570,109 @@
     "winnerPayout": "$7,500.00",
     "winnerNames": "Mike Big House",
     "wrongGuesses": "BED, VELCRO SNEAKERS, GYM, FOOD TRUCK, CAMPING, SECOND FAMILY"
+  },
+  {
+    "date": "Friday, April 24, 2026",
+    "pot": 7500,
+    "format": "v2",
+    "host": "Howie Mandel, Hunter March",
+    "secretItem": "BENJAMIN FRANKLIN",
+    "clues": [
+      {
+        "text": "CURRENT EVENTS EXPERT",
+        "correct": "47",
+        "guesses": "5,382 \ud83e\udd47",
+        "explanation": "While he was a man of his time, the 'current' refers to the electrical current Benjamin Franklin discovered while flying a kite in a storm."
+      },
+      {
+        "text": "THE ORIGINAL PHILADELPHIA FLYER",
+        "correct": "675",
+        "guesses": "5,154 \ud83e\udd48",
+        "explanation": "Long before the hockey team, Franklin was the original flyer in Philadelphia due to his famous kite experiment."
+      },
+      {
+        "text": "PUT HIS JOHN HANCOCK NEXT TO JOHN HANCOCK",
+        "correct": "2,563",
+        "guesses": "6,931 \ud83e\udd49",
+        "explanation": "Benjamin Franklin was a fellow signer of the Declaration of Independence, placing his signature alongside John Hancock's famous one."
+      },
+      {
+        "text": "FIGURE OF NOTE ON A C-NOTE",
+        "correct": "2,579",
+        "guesses": "4,984",
+        "explanation": "A C-note is slang for a hundred-dollar bill, and Franklin is the historic figure of note featured on that currency."
+      },
+      {
+        "text": "FOUNDING DAD WHOSE INVENTIONS WERE RAD",
+        "correct": "2,525",
+        "guesses": "4,399",
+        "explanation": "As a Founding Father, Franklin was also a prolific inventor known for the lightning rod, bifocals, and the Franklin stove."
+      }
+    ],
+    "goldClue": 1,
+    "silverClue": 2,
+    "bronzeClue": 3,
+    "goldWinners": 47,
+    "silverWinners": 675,
+    "bronzeWinners": 2563,
+    "totalWinners": 3285,
+    "goldPayout": 63.82,
+    "silverPayout": 3.7,
+    "bronzePayout": 0.78,
+    "winnerPayout": "$7,500.00",
+    "winnerNames": "Baggy Trumpet, Five Six Media, Electric Painting 22, Neon Racer 240",
+    "wrongGuesses": "NEWSPAPER, SIGNATURE, DECLARATION OF INDEPENDENCE, EAGLE, GEORGE WASHINGTON"
+  },
+  {
+    "date": "Friday, April 24, 2026",
+    "pot": 7500,
+    "format": "v2",
+    "host": "Howie Mandel, Hunter March",
+    "secretItem": "CHAMPAGNE",
+    "clues": [
+      {
+        "text": "HOMETOWN HERO",
+        "correct": "0",
+        "guesses": "4,115",
+        "explanation": "Authentic champagne is a hometown hero because it must be produced specifically in the Champagne region of France to carry the name."
+      },
+      {
+        "text": "CAN HARDLY CONTAIN ITSELF",
+        "correct": "4",
+        "guesses": "4,063 \ud83e\udd47",
+        "explanation": "Champagne is under so much pressure that it requires a wire cage to keep the cork from bursting out of the bottle."
+      },
+      {
+        "text": "FRENCH TOAST INGREDIENT",
+        "correct": "251",
+        "guesses": "10,731 \ud83e\udd48",
+        "explanation": "This is a play on words, as champagne is a famous French wine used specifically to make a toast during celebrations."
+      },
+      {
+        "text": "OVER-THE-TOP POP STAR",
+        "correct": "620",
+        "guesses": "4,529 \ud83e\udd49",
+        "explanation": "When a bottle is opened, the champagne often pops and flows right over the top of the glass."
+      },
+      {
+        "text": "MAKES THE CASE FOR A BUBBLY PERSONALITY",
+        "correct": "1,638",
+        "guesses": "4,421",
+        "explanation": "Champagne is the definitive bubbly drink, famously containing approximately forty-nine million bubbles in every single bottle."
+      }
+    ],
+    "goldClue": 2,
+    "silverClue": 3,
+    "bronzeClue": 4,
+    "goldWinners": 4,
+    "silverWinners": 251,
+    "bronzeWinners": 620,
+    "totalWinners": 875,
+    "goldPayout": 750.0,
+    "silverPayout": 9.96,
+    "bronzePayout": 3.22,
+    "winnerPayout": "$7,500.00",
+    "winnerNames": "SereneSwanOhio, JadedBone557, SmartCanopy810, AfBoslow563",
+    "wrongGuesses": "EGG, EGGS, CINNAMON, BREAD, SUPERMAN"
   }
 ]

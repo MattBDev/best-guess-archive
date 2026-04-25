@@ -1772,5 +1772,23 @@
     "host": "Howie Mandel",
     "format": "v2",
     "clueCount": 5
+  },
+  {
+    "date": "Friday, April 24, 2026",
+    "secretItem": "BENJAMIN FRANKLIN",
+    "pot": 7500,
+    "totalWinners": 3285,
+    "host": "Howie Mandel, Hunter March",
+    "format": "v2",
+    "clueCount": 5
+  },
+  {
+    "date": "Friday, April 24, 2026",
+    "secretItem": "CHAMPAGNE",
+    "pot": 7500,
+    "totalWinners": 875,
+    "host": "Howie Mandel, Hunter March",
+    "format": "v2",
+    "clueCount": 5
   }
 ]
