@@ -36,3 +36,94 @@ git pull --rebase origin main
 - Prefer small, clean commits.
 - If another agent has pushed since you started, sync first instead of guessing.
 - If you see unexpected changes, assume they may be intentional and avoid reverting them unless explicitly asked.
+
+---
+
+## Daily Game Import Procedure
+
+When the user pastes a `=== DAILY GAME UPDATE ===` block, do the following in order:
+
+### 1. Parse the paste
+
+Extract from the paste:
+- DATE, HOST
+- ROUND 1: secretItem, 5 clues (text/correct/guesses), goldClue/silverClue/bronzeClue, winner counts, payouts, winner names, wrong guesses, clue explanations
+- ROUND 2: same fields
+- SPECIAL PROMO (optional): title + description
+- TRANSCRIPT: the labeled dialogue block
+
+### 2. Build two game objects (one per round)
+
+Use the schema in `AI_HANDOFF.md`. Always `format: "v2"` and `pot: 7500` unless the user specifies otherwise.
+
+Medal emoji in the `guesses` field: append ` 🥇` after the number for gold clue, ` 🥈` for silver, ` 🥉` for bronze. Non-winner clues have no emoji.
+
+`winnerPayout` is typically `"$7,500.00"` (full pot to gold winners in v2).
+
+`bonus` field: only include if SPECIAL PROMO section is present.
+
+### 3. Update data/games.json
+
+Append the two new game objects to the END of the array. Do not prepend.
+
+### 4. Regenerate data/games-meta.json
+
+Run or replicate this logic:
+```python
+import json
+with open('data/games.json') as f:
+    games = json.load(f)
+meta = []
+for g in games:
+    entry = {
+        "date": g["date"], "secretItem": g["secretItem"],
+        "pot": g["pot"], "host": g.get("host"), "format": g.get("format"),
+        "totalWinners": g.get("totalWinners", 0),
+        "clueCount": len(g.get("clues", []))
+    }
+    if g.get("note"): entry["note"] = g["note"]
+    meta.append(entry)
+with open('data/games-meta.json', 'w') as f:
+    json.dump(meta, f, indent=2)
+```
+
+### 5. Add transcript entry to data/transcripts.json
+
+Build a new transcript object with:
+- `date`, `host`, `secretItems` (array of both round answers)
+- `rounds` array (one object per round with round number, secretItem, host, pot, format, clues list)
+- `sections` array: exactly 6 sections in order: `Intro`, `Round 1`, `Round 1 Reveal`, `Round 2`, `Round 2 Reveal`, `Outro`
+
+Split the TRANSCRIPT dialogue into these sections by looking for round start/reveal cues. Each section has `title` and `lines` array; each line has `speaker` (string or null) and `text`.
+
+Append the new entry to the END of the `transcripts.json` array.
+
+### 6. Commit all changes
+
+```bash
+git add data/games.json data/games-meta.json data/transcripts.json
+git commit -m "Import [DATE]: [ROUND1_ANSWER] and [ROUND2_ANSWER]"
+git push -u origin main
+```
+
+### Cancelled Episode
+
+If the paste says `CANCELLED`, create one stub game:
+```json
+{
+  "date": "...", "pot": 0, "format": "v2", "host": "...",
+  "secretItem": "", "clues": [], "totalWinners": 0,
+  "winnerPayout": "", "winnerNames": "", "wrongGuesses": "",
+  "note": "No game played."
+}
+```
+Also add a transcript entry with empty round content and `secretItems: []`.
+
+### Validation Checks
+
+Before committing, verify:
+- Both games have exactly 5 clues.
+- `totalWinners` == `goldWinners` + `silverWinners` + `bronzeWinners`.
+- Gold/silver/bronze clue numbers are distinct integers 1–5.
+- New transcript has exactly 6 sections in the correct order.
+- `data/games-meta.json` entry count matches `data/games.json` entry count.

@@ -49,7 +49,11 @@
     "bronzePayout": 7.54,
     "winnerPayout": "$7,500.00",
     "winnerNames": "CodyLicious, ScreechyMeow, CheckeredCups",
-    "wrongGuesses": "TWINS, BOGO, DENTIST, TONGS, TWIX"
+    "wrongGuesses": "TWINS, BOGO, DENTIST, TONGS, TWIX",
+    "bonus": {
+      "title": "Netflix Shop Voucher",
+      "desc": "Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue)."
+    }
   },
   {
     "date": "Thursday, April 23, 2026",
@@ -101,7 +105,11 @@
     "bronzePayout": 2.95,
     "winnerPayout": "$7,500.00",
     "winnerNames": "DanielaS, WesternLeo889, BassDude, MissWorld594",
-    "wrongGuesses": "AIR, SHADOW, WIND, OXYGEN, WATER"
+    "wrongGuesses": "AIR, SHADOW, WIND, OXYGEN, WATER",
+    "bonus": {
+      "title": "Netflix Shop Voucher",
+      "desc": "Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue)."
+    }
   },
   {
     "date": "Wednesday, April 22, 2026",
@@ -153,7 +161,11 @@
     "bronzePayout": 5.08,
     "winnerPayout": "$7,500.00",
     "winnerNames": "I Am The Genius 215, Sour Standard 627, Hot Dog Freak",
-    "wrongGuesses": "MASCARA, DIVORCE, EMOJI, KARAOKE, INSIDE OUT"
+    "wrongGuesses": "MASCARA, DIVORCE, EMOJI, KARAOKE, INSIDE OUT",
+    "bonus": {
+      "title": "Netflix Shop Voucher",
+      "desc": "Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue)."
+    }
   },
   {
     "date": "Wednesday, April 22, 2026",
@@ -205,7 +217,11 @@
     "bronzePayout": 11.76,
     "winnerPayout": "$7,500.00",
     "winnerNames": "Petite Mower 675, True Rat King, Amy To Please, Cloudy Scroll",
-    "wrongGuesses": "IOU, DNA, MAP, TOILET PAPER, IRS"
+    "wrongGuesses": "IOU, DNA, MAP, TOILET PAPER, IRS",
+    "bonus": {
+      "title": "Netflix Shop Voucher",
+      "desc": "Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue)."
+    }
   },
   {
     "date": "Monday, April 20, 2026",
@@ -257,7 +273,11 @@
     "bronzePayout": 5.12,
     "winnerPayout": "$7,500.00",
     "winnerNames": "Lord Farquad, Cali Blonde, Dude Mom, Chrissy for PA",
-    "wrongGuesses": "ALPHABET, BUFFET, CALENDAR, SOAP, OCEAN"
+    "wrongGuesses": "ALPHABET, BUFFET, CALENDAR, SOAP, OCEAN",
+    "bonus": {
+      "title": "Netflix Shop Voucher",
+      "desc": "Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue)."
+    }
   },
   {
     "date": "Monday, April 20, 2026",
@@ -309,7 +329,11 @@
     "bronzePayout": 1.87,
     "winnerPayout": "$7,500.00",
     "winnerNames": "N/A",
-    "wrongGuesses": "GEORGE FOREMAN, DIRT, COMPOST, MARRIAGE, MIKE TYSON"
+    "wrongGuesses": "GEORGE FOREMAN, DIRT, COMPOST, MARRIAGE, MIKE TYSON",
+    "bonus": {
+      "title": "Netflix Shop Voucher",
+      "desc": "Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue)."
+    }
   },
   {
     "date": "Friday, April 17, 2026",
@@ -1663,7 +1687,11 @@
     "winnerNames": "Olive Eagle 501, Gracie 612, Former Realm 5",
     "wrongGuesses": "PIGEONS, SWING, SUP, TRAVELING CIRCUS, MY KNEES, TIGHTROPE, STILTS",
     "winningClue": 1,
-    "winnerCount": 6
+    "winnerCount": 6,
+    "bonus": {
+      "title": "Skechers Voucher",
+      "desc": "Players received a voucher for 40% off one item from Skechers. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Tuesday, March 31, 2026",
@@ -1717,7 +1745,11 @@
     "winnerNames": "N/A",
     "wrongGuesses": "GEORGE, MINECRAFT, MONKEY, RONALD MCDONALD, CHER, '72 PINTO, DJ, COMMERCIALS, MUHAMMAD ALI",
     "winningClue": 1,
-    "winnerCount": 4
+    "winnerCount": 4,
+    "bonus": {
+      "title": "Skechers Voucher",
+      "desc": "Players received a voucher for 40% off one item from Skechers. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Monday, March 30, 2026",
@@ -2959,7 +2991,11 @@
     "winnerNames": "Solid Wand$145, Daria 504",
     "wrongGuesses": "NAME, GAME SHOW HOST, MIRROR, HUG, PERFUME, SALUTE, WATCH, EGO, YAWN, PERSONAL DATA",
     "winningClue": 1,
-    "winnerCount": 353
+    "winnerCount": 353,
+    "bonus": {
+      "title": "The Guessie Awards",
+      "desc": "Three families won Best Guess Live exclusive merchandise (t-shirt, hat, mug) and six months of free Netflix. <br><b>How to qualify:</b> Submit a video of yourself/family playing the game, selected as a winner by viewer votes during the Guessie Awards."
+    }
   },
   {
     "date": "Friday, March 13, 2026",
@@ -3013,7 +3049,11 @@
     "winnerNames": "Coach DBS73, Arhan Echo Soul",
     "wrongGuesses": "JOYSTICK, COFFEE, BEARS, DOOR, SLEEP, GARLIC, NERDS, SEAL, LOWER BACK",
     "winningClue": 1,
-    "winnerCount": 59
+    "winnerCount": 59,
+    "bonus": {
+      "title": "The Guessie Awards",
+      "desc": "Three families won Best Guess Live exclusive merchandise (t-shirt, hat, mug) and six months of free Netflix. <br><b>How to qualify:</b> Submit a video of yourself/family playing the game, selected as a winner by viewer votes during the Guessie Awards."
+    }
   },
   {
     "date": "Thursday, March 12, 2026",
@@ -3391,7 +3431,11 @@
     "winnerNames": "CAMPYBICEP411, LUCY2008, THEFLICKCHIC, SNAKEPHOTOS, GODDID2025, AUTOVANILLA854, ADVANCEDCREW164, BATMAN4292, RAYJSETH, CHARCOALMUSIC412, TUKEMAN",
     "wrongGuesses": "EMINEM, RUSH HOUR 2, SUNSET, WORM, MOON, BATMAN, CHER, MEME",
     "winningClue": 1,
-    "winnerCount": 11
+    "winnerCount": 11,
+    "bonus": {
+      "title": "Partanna Olive Oil Voucher",
+      "desc": "Players received a voucher for $15 off an order of $75 or more for Partanna olive oil. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Monday, March 9, 2026",
@@ -3445,7 +3489,11 @@
     "winnerNames": "KINDLYTOFU414, FARTIE67, SNAPPYGANGWAY805, EVEEP23, HAIRYDEMON400, TIMIDSUGAR15, BEAVS48, ABEFROMAN80, DOODMOM24 Nutty T232, Ragged Collie 769",
     "wrongGuesses": "CAT, JACK, PIZZA, LETTER O, IDEA, RECIPE, AIRPLANE FOOD, SUSHI, DUMPSTER FIRE",
     "winningClue": 1,
-    "winnerCount": 19
+    "winnerCount": 19,
+    "bonus": {
+      "title": "Partanna Olive Oil Voucher",
+      "desc": "Players received a voucher for $15 off an order of $75 or more for Partanna olive oil. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Friday, March 6, 2026",
@@ -4039,7 +4087,11 @@
     "winnerNames": "CHINESEGAMBINO, FREAKEDFOG808, PULPYPIGEON435, SLOWPOKEL2361, SHADY2AMI, BOGTOOB, LIMEPHARAOH402, ROSELEON3710, MAMAFRAN30, VIOLETFIDDLE445, MYSTICALCHUTES23, KHAKIRUNNER28, MR9821, OBSIDIANRICE698, GENERALKOALA960",
     "wrongGuesses": "STYX, BATMAN, HADES, VECNA, TREE, SEED, LAVA LAMP, SKYDIVE CHESS, ATLANTIS",
     "winningClue": 1,
-    "winnerCount": 15
+    "winnerCount": 15,
+    "bonus": {
+      "title": "RDX Sports Gift Card",
+      "desc": "Players earned a $20 digital gift card to use on purchases of $100 or more for RDX Sports combat and fitness gear. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Friday, February 27, 2026",
@@ -4093,7 +4145,11 @@
     "winnerNames": "BOBMCP0OP, DINOLAURS, HUNMAN64, MARITIMEDEN741, MYSTICALB66, The Welts, Such and Such for Pres",
     "wrongGuesses": "CRYPTO, POKEMON, MARTHA STEWART, EVERYTHING, ATOM, PUZZLE, KIDNEY, DNA, WOODY, MAZE",
     "winningClue": 3,
-    "winnerCount": 12
+    "winnerCount": 12,
+    "bonus": {
+      "title": "RDX Sports Gift Card",
+      "desc": "Players earned a $20 digital gift card to use on purchases of $100 or more for RDX Sports combat and fitness gear. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Thursday, February 26, 2026",
@@ -4255,7 +4311,11 @@
     "winnerNames": "LEAFYORC930, HORNEDWEST411, BUBBL3GUPP, TRINA87, MRSBUNNY411, GIOTHEFRIO, ECTOAMBER939, KOOKYACTION351, DADOFGIRLS2, BADUMTSS11, BARKERZZ, SYRINX2112",
     "wrongGuesses": "GOLD, KOBE, CRAYONS, TARGET, ARNOLD SCHWARZENEGGER, SUNRISE, WAFFLES, EQUATION",
     "winningClue": 1,
-    "winnerCount": 12
+    "winnerCount": 12,
+    "bonus": {
+      "title": "Inkind Dining Voucher",
+      "desc": "Players received a $50 voucher toward a $100 meal at over 6,000 participating restaurants on the Inkind dining rewards app. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Wednesday, February 25, 2026",
@@ -4309,7 +4369,11 @@
     "winnerNames": "ZSCRUBZ, GODDZWILLA, THISSEEMSAVOUTRT, GRITTYQUAIL421, ALKALINEPITA968, JANEBGOODE, TINYPEGASUS745, DEEPBOXER378, Fledge Mholland",
     "wrongGuesses": "BATMAN, BABY, MY WIFE, SCANDRON, SEPIA, MRI, POLICE LINEUP, KRISPY KREME, POTATO",
     "winningClue": 1,
-    "winnerCount": 163
+    "winnerCount": 163,
+    "bonus": {
+      "title": "Inkind Dining Voucher",
+      "desc": "Players received a $50 voucher toward a $100 meal at over 6,000 participating restaurants on the Inkind dining rewards app. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Tuesday, February 24, 2026",
@@ -4579,7 +4643,11 @@
     "winnerNames": "HOGWARTSGIRL26, SACREDCODE51",
     "wrongGuesses": "FORK, INTERSTATE, TRAIN, WAFFLE HOUSE, LOADBEARING WALL, TINDER",
     "winningClue": 3,
-    "winnerCount": 2
+    "winnerCount": 2,
+    "bonus": {
+      "title": "iFIT Subscription",
+      "desc": "Players won a free two-month subscription to iFIT online fitness training. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Friday, February 20, 2026",
@@ -4633,7 +4701,11 @@
     "winnerNames": "MFDOOM83, ITSJHUAN601, HUSKERMANAZ, PLAYINGWITHGRIT, VILEQUEEN605, SHELLRUSSELL, SPARKLINGDAGGER, BRASSYWIN656, KINDLYTOFU414, DILLYDALLY718, 1DAWG96, ETHEREALDUSK781, BLUEBACKPACK67, FATIMASYNTHISES, DENAYA, BACKCRACK4, NPEANUTBUTTER, SCRUFFYAVATAR827, Bay Banks",
     "wrongGuesses": "UNDERTAKER, UNO, UTILITY, TV 8, VATICAN CITY, FRUIT SALAD, REBA, DOLLY",
     "winningClue": 1,
-    "winnerCount": 90
+    "winnerCount": 90,
+    "bonus": {
+      "title": "iFIT Subscription",
+      "desc": "Players won a free two-month subscription to iFIT online fitness training. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Thursday, February 19, 2026",
@@ -5659,7 +5731,11 @@
     "winnerNames": "THEKORALREEF79, BEGINFAM, ARCHMOOSE, IMPIOUSBADGE810, LARDAZZBU, BELUGALUGA, VIRTUALREPTILE3, LUNAROCEAN66, LIVEPINAFORE219, COREYLEELARSON, DEEPTIRANA, ZOEGIRL91, VERONICA7X, MADHARE97, AQUAVAN460, NANONACHOS673, TEXASDONTPLAY, TECHIRL, BIGBABY34, STEADYTAPIOCA563, TYLERHALL00",
     "wrongGuesses": "POKEMON, BOWLING PINS, CATS, SEATTLE SEAHAWKS, HEART SURGEON, PIZZA, BUTCHER, ARBY'S",
     "winningClue": 1,
-    "winnerCount": 22
+    "winnerCount": 22,
+    "bonus": {
+      "title": "Good Ranchers Meat Delivery",
+      "desc": "Players received $100 off a Good Ranchers meat delivery subscription and \"free meat for life\". Anyone who got the answer correct on the earliest clue received a bonus essentials box (chicken, beef, seed-oil-free chicken nuggets, ~$250 value). <br><b>How to qualify:</b> Submit any answer during round two for the standard offer; lock in the correct answer on the earliest clue for the bonus meat box."
+    }
   },
   {
     "date": "Friday, February 6, 2026",
@@ -5713,7 +5789,11 @@
     "winnerNames": "N/A",
     "wrongGuesses": "HOWIE MANDEL, LADDER, MIRROR, STATUE OF DAVID, CREED, TONGS, CAT, GUILLOTINE",
     "winningClue": 1,
-    "winnerCount": 163
+    "winnerCount": 163,
+    "bonus": {
+      "title": "Good Ranchers Meat Delivery",
+      "desc": "Players received $100 off a Good Ranchers meat delivery subscription and \"free meat for life\". Anyone who got the answer correct on the earliest clue received a bonus essentials box (chicken, beef, seed-oil-free chicken nuggets, ~$250 value). <br><b>How to qualify:</b> Submit any answer during round two for the standard offer; lock in the correct answer on the earliest clue for the bonus meat box."
+    }
   },
   {
     "date": "Thursday, February 5, 2026",
@@ -6199,7 +6279,11 @@
     "winnerNames": "YOBOITOXIC, POCKETTAFFY",
     "wrongGuesses": "HOTEL ROOM, COFFEE, HYPNOSIS, PIPE ORGAN, MONDAY",
     "winningClue": 3,
-    "winnerCount": 2
+    "winnerCount": 2,
+    "bonus": {
+      "title": "Netflix Subscription",
+      "desc": "Players won a free one-month subscription to Netflix. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Friday, January 30, 2026",
@@ -6253,7 +6337,11 @@
     "winnerNames": "CONSHIESTY",
     "wrongGuesses": "PROJECTOR, ZILLOW, FITCH, TREATS, DOG, POOL NOODLE, AIR BUD",
     "winningClue": 3,
-    "winnerCount": 1
+    "winnerCount": 1,
+    "bonus": {
+      "title": "Netflix Subscription",
+      "desc": "Players won a free one-month subscription to Netflix. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Thursday, January 29, 2026",
@@ -8575,7 +8663,11 @@
     "winnerNames": "Names not read",
     "wrongGuesses": "WAFFLE, SHADOW, TUPE, TUPAC, AGO, CAMOUFLAGE, SPY, JANE, HAMBURGER, WILL, SAFE, MOON, BED BATH AND BEYOND",
     "winningClue": 3,
-    "winnerCount": 2
+    "winnerCount": 2,
+    "bonus": {
+      "title": "Uber Voucher",
+      "desc": "Players received a voucher for 50% off their next Uber ride. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Wednesday, December 31, 2025",
@@ -8629,7 +8721,11 @@
     "winnerNames": "Names not read",
     "wrongGuesses": "WI-FI, WATER, HASH BROWNS, MONEY, GOLD, OIL, PENNY STOCK OPTIONS, BANK, OPRAH, CAFE, JIM, TESLA, MILLIE BOBBY BROWN",
     "winningClue": 1,
-    "winnerCount": 1343
+    "winnerCount": 1343,
+    "bonus": {
+      "title": "Uber Voucher",
+      "desc": "Players received a voucher for 50% off their next Uber ride. <br><b>How to qualify:</b> Submit any answer (right or wrong) during round two."
+    }
   },
   {
     "date": "Tuesday, December 30, 2025",
@@ -10517,7 +10613,11 @@
     "bronzePayout": 0.45,
     "winnerPayout": "$7,500.00",
     "winnerNames": "Cranky Llama 266, Mag Maggie 321",
-    "wrongGuesses": "BELLYBUTTONS, THE HINDENBURG, GARAGE, YO-YO, JAY LENO, SYLVESTER STALLONE, UBER DRIVER"
+    "wrongGuesses": "BELLYBUTTONS, THE HINDENBURG, GARAGE, YO-YO, JAY LENO, SYLVESTER STALLONE, UBER DRIVER",
+    "bonus": {
+      "title": "Netflix Shop Voucher",
+      "desc": "Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue)."
+    }
   },
   {
     "date": "Tuesday, April 21, 2026",
@@ -10569,7 +10669,11 @@
     "bronzePayout": 181.81,
     "winnerPayout": "$7,500.00",
     "winnerNames": "Mike Big House",
-    "wrongGuesses": "BED, VELCRO SNEAKERS, GYM, FOOD TRUCK, CAMPING, SECOND FAMILY"
+    "wrongGuesses": "BED, VELCRO SNEAKERS, GYM, FOOD TRUCK, CAMPING, SECOND FAMILY",
+    "bonus": {
+      "title": "Netflix Shop Voucher",
+      "desc": "Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue)."
+    }
   },
   {
     "date": "Friday, April 24, 2026",
@@ -10621,7 +10725,11 @@
     "bronzePayout": 0.78,
     "winnerPayout": "$7,500.00",
     "winnerNames": "Baggy Trumpet, Five Six Media, Electric Painting 22, Neon Racer 240",
-    "wrongGuesses": "NEWSPAPER, SIGNATURE, DECLARATION OF INDEPENDENCE, EAGLE, GEORGE WASHINGTON"
+    "wrongGuesses": "NEWSPAPER, SIGNATURE, DECLARATION OF INDEPENDENCE, EAGLE, GEORGE WASHINGTON",
+    "bonus": {
+      "title": "Netflix Shop Voucher",
+      "desc": "Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue)."
+    }
   },
   {
     "date": "Friday, April 24, 2026",
@@ -10673,6 +10781,10 @@
     "bronzePayout": 3.22,
     "winnerPayout": "$7,500.00",
     "winnerNames": "SereneSwanOhio, JadedBone557, SmartCanopy810, AfBoslow563",
-    "wrongGuesses": "EGG, EGGS, CINNAMON, BREAD, SUPERMAN"
+    "wrongGuesses": "EGG, EGGS, CINNAMON, BREAD, SUPERMAN",
+    "bonus": {
+      "title": "Netflix Shop Voucher",
+      "desc": "Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue)."
+    }
   }
 ]

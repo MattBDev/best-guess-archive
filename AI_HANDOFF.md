@@ -8,7 +8,7 @@ Last updated: 2026-04-25
 
 ## Latest Known Implementation Commit
 
-- `fb57221` - Standardize transcript archive metadata
+- `24ed0b3` - Update handoff for transcript standardization (last Codex commit)
 
 ## Current State
 
@@ -16,33 +16,230 @@ Last updated: 2026-04-25
 - Main-only workflow is in effect. Do not create branches; remove stale non-main branches after confirming their commits are already represented on `main`.
 - Database side arrows are working on desktop.
 - Home page KPI counters animate on load without layout shift.
-- Admin import/delete flow has extra safety checks and preview escaping.
-- Admin import/delete now writes `data/games.json` and `data/games-meta.json` together through the Git database API (blob/tree/commit/ref), avoiding the old contents-endpoint size ceiling and keeping home-page totals in sync.
+- **Admin panel removed**: All game/transcript updates are now done by AI agents (Claude/Codex) directly editing the data files and committing. See "Daily Update Workflow" below.
+- **Bonus/promo data migrated**: `bonusMap` moved from hardcoded JS in `index.html` to a `bonus: {title, desc}` field on each game in `games.json`. Rendering code reads `g.bonus` directly. `bonus.desc` may contain safe HTML (`<br>` and `<b>` tags).
+- **Scripts cleaned up**: `scripts/import_transcripts_from_docx.py` and `KindaCharming's Best Guess Live Show Transcripts.docx` removed (all past transcripts are imported). Admin code archived to `scripts/admin-panel-archive.js`.
 - Latest imported episode: Friday, April 24, 2026 with BENJAMIN FRANKLIN and CHAMPAGNE.
-- Review pass hardened database rows, details modals, result screens, stats lists, play clue rendering, and tip-jar URLs so imported/archive text is escaped before being rendered through `innerHTML`.
-- Stats payout badges were corrected to avoid relying on Tailwind arbitrary classes inside JS-rendered HTML.
-- Stats charts now use shared Chart.js usability defaults: taller chart panels, larger hover hit targets, x-column hover activation for bar charts, minimum visible bar lengths, improved tooltips, and logarithmic scales for high-spread clue charts.
-- Database date column width was reduced from the earlier oversized value to better preserve secret-item alignment.
+- 100 total game days (99 playable + 1 cancelled: Thursday, April 9, 2026).
+- 199 game objects in `data/games.json` (most dates have two rounds).
 
-## Transcript Import Work
+## Daily Update Workflow
 
-- User wants the public Google Doc transcript link replaced with in-site transcripts, one transcript per air date.
-- Source file in repo: `KindaCharming's Best Guess Live Show Transcripts.docx`.
-- Added local importer: `scripts/import_transcripts_from_docx.py`.
-- Importer reads `word/document.xml`, finds date headings, keeps only paragraphs under `Show Transcript`, and stops before `Explanation Table`, `Clue & Answer Results Table`, or JSON/table appendices.
-- Regenerated `data/transcripts.json` from the `.docx`: 100 transcripts, first `Monday, December 8, 2025`, last `Friday, April 24, 2026`.
-- `index.html` has internal transcript navigation and a lazy-loaded `view-transcripts` page with search, episode list, and detail panel.
-- Database details modals include a `View full episode transcript` button for the selected date.
-- Transcript detail pages include per-game database detail buttons for that transcript date.
-- Transcript list/detail UI now shows host metadata and round secret-item chips; canceled/no-game dates render as `No game played`.
-- Transcript text is escaped before rendering.
-- Validation passed after the transcript commit: Python importer compile/run, generated transcript JSON matches `data/transcripts.json`, inline JS syntax check, `games.json`/`games-meta.json` consistency, and no remaining Google Doc transcript link in `index.html`.
-- Corrected the source-doc date typo for the MANICURE/COASTER transcript: `Wednesday, February 5, 2025` maps to `Thursday, February 5, 2026`; all transcript dates now match a database date.
-- Importer now uses Title headings as the authoritative date (Heading1 can be mis-typed; Apr 15 and Apr 20 were previously duplicated as Apr 16 / Apr 21 due to this). Title immediately followed by Heading1/None date line → Heading1 is skipped.
-- Importer now accepts "Show Transcript" in any style (Heading1, Heading3, or None); early January 2026 episodes used Heading3 or None.
-- Importer enriches each transcript with host, secret items, round metadata, and database clue text so unsectioned transcripts can be split by the actual game data.
-- Importer standardizes every transcript to exactly six sections: `Intro`, `Round 1`, `Round 1 Reveal`, `Round 2`, `Round 2 Reveal`, and `Outro`.
-- Full coverage: 100 transcripts, 0 duplicates, matching all 100 game dates. `Thursday, April 9, 2026` is the expected canceled/no-game transcript with empty round/item metadata.
+Every episode day, paste the following block to Claude or Codex. Claude/Codex will update `data/games.json`, `data/games-meta.json`, `data/transcripts.json`, and any special promo fields, then commit and push to `main`.
+
+### How to Prepare the Paste Block
+
+**Step 1 — Get structured transcript from Gemini/Plaud:**
+
+Feed the raw Plaud/YouTube transcript to Gemini with this prompt:
+
+```
+You are formatting a raw Best Guess Live show transcript into a strict structured template. Follow these rules exactly:
+
+1. Find the DATE of the episode (usually said at the start).
+2. Find the HOST name(s).
+3. For EACH ROUND (there are always two rounds):
+   a. Find the SECRET ITEM (the answer) — revealed at the end of the round.
+   b. Extract exactly 5 CLUES in order. Each clue is a short all-caps phrase read on screen. Copy them verbatim (verify spelling from video if needed).
+   c. For each clue, write one sentence EXPLANATION of why it points to the secret item.
+   d. Extract the CORRECT count and TOTAL GUESSES for each clue — the hosts announce these numbers aloud. Also extract Gold/Silver/Bronze winner counts and payouts, total winners, winner names (up to 4), and wrong guesses shown on screen.
+4. Format all dialogue as a transcript with speaker labels. Use "HOST:" for the main host, "GUEST:" for any co-host/guest, and "RECAP:" for any recap narrator voice. No invented speakers.
+5. Output NOTHING except the template below.
+
+OUTPUT THIS EXACT TEMPLATE (fill in the [brackets]):
+
+DATE: [Full date, e.g. "Friday, April 25, 2026"]
+HOST: [Full host name(s), comma-separated if multiple]
+
+ROUND 1
+Secret Item: [THE ANSWER IN ALL CAPS]
+Clue 1: [CLUE TEXT IN ALL CAPS] | Correct: [n] | Guesses: [n,nnn]
+Clue 2: [CLUE TEXT IN ALL CAPS] | Correct: [n] | Guesses: [n,nnn]
+Clue 3: [CLUE TEXT IN ALL CAPS] | Correct: [n] | Guesses: [n,nnn]
+Clue 4: [CLUE TEXT IN ALL CAPS] | Correct: [n] | Guesses: [n,nnn]
+Clue 5: [CLUE TEXT IN ALL CAPS] | Correct: [n] | Guesses: [n,nnn]
+
+Gold Clue: [1-5]   Gold Winners: [n]   Gold Payout: $[n,nnn.nn]
+Silver Clue: [1-5] Silver Winners: [n] Silver Payout: $[n.nn]
+Bronze Clue: [1-5] Bronze Winners: [n] Bronze Payout: $[n.nn]
+Total Winners: [n]
+Winner Names: [Name1, Name2, Name3, Name4]
+Wrong Guesses: [WORD1, WORD2, WORD3]
+
+Clue 1 Explanation: [One sentence explaining why this clue points to the secret item]
+Clue 2 Explanation: [One sentence]
+Clue 3 Explanation: [One sentence]
+Clue 4 Explanation: [One sentence]
+Clue 5 Explanation: [One sentence]
+
+ROUND 2
+[same structure as Round 1]
+
+TRANSCRIPT
+[Full labeled dialogue from start to finish:
+HOST: line
+GUEST: line
+RECAP: line
+Lines with no clear speaker: just the text with no label.]
+```
+
+**Step 2 — Paste to Claude/Codex in this format:**
+
+```
+=== DAILY GAME UPDATE ===
+
+DATE: [e.g. Friday, April 25, 2026]
+HOST: [e.g. Howie Mandel, Hunter March]
+
+--- ROUND 1 ---
+Secret Item: [ALL CAPS]
+Pot: 7500
+Format: v2
+
+Clue 1: [ALL CAPS CLUE TEXT] | Correct: [n] | Guesses: [n,nnn]
+Clue 2: [ALL CAPS CLUE TEXT] | Correct: [n] | Guesses: [n,nnn]
+Clue 3: [ALL CAPS CLUE TEXT] | Correct: [n] | Guesses: [n,nnn]
+Clue 4: [ALL CAPS CLUE TEXT] | Correct: [n] | Guesses: [n,nnn]
+Clue 5: [ALL CAPS CLUE TEXT] | Correct: [n] | Guesses: [n,nnn]
+
+Gold Clue: [1-5]   Gold Winners: [n]   Gold Payout: $[n,nnn.nn]
+Silver Clue: [1-5] Silver Winners: [n] Silver Payout: $[n.nn]
+Bronze Clue: [1-5] Bronze Winners: [n] Bronze Payout: $[n.nn]
+Total Winners: [n]
+
+Winner Names: [Name1, Name2, Name3, Name4]
+Wrong Guesses: [WORD1, WORD2, WORD3]
+
+Clue 1 Explanation: [from Gemini output]
+Clue 2 Explanation: [from Gemini output]
+Clue 3 Explanation: [from Gemini output]
+Clue 4 Explanation: [from Gemini output]
+Clue 5 Explanation: [from Gemini output]
+
+--- ROUND 2 ---
+[same structure as Round 1]
+
+--- SPECIAL PROMO (omit section if none) ---
+Title: [e.g. Netflix Shop Voucher]
+Description: [full text including how-to-qualify. May use <br> and <b> tags.]
+
+--- TRANSCRIPT ---
+[paste Gemini TRANSCRIPT section here]
+```
+
+**Notes:**
+- All games from late April 2026 onward use `format: v2` with a $7,500 pot per round. Use `format: v1` only if the show announces a return to the old variable-pot format.
+- `winnerPayout` is computed as: `$${(7500).toFixed(2)}` unless payout is split (most rounds have one payout winner who receives the full pot). Actually it should be whichever payout value shown on screen. For v2 it's typically `"$7,500.00"` if there was a gold winner, otherwise N/A.
+- `bonus.desc` may contain `<br>` and `<b>` tags; they are rendered as HTML in the modal. Keep descriptions clean and avoid other HTML tags.
+- Clue text on-screen uses all caps and may include punctuation; verify spelling from the video still frame if Gemini misheard a word.
+
+### What Claude/Codex Does with the Paste
+
+1. Parses the paste into two game objects (one per round).
+2. Appends them to `data/games.json` (most recent dates go at the end — the database sorts descending by date at render time).
+3. Rebuilds `data/games-meta.json` from the full `games.json`.
+4. Adds a new transcript entry to `data/transcripts.json` with all six canonical sections (Intro, Round 1, Round 1 Reveal, Round 2, Round 2 Reveal, Outro) and the round metadata.
+5. Commits all changed files to `main` and pushes.
+
+### Cancelled Episode
+
+If no game was played:
+
+```
+=== DAILY GAME UPDATE ===
+DATE: Thursday, April 9, 2026
+HOST: [host name]
+CANCELLED - No game played
+[optional note about why]
+```
+
+Agent writes one stub game object with `note` field and no `clues` array.
+
+## games.json Schema
+
+Each game object:
+```json
+{
+  "date": "Friday, April 25, 2026",
+  "pot": 7500,
+  "format": "v2",
+  "host": "Howie Mandel, Hunter March",
+  "secretItem": "WIDGET",
+  "clues": [
+    {"text": "CLUE TEXT", "correct": "123", "guesses": "4,567 🥇", "explanation": "One sentence."},
+    ...
+  ],
+  "goldClue": 1,
+  "silverClue": 2,
+  "bronzeClue": 3,
+  "goldWinners": 123,
+  "silverWinners": 456,
+  "bronzeWinners": 789,
+  "totalWinners": 1368,
+  "goldPayout": 60.98,
+  "silverPayout": 16.45,
+  "bronzePayout": 9.51,
+  "winnerPayout": "$7,500.00",
+  "winnerNames": "Name1, Name2, Name3",
+  "wrongGuesses": "WORD1, WORD2, WORD3",
+  "bonus": {"title": "Promo Name", "desc": "Description with optional <br>/<b> HTML."}
+}
+```
+
+Medal emoji in `guesses` field: append ` 🥇` / ` 🥈` / ` 🥉` after the number for the gold/silver/bronze clue respectively.
+
+`bonus` is optional — only include when there's a special promo for that day.
+
+## transcripts.json Schema
+
+Each transcript entry:
+```json
+{
+  "date": "Friday, April 25, 2026",
+  "host": "Howie Mandel",
+  "secretItems": ["ROUND1 ANSWER", "ROUND2 ANSWER"],
+  "rounds": [
+    {
+      "round": 1,
+      "secretItem": "ROUND1 ANSWER",
+      "host": "Howie Mandel",
+      "pot": 7500,
+      "format": "v2",
+      "clues": ["CLUE 1 TEXT", "CLUE 2 TEXT", ...]
+    },
+    { "round": 2, ... }
+  ],
+  "sections": [
+    {"title": "Intro", "lines": [{"speaker": "HOST", "text": "..."}, ...]},
+    {"title": "Round 1", "lines": [...]},
+    {"title": "Round 1 Reveal", "lines": [...]},
+    {"title": "Round 2", "lines": [...]},
+    {"title": "Round 2 Reveal", "lines": [...]},
+    {"title": "Outro", "lines": [...]}
+  ]
+}
+```
+
+Sections always appear in exactly this order. `speaker` is a string (host name, "RECAP", etc.) or `null` for lines without a clear speaker.
+
+## Performance Architecture
+
+- **Tailwind**: Static `tailwind.css` (33KB prebuilt). If new Tailwind classes are added to index.html, regenerate with: `npx tailwindcss@3 -i tailwind-input.css -o tailwind.css --minify`
+- **games-meta.json**: Lightweight (36KB) loaded on init for home stats. Full `games.json` lazy-loads when user first visits Database or Stats.
+- **Chart.js**: Injected dynamically on first Stats page visit only.
+- **filterDatabase**: Debounced 150ms.
+- **_homeStatsCache**: Invalidated when full games.json loads or refreshStats() runs.
+
+## Things Worth Double-Checking After Future Edits
+
+- GitHub Pages reflects the newest commit on `main`.
+- Desktop database arrows remain visible and clickable while scrolling.
+- Home KPI counters do not cause layout shift.
+- Database details modal shows bonus section for promo dates; verify `g.bonus` is present in games.json and the title is escaped, desc is trusted HTML.
+- Play feature (`startRandomGame`) awaits full games.json load before starting.
+- Stats charts render all 5 canvases; Clue 5 bar in "Avg Payout Per Winner by Clue" shows `Avg payout: $2`.
+- `data/games-meta.json` regenerates exactly from `data/games.json` after every import.
+- Transcripts: search finds new date, shows host/chips/sections, database detail buttons work.
 
 ## Working Agreement
 
@@ -50,59 +247,3 @@ Last updated: 2026-04-25
 - Leave all work on `main`.
 - Commit directly to `main` and push to `origin/main` when finished.
 - Update this file after meaningful changes so the next agent can pick up quickly.
-
-## Performance Architecture (added 2026-04-23)
-
-- **Tailwind**: Static `tailwind.css` (33KB prebuilt). If new Tailwind classes are added to index.html, regenerate with: `npx tailwindcss@3 -i tailwind-input.css -o tailwind.css --minify`
-- **games-meta.json**: Lightweight (36KB) file loaded on init for home stats. Full `games.json` (358KB) lazy-loads when user first visits Database or Stats. If `games.json` changes, regenerate meta with the Python script in AI_HANDOFF history or reuse the pattern from the commit.
-- **Chart.js**: Injected dynamically on first Stats page visit only.
-- **filterDatabase**: Debounced 150ms.
-- **_homeStatsCache**: Invalidated when full games.json loads or refreshStats() runs.
-
-## Things Worth Double-Checking After Future UI Edits
-
-- GitHub Pages reflects the newest commit on `main`.
-- Desktop database arrows remain visible and clickable while scrolling.
-- Date column width still keeps secret items aligned.
-- Home KPI counters do not cause layout shift.
-- Admin import previews render safely and publish in the intended order.
-- Admin writes still target `main`, update both JSON data files in one commit, and fail safely if GitHub advances between fetch and commit (ref PATCH is fast-forward-only, no explicit `force: false` needed).
-- `_commitGamesState` takes the pre-fetched state object instead of re-reading - one tree walk per admin action instead of two.
-- Play feature (`startRandomGame`) now awaits the full games.json load before starting - previously it would crash unless the user had opened Database or Stats first (which is what triggers the lazy load of clues data).
-- `_ensureFullGamesLoaded` now propagates fetch errors; all three call sites (database, stats, play) have `.catch` handlers that surface the failure. `_showDataLoadError` reuses the top-bar status indicator.
-- Clue-time `<select>` no longer has an inline onchange handler; calls `app.setClueDuration(value)`.
-- Re-check visible database details and play result screens after future `innerHTML` edits, especially any new fields that come from pasted/imported game JSON.
-- After future Stats chart edits, verify the Clue 5 bar in "Avg Payout Per Winner by Clue" remains visible and hoverable; current data has Clue 5 averaging only `$2` versus thousands for other clues.
-- After transcript edits, verify the Transcripts nav opens the internal archive and no longer links directly to the Google Doc.
-
-## Codex Verification (2026-04-24)
-
-- Verified `main` includes Claude branch commit `6af60cf`; the stale remote branch `claude/code-review-improvements-TImSY` was deleted after verification.
-- `data/games.json` and `data/games-meta.json` parse cleanly and metadata regenerates exactly from the full games file.
-- Inline browser scripts in `index.html` pass syntax checks.
-- Static local asset references in the rendered HTML all exist.
-- Local browser smoke test at `http://127.0.0.1:5173/` passed for Home, Play, Database, and Stats with no console errors:
-  - Home loaded 197 rounds from `games-meta.json`.
-  - Play Random Game loaded full clues before selecting a game and rendered date/player count.
-  - Database rendered 197 rows.
-  - Stats rendered headline values including `$2,619,998` total paid out and `285` average winners.
-- Stats chart usability pass:
-  - JS syntax check passed after Chart.js config changes.
-  - `games-meta.json` still regenerates exactly from `games.json`.
-  - Local browser Stats page rendered all 5 canvases with no console errors.
-  - Hovering the Clue 5 bar in "Avg Payout Per Winner by Clue" shows the tooltip with `Avg payout: $2`.
-
-## Codex Verification (2026-04-25)
-
-- Refreshed `main` and confirmed the remote has only `refs/heads/main`.
-- Regenerated transcripts from the checked-in `.docx`; output is deterministic and matches `data/transcripts.json`.
-- Transcript validation passed: 100 transcripts, 100 unique dates, expected six-section order for every transcript, no missing hosts, no missing secret items except the expected canceled `Thursday, April 9, 2026` entry.
-- January repair check passed for `Tuesday, January 6`, `Thursday, January 8`, `Friday, January 9`, and `Monday, January 12`: all now have populated Round 2 and Round 2 Reveal sections.
-- Speaker parsing cleanup passed: false speaker labels from clue sentences were removed; remaining speakers are real hosts/guests plus `Recap`.
-- Inline `index.html` scripts parse cleanly.
-- `data/games-meta.json` regenerates exactly from `data/games.json` using `_buildGamesMeta`.
-- Local browser smoke test at `http://127.0.0.1:5173/` passed with no console errors:
-  - Stats rendered all 5 canvases.
-  - Hovering the Clue 5 column in "Avg Payout Per Winner by Clue" shows `Avg payout: $2`.
-  - Transcripts search found `Tuesday, January 6, 2026` and rendered host, round chips, database detail buttons, and all six section headings.
-  - Canceled `Thursday, April 9, 2026` renders `No game played` with host metadata and the standardized section shape.
