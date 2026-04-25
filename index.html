@@ -2379,17 +2379,15 @@ class App {
       </div>
       <div class="space-y-7">
         ${(transcript.sections || []).map(section => {
-          const clueRE = /^(Clue \d+):\s*(.+)/i;
+          const clueRE = /^(Clue\s+(?:number\s+)?(?:\d+|one|two|three|four|five)):\s*(.+)/i;
           return `
           <section>
             <h4 class="text-sm uppercase tracking-widest text-yellow-400 font-bold mb-3">${esc(section.tag || 'Transcript')}</h4>
             <div class="space-y-2">
               ${(section.lines || []).length ? (section.lines || []).map(line => {
-                if (!line.speaker) {
-                  const cm = line.text.match(clueRE);
-                  if (cm) {
-                    return `<span class="transcript-clue-line"><span class="transcript-clue-label">${esc(cm[1])}:</span>${esc(cm[2])}</span>`;
-                  }
+                const cm = line.text.match(clueRE);
+                if (cm) {
+                  return `<span class="transcript-clue-line"><span class="transcript-clue-label">${esc(cm[1])}:</span>${esc(cm[2])}</span>`;
                 }
                 const speakerHtml = line.speaker ? `<span class="font-semibold text-white">${esc(line.speaker)}:</span> ` : '';
                 return `<p class="text-sm leading-relaxed text-slate-300">${speakerHtml}${esc(line.text)}</p>`;
