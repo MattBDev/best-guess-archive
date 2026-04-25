@@ -8,7 +8,7 @@ Last updated: 2026-04-24
 
 ## Latest Known Commit
 
-- `1f9fc86` - Improve stats chart usability
+- `39934c2` - Add April 24, 2026 games: BENJAMIN FRANKLIN and CHAMPAGNE
 
 ## Current State
 
@@ -18,7 +18,7 @@ Last updated: 2026-04-24
 - Home page KPI counters animate on load without layout shift.
 - Admin import/delete flow has extra safety checks and preview escaping.
 - Admin import/delete now writes `data/games.json` and `data/games-meta.json` together through the Git database API (blob/tree/commit/ref), avoiding the old contents-endpoint size ceiling and keeping home-page totals in sync.
-- Latest imported episode: Thursday, April 23, 2026 with CHOPSTICKS and TIME, including the Fan Appreciation Week Netflix Shop voucher detail.
+- Latest imported episode: Friday, April 24, 2026 with BENJAMIN FRANKLIN and CHAMPAGNE.
 - Review pass hardened database rows, details modals, result screens, stats lists, play clue rendering, and tip-jar URLs so imported/archive text is escaped before being rendered through `innerHTML`.
 - Stats payout badges were corrected to avoid relying on Tailwind arbitrary classes inside JS-rendered HTML.
 - Stats charts now use shared Chart.js usability defaults: taller chart panels, larger hover hit targets, x-column hover activation for bar charts, minimum visible bar lengths, improved tooltips, and logarithmic scales for high-spread clue charts.
