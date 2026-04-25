@@ -702,7 +702,7 @@ document.addEventListener('focusout', function(e) {
       gap: 1.5rem;
     }
     .transcript-list {
-      max-height: 32rem;
+      max-height: 9rem;
     }
     .transcript-detail {
       min-height: 24rem;
@@ -711,6 +711,25 @@ document.addEventListener('focusout', function(e) {
       .transcript-layout {
         grid-template-columns: 20rem minmax(0, 1fr);
       }
+      .transcript-list {
+        max-height: 32rem;
+      }
+    }
+    .transcript-clue-line {
+      display: block;
+      background: rgba(59,130,246,0.08);
+      border-left: 3px solid rgba(96,165,250,0.5);
+      border-radius: 0 4px 4px 0;
+      padding: 0.35rem 0.65rem;
+      margin: 0.1rem 0;
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      letter-spacing: 0.01em;
+    }
+    .transcript-clue-label {
+      font-weight: 700;
+      color: #93c5fd;
+      margin-right: 0.25rem;
     }
   </style>
   <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
@@ -734,8 +753,8 @@ document.addEventListener('focusout', function(e) {
       <div id="transcript-list" class="transcript-list overflow-y-auto divide-y divide-slate-800"></div>
     </aside>
 
-    <article class="glass-panel rounded-xl border border-slate-700/60 overflow-hidden">
-      <div id="transcript-detail" class="transcript-detail p-5 md:p-8">
+    <article id="transcript-detail-panel" class="glass-panel rounded-xl border border-slate-700/60 overflow-hidden">
+      <div id="transcript-detail" class="transcript-detail p-4 md:p-8">
         <div class="text-slate-400">Loading transcripts...</div>
       </div>
     </article>
@@ -2299,6 +2318,11 @@ class App {
   showTranscriptFromButton(button) {
     this._selectedTranscriptDate = button?.dataset?.date || '';
     this.renderTranscripts();
+    // On mobile (single-column layout) scroll the detail panel into view
+    if (window.innerWidth < 1024) {
+      const panel = document.getElementById('transcript-detail-panel');
+      if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   openTranscriptDate(date) {
@@ -2354,19 +2378,25 @@ class App {
         </div>
       </div>
       <div class="space-y-7">
-        ${(transcript.sections || []).map(section => `
+        ${(transcript.sections || []).map(section => {
+          const clueRE = /^(Clue \d+):\s*(.+)/i;
+          return `
           <section>
             <h4 class="text-sm uppercase tracking-widest text-yellow-400 font-bold mb-3">${esc(section.tag || 'Transcript')}</h4>
-            <div class="space-y-3">
-              ${(section.lines || []).length ? (section.lines || []).map(line => `
-                <p class="text-sm md:text-base leading-relaxed text-slate-300">
-                  ${line.speaker ? `<span class="font-bold text-white">${esc(line.speaker)}:</span> ` : ''}
-                  ${esc(line.text)}
-                </p>
-              `).join('') : '<p class="text-sm text-slate-600 italic">No lines captured for this section.</p>'}
+            <div class="space-y-2">
+              ${(section.lines || []).length ? (section.lines || []).map(line => {
+                if (!line.speaker) {
+                  const cm = line.text.match(clueRE);
+                  if (cm) {
+                    return `<span class="transcript-clue-line"><span class="transcript-clue-label">${esc(cm[1])}:</span>${esc(cm[2])}</span>`;
+                  }
+                }
+                const speakerHtml = line.speaker ? `<span class="font-semibold text-white">${esc(line.speaker)}:</span> ` : '';
+                return `<p class="text-sm leading-relaxed text-slate-300">${speakerHtml}${esc(line.text)}</p>`;
+              }).join('') : '<p class="text-sm text-slate-600 italic">No lines captured for this section.</p>'}
             </div>
-          </section>
-        `).join('')}
+          </section>`;
+        }).join('')}
       </div>`;
   }
 
