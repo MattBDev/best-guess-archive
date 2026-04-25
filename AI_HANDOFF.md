@@ -8,7 +8,7 @@ Last updated: 2026-04-25
 
 ## Latest Known Commit
 
-- `9d568b3` - Reconcile transcript dates and database links
+- `686e9e7` - Fix transcript importer: handle all doc format variants, resolve duplicates
 
 ## Current State
 
@@ -37,6 +37,9 @@ Last updated: 2026-04-25
 - Transcript text is escaped before rendering.
 - Validation passed after the transcript commit: Python importer compile/run, generated transcript JSON matches `data/transcripts.json`, inline JS syntax check, `games.json`/`games-meta.json` consistency, and no remaining Google Doc transcript link in `index.html`.
 - Corrected the source-doc date typo for the MANICURE/COASTER transcript: `Wednesday, February 5, 2025` maps to `Thursday, February 5, 2026`; all transcript dates now match a database date.
+- Importer now uses Title headings as the authoritative date (Heading1 can be mis-typed; Apr 15 and Apr 20 were previously duplicated as Apr 16 / Apr 21 due to this). Title immediately followed by Heading1/None date line → Heading1 is skipped.
+- Importer now accepts "Show Transcript" in any style (Heading1, Heading3, or None); early January 2026 episodes used Heading3 or None.
+- Full coverage: 100 transcripts, 0 duplicates, matching all 100 game dates.
 
 ## Working Agreement
 
