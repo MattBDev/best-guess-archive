@@ -4,6 +4,14 @@
 The source document includes clue summaries and appendix tables around each
 transcript. This importer keeps only the paragraphs under each episode's
 "Show Transcript" heading and stops at the next table/appendix heading.
+
+Doc structure per episode:
+  [Title]    🎉 WEEKDAY, MONTH DAY, YEAR   ← authoritative date (may have emoji)
+  [Heading1] WEEKDAY, MONTH DAY, YEAR      ← sometimes mis-typed; skipped in favour of Title
+  ... clue/answer section ...
+  [Heading1 or Heading3] Show Transcript   ← Heading3 used in early January 2026 episodes
+  ... transcript lines ...
+  [Title]    next episode                  ← terminates content
 """
 
 from __future__ import annotations
@@ -26,11 +34,13 @@ DATE_RE = re.compile(
     re.IGNORECASE,
 )
 SECTION_RE = re.compile(r"^\[(.+)\]$")
+TIMESTAMP_RE = re.compile(r"^\[\d{1,2}:\d{2}(?::\d{2})?\]$")
 SPEAKER_RE = re.compile(r"^([A-Z][A-Za-z .'\-]+):\s*(.+)$")
 STOP_HEADINGS = {
     "Explanation Table",
     "Clue & Answer Results Table (Google Sheets Ready)",
     "Clue & Answer Results Table",
+    "Results Table",
     "JSON",
     "JSON Data",
 }
@@ -64,8 +74,6 @@ def iter_paragraphs(docx_path: Path) -> list[dict[str, str | None]]:
 
 
 def normalize_date(text: str) -> str:
-    # The doc uses decorative emoji on Title paragraphs. Strip those while
-    # keeping the real date text untouched.
     match = re.search(
         r"(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+"
         r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+"
@@ -80,7 +88,13 @@ def normalize_date(text: str) -> str:
     return DATE_CORRECTIONS.get(normalized, normalized)
 
 
-def is_date_heading(paragraph: dict[str, str | None]) -> bool:
+def is_title_date(paragraph: dict[str, str | None]) -> bool:
+    """Return True only for Title-style date headings (the authoritative date source)."""
+    return paragraph["style"] == "Title" and bool(DATE_RE.match(normalize_date(str(paragraph["text"]))))
+
+
+def is_any_date_heading(paragraph: dict[str, str | None]) -> bool:
+    """Return True for Title or Heading1 date headings."""
     text = normalize_date(str(paragraph["text"]))
     return paragraph["style"] in {"Title", "Heading1"} and bool(DATE_RE.match(text))
 
@@ -97,15 +111,32 @@ def parse_transcripts(paragraphs: list[dict[str, str | None]]) -> list[dict[str,
     i = 0
     while i < len(paragraphs):
         paragraph = paragraphs[i]
-        if not is_date_heading(paragraph):
+
+        # Only Title-style date headings start a new transcript.
+        # Heading1 date headings are skipped here — they follow immediately after
+        # the Title and can be mis-typed in the doc; the Title is authoritative.
+        if not is_title_date(paragraph):
             i += 1
             continue
 
         date = normalize_date(str(paragraph["text"]))
         i += 1
 
-        while i < len(paragraphs) and not is_date_heading(paragraphs[i]):
-            if paragraphs[i]["style"] == "Heading1" and paragraphs[i]["text"] == "Show Transcript":
+        # Skip the Heading1 (or plain-text) date line that immediately follows
+        # the Title. It may have a different (incorrect) date, so we ignore it.
+        if i < len(paragraphs):
+            nxt = paragraphs[i]
+            nxt_date = normalize_date(str(nxt["text"]))
+            if nxt["style"] in ("Heading1", None) and DATE_RE.match(nxt_date):
+                i += 1
+
+        # Scan forward for "Show Transcript" marker.
+        # Later episodes use Heading1; early Jan 2026 use Heading3; Jan 13 uses plain None style.
+        while i < len(paragraphs):
+            para = paragraphs[i]
+            if is_title_date(para):
+                break  # next episode — no transcript found for this date
+            if para["text"] == "Show Transcript":
                 break
             i += 1
 
@@ -120,19 +151,29 @@ def parse_transcripts(paragraphs: list[dict[str, str | None]]) -> list[dict[str,
             paragraph = paragraphs[i]
             text = str(paragraph["text"])
 
-            if is_date_heading(paragraph):
+            if is_title_date(paragraph):
                 break
-            if paragraph["style"] == "Heading1" and text in STOP_HEADINGS:
+            if paragraph["style"] in ("Heading1", "Heading3") and text in STOP_HEADINGS:
                 break
 
-            section_match = SECTION_RE.match(text)
-            if section_match:
-                current = {"tag": section_match.group(1), "lines": []}
-                sections.append(current)
+            # Skip intro summary line (with or without leading curly/straight quote)
+            stripped = text.lstrip('“‘”’"\'')
+            if stripped.startswith("Here is the full transcript"):
                 i += 1
                 continue
 
-            if text.startswith("Here is the full transcript"):
+            # Skip bare timestamp lines like [02:34] or [00:01:05]
+            if TIMESTAMP_RE.match(text):
+                i += 1
+                continue
+
+            section_match = SECTION_RE.match(text)
+            if section_match:
+                tag = section_match.group(1)
+                # Skip timestamp-only section tags e.g. [02:34]
+                if not TIMESTAMP_RE.match(text):
+                    current = {"tag": tag, "lines": []}
+                    sections.append(current)
                 i += 1
                 continue
 
