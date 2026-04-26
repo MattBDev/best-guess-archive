@@ -8,7 +8,7 @@ Last updated: 2026-04-25
 
 ## Latest Known Implementation Commit
 
-- `8b3c0b9` - Reformat all April transcripts to match March 18 template
+- `fbb8b4a` - Reformat all Dec/Jan/Feb/Mar transcripts to match established Results format
 
 ## Current State
 
@@ -26,7 +26,7 @@ Last updated: 2026-04-25
 - **Jan 1-14 transcripts fixed**: These episodes had no Heading2 section markers in the docx. A heuristic state machine now splits them into 6 sections using phrase triggers ("crystal ball reveals", "correct answer was", etc.) and space-normalized secret-item matching. All 10 episodes are now fully populated.
 - **Mobile transcript layout fixed**: episode list max-height reduced from 32rem to 9rem on mobile; tapping an episode smooth-scrolls to the transcript detail panel. Desktop still uses 32rem two-column layout.
 - **Clue lines** in transcript sections now render as left-bordered callout blocks consistently across all episode formats. Pattern matches "Clue N:" and "Clue number N:" (spelled or numeric) on any line regardless of speaker attribution.
-- **April transcripts reformatted** (commit `8b3c0b9`): All 16 April episodes now match the Wednesday March 18, 2026 template — Results sections rebuilt with speaker reveal line + null-speaker "Clue 5→1" breakdowns + winner announcement from games.json. Fragmented paragraph lines merged. "Final clue" references normalized to "Clue 5: TEXT". Guest hosts (Jade Catapa Apr 8, Anthony Anderson Apr 7, Karen Fox Apr 1, Austin Show Apr 16) correctly attributed.
+- **All transcripts reformatted** (commits `8b3c0b9`, `fbb8b4a`): All episodes (Dec 2025 through Apr 2026) now use consistent Results section format — speaker reveal line + null-speaker "Clue 5→1" breakdowns from games.json + null-speaker winner announcement. 21 episodes lack a speaker-attributed reveal (source had none) and fall back to a null-speaker constructed line. Clue callout formatting (indented border blocks) now applies only in Results sections, not Round sections.
 - **Beta notice** added to Transcripts page header (commit `d1a30c9`): yellow banner noting formatting is still being updated.
 
 ## Daily Update Workflow
