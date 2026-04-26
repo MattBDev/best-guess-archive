@@ -18,7 +18,7 @@ Last updated: 2026-04-25
 - Home page KPI counters animate on load without layout shift.
 - **Admin panel removed**: All game/transcript updates are now done by AI agents (Claude/Codex) directly editing the data files and committing. See "Daily Update Workflow" below.
 - **Bonus/promo data migrated**: `bonusMap` moved from hardcoded JS in `index.html` to a `bonus: {title, desc}` field on each game in `games.json`. Rendering code reads `g.bonus` directly. `bonus.desc` may contain safe HTML (`<br>` and `<b>` tags).
-- **Scripts cleaned up**: `scripts/import_transcripts_from_docx.py` and `KindaCharming's Best Guess Live Show Transcripts.docx` removed (all past transcripts are imported). Admin code archived to `scripts/admin-panel-archive.js`.
+- **Scripts cleaned up**: `scripts/` directory removed entirely; `import_transcripts_from_docx.py`, `admin-panel-archive.js`, and `KindaCharming's Best Guess Live Show Transcripts.docx` are gone. Recover from git history if ever needed.
 - Latest imported episode: Friday, April 24, 2026 with BENJAMIN FRANKLIN and CHAMPAGNE.
 - 100 total game days (99 playable + 1 cancelled: Thursday, April 9, 2026).
 - 199 game objects in `data/games.json` (most dates have two rounds).
