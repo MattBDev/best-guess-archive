@@ -694,6 +694,13 @@ document.addEventListener('focusout', function(e) {
       width: 100%;
       max-width: 32rem;
     }
+    #transcript-search {
+      color: #fff;
+    }
+    #transcript-search::placeholder {
+      color: #94a3b8;
+      opacity: 1;
+    }
     .transcript-layout {
       display: grid;
       grid-template-columns: 1fr;
@@ -736,9 +743,9 @@ document.addEventListener('focusout', function(e) {
       <p class="text-slate-400 text-sm mt-1">Episode transcripts imported into the archive, one page per air date.</p>
     </div>
     <div class="relative transcript-search-wrap">
-      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
       <input id="transcript-search" type="text" placeholder="Search date, speaker, clue, or transcript text"
-        class="w-full bg-slate-800/80 border border-slate-700 focus:border-blue-500 text-white rounded-full pl-11 pr-4 py-3 outline-none transition">
+        class="w-full bg-slate-800/80 border border-slate-700 focus:border-blue-500 text-white rounded-full pl-12 pr-4 py-3 outline-none transition">
     </div>
   </div>
 
@@ -2377,11 +2384,11 @@ class App {
         </div>
       </div>
       <div class="space-y-7">
-        ${(transcript.sections || []).map(section => {
+        ${(transcript.sections || []).map((section, idx) => {
           const isResults = /Results/i.test(section.tag || '');
           const clueRE = /^(Clue\s+(?:number\s+)?(?:\d+|one|two|three|four|five)):\s*(.+)/i;
           return `
-          <section>
+          <section ${idx > 0 ? 'class="pt-6 border-t border-slate-700/50"' : ''}>
             <h4 class="text-sm uppercase tracking-widest text-yellow-400 font-bold mb-3">${esc(section.tag || 'Transcript')}</h4>
             <div class="space-y-2">
               ${(section.lines || []).length ? (section.lines || []).map(line => {
