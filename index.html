@@ -741,6 +741,39 @@ document.addEventListener('focusout', function(e) {
       padding-top: 1.75rem;
       border-top: 1px solid rgba(51, 65, 85, 0.5);
     }
+    .transcript-section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      margin-bottom: 0.85rem;
+    }
+    .transcript-section-header .material-symbols-outlined {
+      font-size: 1.2rem;
+    }
+    .transcript-tag-intro,
+    .transcript-tag-outro { color: #94a3b8; }
+    .transcript-tag-round { color: #60a5fa; }
+    .transcript-tag-results { color: #facc15; }
+    .transcript-speaker-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.14);
+      color: #e2e8f0;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      margin-bottom: 0.25rem;
+    }
+    .transcript-line-cont {
+      padding-left: 0.1rem;
+    }
   </style>
   <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
     <div>
@@ -1309,6 +1342,7 @@ class App {
       document.getElementById('data-source-status').innerText = `Data load failed: ${err.message}`;
     }
     this.setView('home');
+    this._ensureTranscriptsLoaded();
   }
 
   _ensureFullGamesLoaded() {
@@ -2231,23 +2265,29 @@ class App {
           <span class="bg-blue-900/30 text-blue-400 border border-blue-600/30 px-3 py-1 rounded-full text-sm font-bold">Won on Clue ${g.winningClue || g.goldClue} · ${(g.totalWinners).toLocaleString()} winners · ${esc(g.winnerPayout)}</span>
         </div>`;
 
+    const hasTranscript = (this.transcripts || []).some(t => t.date === g.date && (t.sections || []).some(s => (s.lines || []).length));
+    const transcriptChip = hasTranscript
+      ? `<button type="button" onclick="app.openTranscriptDate('${esc(g.date)}')"
+            class="inline-flex items-center gap-1.5 bg-blue-900/30 text-blue-300 border border-blue-500/30 px-3 py-1 rounded-full text-sm font-bold hover:bg-blue-600 hover:text-white transition">
+            <span class="material-symbols-outlined text-base">article</span>
+            Transcript
+          </button>`
+      : '';
+
     document.getElementById('modal-content').innerHTML = `
       <div class="text-center mb-8">
         <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">${esc(g.date)}</div>
         <h2 class="text-4xl font-display font-bold text-white">${esc(g.secretItem)}</h2>
-        <div class="flex justify-center gap-4 mt-4 flex-wrap">
+        <div class="flex justify-center items-center gap-2 mt-4 flex-wrap">
           <span class="inline-flex items-center gap-1 bg-green-900/30 text-green-400 border border-green-500/30 px-3 py-1 rounded-full text-sm font-bold">$${g.pot.toLocaleString()}</span>
           <span class="inline-flex items-center gap-1 bg-purple-900/30 text-purple-400 border border-purple-500/30 px-3 py-1 rounded-full text-sm font-bold">${esc(g.host)}</span>
+          ${transcriptChip}
         </div>
         ${medalSummary}
         <div class="mt-4 text-xs text-slate-400 border-t border-slate-700 pt-3">
           <span class="font-bold text-white">Winners:</span> ${esc((g.winnerNames || 'None listed').toUpperCase())}
         </div>
         ${bonus ? `<div class='mt-6 bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 text-left max-w-xl mx-auto'><span class='font-bold text-blue-300 block mb-1'>Special Bonus: ${esc(bonus.title)}</span><span class='text-blue-100 text-sm'>${bonus.desc}</span></div>` : ''}
-        <button class="mt-5 inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-900/30 px-4 py-2 text-sm font-bold text-blue-100 hover:bg-blue-600 transition" onclick="app.openTranscriptDate('${esc(g.date)}')">
-          <span class="material-symbols-outlined text-base">article</span>
-          View full episode transcript
-        </button>
       </div>
       <div class="bg-slate-900/50 rounded-xl p-2 mb-6 border border-white/5">${cluesHtml}</div>
       <div class="text-sm text-slate-400 bg-red-900/10 border border-red-500/20 p-4 rounded-lg">
@@ -2389,22 +2429,43 @@ class App {
         </div>
       </div>
       <div class="transcript-sections">
-        ${(transcript.sections || []).map(section => {
-          const isResults = /Results/i.test(section.tag || '');
+        ${(transcript.sections || []).filter(s => (s.lines || []).length).map(section => {
+          const tag = section.tag || 'Transcript';
+          const isResults = /Results/i.test(tag);
+          const isRound = /Round/i.test(tag) && !isResults;
+          const isIntro = /Intro/i.test(tag);
+          const isOutro = /Outro/i.test(tag);
+          const tagClass = isResults ? 'transcript-tag-results'
+                         : isRound   ? 'transcript-tag-round'
+                         : (isIntro || isOutro) ? 'transcript-tag-intro'
+                         : 'transcript-tag-results';
+          const tagIcon = isResults ? 'emoji_events'
+                        : isRound   ? 'casino'
+                        : isIntro   ? 'play_arrow'
+                        : isOutro   ? 'waving_hand'
+                        : 'description';
           const clueRE = /^(Clue\s+(?:number\s+)?(?:\d+|one|two|three|four|five)):\s*(.+)/i;
+          let prevSpeaker = null;
+          const linesHtml = (section.lines || []).map(line => {
+            const cm = isResults && line.text.match(clueRE);
+            if (cm) {
+              prevSpeaker = null;
+              return `<span class="transcript-clue-line"><span class="transcript-clue-label">${esc(cm[1])}:</span>${esc(cm[2])}</span>`;
+            }
+            const speaker = line.speaker || '';
+            const showBadge = speaker && speaker !== prevSpeaker;
+            prevSpeaker = speaker || prevSpeaker;
+            const badgeHtml = showBadge ? `<div><span class="transcript-speaker-badge">${esc(speaker)}</span></div>` : '';
+            const lineClass = (speaker && !showBadge) ? 'transcript-line-cont' : '';
+            return `${badgeHtml}<p class="text-sm leading-relaxed text-slate-300 ${lineClass}">${esc(line.text)}</p>`;
+          }).join('');
           return `
           <section>
-            <h4 class="text-sm uppercase tracking-widest text-yellow-400 font-bold mb-3">${esc(section.tag || 'Transcript')}</h4>
-            <div class="space-y-2">
-              ${(section.lines || []).length ? (section.lines || []).map(line => {
-                const cm = isResults && line.text.match(clueRE);
-                if (cm) {
-                  return `<span class="transcript-clue-line"><span class="transcript-clue-label">${esc(cm[1])}:</span>${esc(cm[2])}</span>`;
-                }
-                const speakerHtml = line.speaker ? `<span class="font-semibold text-white">${esc(line.speaker)}:</span> ` : '';
-                return `<p class="text-sm leading-relaxed text-slate-300">${speakerHtml}${esc(line.text)}</p>`;
-              }).join('') : '<p class="text-sm text-slate-600 italic">No lines captured for this section.</p>'}
-            </div>
+            <h4 class="transcript-section-header ${tagClass}">
+              <span class="material-symbols-outlined" aria-hidden="true">${tagIcon}</span>
+              <span>${esc(tag)}</span>
+            </h4>
+            <div class="space-y-2">${linesHtml}</div>
           </section>`;
         }).join('')}
       </div>`;
