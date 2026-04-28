@@ -10786,5 +10786,113 @@
       "title": "Netflix Shop Voucher",
       "desc": "Fan Appreciation Week: Players received a $5 voucher for merchandise from the official Netflix Shop. <br><b>How to qualify:</b> Submit the correct answer during round two (accuracy required, any clue)."
     }
+  },
+  {
+    "date": "Monday, April 27, 2026",
+    "pot": 7500,
+    "format": "v2",
+    "host": "Howie Mandel",
+    "secretItem": "TOOTHPICK",
+    "clues": [
+      {
+        "text": "THE END IS NEAR",
+        "correct": "8",
+        "guesses": "3,403 \ud83e\udd47",
+        "explanation": "Both ends of a toothpick are close to each other, so \"the end is near.\""
+      },
+      {
+        "text": "MOVES N' GROOVES",
+        "correct": "2",
+        "guesses": "5,884 \ud83e\udd48",
+        "explanation": "A toothpick moves in the grooves of your teeth."
+      },
+      {
+        "text": "HELPS WITH THE CHECK AFTER THE CHECK",
+        "correct": "77",
+        "guesses": "6,698 \ud83e\udd49",
+        "explanation": "You often grab a toothpick after you pay your restaurant check to check your teeth\u2014\"after the check.\""
+      },
+      {
+        "text": "ALWAYS A LITTLE STICKY",
+        "correct": "98",
+        "guesses": "4,900",
+        "explanation": "A toothpick is a little stick\u2014\"a little sticky.\""
+      },
+      {
+        "text": "OLD-FASHIONED GRILL CLEANER",
+        "correct": "321",
+        "guesses": "6,700",
+        "explanation": "A toothpick is the classic old-fashioned way to clean your \"grill,\" meaning your teeth."
+      }
+    ],
+    "goldClue": 1,
+    "silverClue": 2,
+    "bronzeClue": 3,
+    "goldWinners": 8,
+    "silverWinners": 2,
+    "bronzeWinners": 77,
+    "totalWinners": 87,
+    "goldPayout": 375.0,
+    "silverPayout": 1250.0,
+    "bronzePayout": 25.95,
+    "winnerPayout": "$7,500.00",
+    "winnerNames": "Red Halo 736, Pre Guard Guardian 850, Howie Buns of Steel, Fried bologna sammy",
+    "wrongGuesses": "NEW YEAR'S EVE, SNAKE, VINYL RECORD, STAMPED, SAP"
+  },
+  {
+    "date": "Monday, April 27, 2026",
+    "pot": 7500,
+    "format": "v2",
+    "host": "Howie Mandel",
+    "secretItem": "WILLY WONKA",
+    "clues": [
+      {
+        "text": "RECIPE FOR SUCCESS",
+        "correct": "0",
+        "guesses": "3,199",
+        "explanation": "Willy Wonka's famous recipes made his candy a success."
+      },
+      {
+        "text": "MOSTLY SHORT-STAFFED",
+        "correct": "408",
+        "guesses": "4,697 \ud83e\udd47",
+        "explanation": "His factory workers are Oompa Loompas, who are short in stature\u2014\"mostly short-staffed.\""
+      },
+      {
+        "text": "GOT RICH BEHIND BARS",
+        "correct": "1,816",
+        "guesses": "8,076 \ud83e\udd48",
+        "explanation": "He made his fortune selling chocolate bars\u2014\"rich behind bars.\""
+      },
+      {
+        "text": "ALWAYS WILD, USED TO BE WILDER",
+        "correct": "1,690",
+        "guesses": "5,412 \ud83e\udd49",
+        "explanation": "He\u2019s an eccentric, \"wild\" character, and was played by Gene Wilder."
+      },
+      {
+        "text": "HIS TICKETS ARE GOLD, AND CHARLIE'S GRANDPA IS OLD",
+        "correct": "7,436",
+        "guesses": "10,122",
+        "explanation": "The plot centers on golden tickets and Charlie\u2019s Grandpa Joe."
+      }
+    ],
+    "goldClue": 2,
+    "silverClue": 3,
+    "bronzeClue": 4,
+    "goldWinners": 408,
+    "silverWinners": 1816,
+    "bronzeWinners": 1690,
+    "totalWinners": 3914,
+    "goldPayout": 7.35,
+    "silverPayout": 1.37,
+    "bronzePayout": 1.18,
+    "winnerPayout": "$7,500.00",
+    "winnerNames": "",
+    "wrongGuesses": "ELVES, JUDGE, TOM CRUISE, NICK CANNON, JOHNNY DEPP",
+    "bonus": {
+      "title": "Netflix Shop K-pop Demon Hunters Glass Voucher",
+      "desc": "All week, everyone who answers correctly on the second puzzle receives a voucher for a K-pop Demon Hunters glass from the Netflix Shop, valued at $24.95. You qualify by submitting a correct answer by Clue 5 in Round 2, regardless of cash winnings. Last week\u2019s $5 Netflix Shop vouchers expire on May 5 at 2:59 AM Eastern Time."
+    }
   }
 ]
