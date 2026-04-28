@@ -25571,7 +25571,7 @@
         "format": "v2",
         "clues": [
           "THE END IS NEAR",
-          "MOVES N' GROOVES",
+          "MOVES 'N GROOVES",
           "HELPS WITH THE CHECK AFTER THE CHECK",
           "ALWAYS A LITTLE STICKY",
           "OLD-FASHIONED GRILL CLEANER"
@@ -25588,7 +25588,7 @@
           "MOSTLY SHORT-STAFFED",
           "GOT RICH BEHIND BARS",
           "ALWAYS WILD, USED TO BE WILDER",
-          "HIS TICKETS ARE GOLD, AND CHARLIE'S GRANDPA IS OLD"
+          "HIS TICKETS ARE GOLD AND CHARLIE'S GRANDPA IS OLD"
         ]
       }
     ],
@@ -25598,39 +25598,43 @@
         "lines": [
           {
             "speaker": "Howie Mandel",
-            "text": "Welcome to Best Guess Live. I'm your host, Howie Mandel. Can I just say \u2014 thanks for letting me into your phone tonight. I promise to clean it up before I leave. I am smudging. I am not going to put my hands up."
+            "text": "Welcome to Best Guess Live, I'm your host Howie Mandel."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Okay, not only do we have our gold, silver, and bronze cash prizes \u2014 our fan appreciation is going to continue with even more ways to win. Last week we gave out five-dollar vouchers for the Netflix Shop. Turns out you guys love getting free stuff, so we're gonna sweeten the deal all week. Everyone who answers correctly on our second puzzle gets one of these. Look at it. Put up the video. There we go. It is a K-pop Demon Hunters glass from the Netflix Shop. You know what that's worth? Twenty-four ninety-five. That's twenty-five dollars. Nothing but putting in the correct guess."
+            "text": "Can I just say thanks for letting me into your phone tonight \u2014 I promise to clean it up before I leave."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Now, I don't know anything about demon hunters, but apparently they drink through a metal straw, which means they care about the environment and killing demons. That's two reasons you should like them. Doesn't matter if you win money or not \u2014 just answer right by clue number five. The glass is yours. The demons? That's still gonna be your problem."
+            "text": "Not only do we have our gold, silver, and bronze cash prizes \u2014 our fan appreciation is going to continue with even more ways to win."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Anyway, now let's give away fifteen thousand dollars. Here are the rules. Each episode of Best Guess Live has two rounds. Each round has one puzzle. Each puzzle has three sets of winners: gold, silver, and bronze. You know, the Olympics should do something like that."
+            "text": "Everyone who answers correctly on our second puzzle gets one of these \u2014 look at it, put up the video. There we go. It is a K-Pop Demon Hunter glass from the Netflix Shop, that's worth $24.95."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Before each round, we're gonna load our crystal ball with a secret item that could be absolutely anything, and then I'm gonna give you five clues. But remember, the clues are like riddles \u2014 they're meant to make you think. So after each clue, you get twenty seconds to submit an answer."
+            "text": "Doesn't matter if you win money or not, just answer right by clue number five and the glass is yours."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "But you only get one best guess per round \u2014 not one per clue, one per round. So make sure you are confident before you lock it in. It's got to be the exact answer, and we don't accept typos. Bottom line: you want to be fast, but you gotta be right."
+            "text": "Now let's give away $15,000."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Everyone that locks in a correct answer on the earliest clue will split the gold prize of three thousand dollars. Everyone that locks in a correct answer on the second earliest clue will split the silver pot of twenty-five hundred dollars. And everyone that gets in on the third earliest clue will split the bronze prize of two thousand dollars. So if you give a correct answer on one of the three earliest clues, you are a winner. And if you are the only one to give a correct answer on one of those clues, you take that whole pot for that medal."
+            "text": "Here are the rules: each episode has two rounds, each round has one puzzle, and each puzzle has three sets of winners: gold, silver, and bronze."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "So don't forget \u2014 if possible, take a video of you and your friends or family playing Best Guess Live and send it to us, or post it on your socials with the hashtag #BestGuessLive or tag me. I love seeing it. Enough talk. Let's win some money."
+            "text": "Before each round, we load our crystal ball with a secret item. I'll give you five clues \u2014 they're like riddles meant to make you think."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Oh, I want to say there are first time players here: Red Halo 736. Welcome to the fun! And we have a returning player: Pre Guard Guardian 850. Thank you so much for coming back. More first time players \u2014 I'm not going to mention you all, but I will get to you at one point. Keep coming back."
+            "text": "After each clue you get 20 seconds to submit an answer, but you only get one best guess per round."
+          },
+          {
+            "speaker": "Howie Mandel",
+            "text": "Everyone that locks in a correct answer on the earliest clue will split the gold prize of $3,000. Everyone that locks in on the second earliest clue splits the silver pot of $2,500. Everyone that gets it on the third earliest clue splits the bronze prize of $2,000."
           }
         ]
       },
@@ -25639,39 +25643,55 @@
         "lines": [
           {
             "speaker": "Howie Mandel",
-            "text": "Round one is worth seventy-five hundred dollars. Let's load that crystal ball. All right, the ball is being loaded. A lot of people are here ready to play. It's Monday, I am feeling good about this. Seven thousand five hundred is up for grabs. Here is your first clue: THE END IS NEAR. The clock starts now."
+            "text": "Round one is worth $7,500. Let's load that crystal ball."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "THE END IS NEAR. The clock is counting down. And it says on my card \u2014 I'm reading, this is scripted \u2014 it says recap clues. I've given you one clue, I'm gonna recap it now. THE END IS NEAR. Wow, guesses are coming in. We have sixteen hundred guesses already. Suns and Buns says 'New Year's Eve.' THE END IS NEAR \u2014 what's the end of the new year? I have no idea, but maybe that's it. We're about to find out."
+            "text": "Here's your first clue: THE END IS NEAR."
+          },
+          {
+            "speaker": null,
+            "text": "THE END IS NEAR."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Here is your second clue: MOVES N' GROOVES. Clock starts now. First clue was THE END IS NEAR. MOVES N' GROOVES is your second clue. With fifteen seconds left on the clock, we already have thirty-five hundred submitted guesses. It's a lot of people going for that gold, going for the quickness."
+            "text": "Guesses are coming in. Suns and Buns says New Year's Eve."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Makes you possibly win a lot more money. Almost three thousand guesses just on that second clue. Brandon Durham said 'snake.' Fanny Low 15 said 'vinyl record' \u2014 oh, moves and grooves. I see that, and the end is near. I think a song or a record is only like three minutes."
+            "text": "Here's your second clue: MOVES 'N GROOVES."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Here is your third clue: HELPS WITH THE CHECK AFTER THE CHECK. Clock starts now. THE END IS NEAR is your first clue, your second clue was MOVES N' GROOVES, and your third clue is HELPS WITH THE CHECK AFTER THE CHECK. Ten seconds left on the clock, almost ten thousand submitted guesses. I want to get a Demon Hunter glass. What do I have to do? I'm not allowed to \u2014 I'm a host, right? I'm going to buy one. I am gonna spend twenty-five bucks. Take it off my check. Get me a Demon Hunter glass. I am not kidding, my daughter loves that show on Netflix, and I'll be a big sport if I bring it home."
+            "text": "Almost 3,000 guesses just on that second clue. Fanny Low 15 said vinyl record."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "All right, a Czech hockey player \u2014 helps with the Czech after the Czech, moves and grooves, and the end is near. We're no longer going to have Czech hockey players. Wow, what a way to find out."
+            "text": "Here's your third clue: HELPS WITH THE CHECK AFTER THE CHECK."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Here's your fourth clue: ALWAYS A LITTLE STICKY. The clock starts now. First clue was THE END IS NEAR, your second clue was MOVES N' GROOVES, your third clue is HELPS WITH THE CHECK AFTER THE CHECK, and your fourth clue is ALWAYS A LITTLE STICKY. Five seconds left on the clock. Sixteen thousand submitted guesses. And Howie Buns of Steel said 'stamped.' Wow, I like what you call it. That's a different Howie. And Fried bologna sammy said 'sap' \u2014 what does that even mean? ALWAYS A LITTLE STICKY. Good luck, Fried bologna sammy."
+            "text": "Almost 10,000 submitted guesses. Do the Do 16 said hockey player."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Okay, here's your final clue. Final chance to guess. OLD-FASHIONED GRILL CLEANER, and the clock starts now. The first clue was THE END IS NEAR, the second clue is MOVES N' GROOVES, the third clue is HELPS WITH THE CHECK AFTER THE CHECK, the fourth clue was ALWAYS A LITTLE STICKY, and your final clue was OLD-FASHIONED GRILL CLEANER. Three, two, one \u2014 your time is up. We had twenty-one thousand people guessing on this first round."
+            "text": "Here's your fourth clue: ALWAYS A LITTLE STICKY."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "So you want to find out what is in this crystal ball? Let's find out. The only way to do that is I say \u2014 open the ball."
+            "text": "16,000 submitted guesses. Howie Buns of Steel said stamped. Fried Boloney Sammy said sap."
+          },
+          {
+            "speaker": "Howie Mandel",
+            "text": "Here's your final clue, final chance to guess: OLD-FASHIONED GRILL CLEANER."
+          },
+          {
+            "speaker": "Howie Mandel",
+            "text": "We had 21,000 people guessing on this first round. Let's find out what is in this crystal ball."
+          },
+          {
+            "speaker": "Howie Mandel",
+            "text": "Open the ball. It's a toothpick!"
           }
         ]
       },
@@ -25680,39 +25700,51 @@
         "lines": [
           {
             "speaker": "Howie Mandel",
-            "text": "It's a toothpick! See that? I don't have one, so I'm gonna spend the next ten minutes doing this. People are throwing their phones against the wall right now."
+            "text": "The fifth clue was OLD-FASHIONED GRILL CLEANER. A toothpick is the classic old-fashioned way to clean your teeth \u2014 your grill."
+          },
+          {
+            "speaker": null,
+            "text": "Clue 5: OLD-FASHIONED GRILL CLEANER \u2014 321 correct / 6,716 guesses."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Okay, let's take a look at how the clues fit and find out who is taking the money."
+            "text": "The fourth clue is ALWAYS A LITTLE STICKY. A toothpick is a little stick \u2014 or a 'sticky' if you're being adorable."
           },
           {
             "speaker": null,
-            "text": "Clue 5: OLD-FASHIONED GRILL CLEANER \u2014 A toothpick is the classic old-fashioned way to clean your teeth. What do you call your teeth? Your grill. 321 correct / 6,700 guesses."
-          },
-          {
-            "speaker": null,
-            "text": "Clue 4: ALWAYS A LITTLE STICKY \u2014 A toothpick is a little stick \u2014 \"a little sticky.\" 98 correct / 4,900 guesses."
-          },
-          {
-            "speaker": null,
-            "text": "Clue 3: HELPS WITH THE CHECK AFTER THE CHECK \u2014 You usually grab a toothpick after you pay your restaurant check to check your teeth \u2014 after the check. 77 correct / 6,698 guesses."
-          },
-          {
-            "speaker": null,
-            "text": "Clue 2: MOVES N' GROOVES \u2014 A toothpick moves in the grooves of your teeth. 2 correct / 5,884 guesses."
-          },
-          {
-            "speaker": null,
-            "text": "Clue 1: THE END IS NEAR \u2014 Both ends of a toothpick are close to each other. 8 correct / 3,403 guesses."
+            "text": "Clue 4: ALWAYS A LITTLE STICKY \u2014 98 correct / 4,911 guesses."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Eight of you are splitting three hundred and seventy-five dollars \u2014 that's the gold prize. Clue number two: two of you are splitting twelve hundred and fifty dollars each. And clue number three is the bronze: seventy-seven people are taking twenty-five dollars and ninety-five cents. So you could buy one of those cups \u2014 but you don't have to."
+            "text": "The third clue was HELPS WITH THE CHECK AFTER THE CHECK. You grab a toothpick on the way out of the restaurant after you pay your check to check your teeth."
           },
           {
             "speaker": null,
-            "text": "\ud83e\udd47 Gold (Clue 1): 8 winners \u00b7 $375.00 each \u2014 Red Halo 736, Pre Guard Guardian 850, Howie Buns of Steel, Fried bologna sammy"
+            "text": "Clue 3: HELPS WITH THE CHECK AFTER THE CHECK \u2014 77 correct / 6,698 guesses."
+          },
+          {
+            "speaker": "Howie Mandel",
+            "text": "MOVES 'N GROOVES. A toothpick moves in the grooves of your teeth."
+          },
+          {
+            "speaker": null,
+            "text": "Clue 2: MOVES 'N GROOVES \u2014 2 correct / 5,884 guesses."
+          },
+          {
+            "speaker": "Howie Mandel",
+            "text": "The first clue was THE END IS NEAR. Both ends of a toothpick are close to each other."
+          },
+          {
+            "speaker": null,
+            "text": "Clue 1: THE END IS NEAR \u2014 8 correct / 3,403 guesses."
+          },
+          {
+            "speaker": "Howie Mandel",
+            "text": "Eight of you are splitting $375 \u2014 that's the gold prize. Clue number two: two of you are splitting $1,250 each. Clue number three is the bronze: 77 people are taking $25.95."
+          },
+          {
+            "speaker": null,
+            "text": "\ud83e\udd47 Gold (Clue 1): 8 winners \u00b7 $375.00 each \u2014 Tuxie1989"
           },
           {
             "speaker": null,
@@ -25724,15 +25756,7 @@
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Congratulations to our puzzle one winners! Remember, everyone who answers correctly on this next puzzle wins a Netflix Shop voucher for a K-pop Demon Hunter glass \u2014 even though some of you on the bronze in the first clue have enough to buy one."
-          },
-          {
-            "speaker": "Howie Mandel",
-            "text": "Quick reminder: if you've got a voucher from last week or you win one tonight, redeem it before it expires. Last week's five-dollar vouchers expire on May 5th at 2:59 AM Eastern Time. So get on it. That clock is ticking, people."
-          },
-          {
-            "speaker": "Howie Mandel",
-            "text": "Before we move on \u2014 happy birthday, Annie! Your son asked us to give you a shout out tonight on Discord. I hope you win cash. Your son loved you a little more. He might have bought you something, but he got a free shout out."
+            "text": "Happy birthday Annie \u2014 your son asked us to give you a shout out on Discord tonight."
           }
         ]
       },
@@ -25741,51 +25765,51 @@
         "lines": [
           {
             "speaker": "Howie Mandel",
-            "text": "Okay, it's time for round two with another seventy-five hundred dollars on the line. The prize pots are the same: three thousand for gold, twenty-five hundred for silver, and two thousand for bronze. Let's load that crystal ball."
+            "text": "It's time for round two with another $7,500 on the line."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "We're loading the ball now. People are getting ready. Remember, correct answer on the earliest clues will win the most money \u2014 but any correct answer at any time is gonna win you a cup."
+            "text": "Here's your first clue: RECIPE FOR SUCCESS."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "So here's your first clue: RECIPE FOR SUCCESS. And the clock starts now. The answers are coming in. People are being a little more careful than usual."
+            "text": "People are being a little more careful than usual. Coppery Outfit 499 said coffee. Clean Slivven 25 said Tim Cook."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Coppery Outfit 499 said 'coffee' \u2014 in the morning, that is the recipe for success. I can't succeed without it. Clean Sliven 25 said 'Tim Cook' \u2014 he knows the recipe for success, he's successful."
+            "text": "Here's your second clue: MOSTLY SHORT-STAFFED."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Okay, here's your second clue: MOSTLY SHORT-STAFFED. And the clock starts now. RECIPE FOR SUCCESS is clue number one, clue number two is MOSTLY SHORT-STAFFED. Almost thirty-five hundred submitted answers with five seconds left on the clock."
+            "text": "Salty Brewer 466 says elves."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "And Salty Brewer 466 has 'elves' \u2014 elves, short-staffed, get it? All right."
+            "text": "Here is your third clue: GOT RICH BEHIND BARS."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Here is your third clue: GOT RICH BEHIND BARS. Clock starts now. Clue one is RECIPE FOR SUCCESS, clue two is MOSTLY SHORT-STAFFED, and clue three is GOT RICH BEHIND BARS. Ten seconds left on the clock. Eight thousand guesses already submitted. Over three thousand just came in on this one."
+            "text": "8,000 guesses already. Stony Dark said judge. Have To Be Right said Tom Cruise."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Stoney Dark said 'judge,' and Tom Cruise was mentioned. When you say mostly short-staffed... anyway, time is up."
+            "text": "Here is your fourth clue: ALWAYS WILD, USED TO BE WILDER."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Here is your fourth clue: ALWAYS WILD, USED TO BE WILDER. Clock starts now. RECIPE FOR SUCCESS is your first clue, your second is MOSTLY SHORT-STAFFED, your third is GOT RICH BEHIND BARS, and your fourth is ALWAYS WILD, USED TO BE WILDER. Five seconds left on the clock. Sixteen thousand submitted guesses."
+            "text": "16,000 submitted guesses. Nick Cannon \u2014 I get it, Wild 'N Out."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Nick Cannon was submitted \u2014 I get it. Well, he's mostly short-staffed because of his children, and apparently he knows the recipe for success because he's hosting a lot of shows."
+            "text": "Here is your final clue: HIS TICKETS ARE GOLD AND CHARLIE'S GRANDPA IS OLD."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Here is your final clue, final chance to guess: HIS TICKETS ARE GOLD, AND CHARLIE'S GRANDPA IS OLD. The clock starts now."
+            "text": "Oh you got it now! 7,289 submissions on that final clue."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Clue number one is RECIPE FOR SUCCESS, clue number two was MOSTLY SHORT-STAFFED, clue number three is GOT RICH BEHIND BARS, clue number four is ALWAYS WILD, USED TO BE WILDER, and your final clue is HIS TICKETS ARE GOLD, AND CHARLIE'S GRANDPA IS OLD. Seven thousand two hundred and eighty-nine submissions on that final clue. Everybody should submit by now \u2014 I want everyone to win at least a cup."
+            "text": "Open the ball now. Willy Wonka!"
           }
         ]
       },
@@ -25794,39 +25818,51 @@
         "lines": [
           {
             "speaker": "Howie Mandel",
-            "text": "Here we go. Let's find out what is in the crystal ball. Open the ball. Willy Wonka! That's Willy Wonka. I love Gene Wilder. I loved Gene Wilder. I loved everything he did \u2014 so funny and so talented."
+            "text": "Clue five: HIS TICKETS ARE GOLD AND CHARLIE'S GRANDPA IS OLD. Willy Wonka famously gave out golden tickets."
+          },
+          {
+            "speaker": null,
+            "text": "Clue 5: HIS TICKETS ARE GOLD AND CHARLIE'S GRANDPA IS OLD \u2014 7,436 correct / 10,122 guesses."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Let's take a look at how the clues fit and find out who is taking the money."
+            "text": "Clue number four: ALWAYS WILD, USED TO BE WILDER. Willy Wonka is wild and he was played by Gene Wilder."
           },
           {
             "speaker": null,
-            "text": "Clue 5: HIS TICKETS ARE GOLD, AND CHARLIE'S GRANDPA IS OLD \u2014 Willy Wonka famously gave out golden tickets to gain entrance to his factory. 7,436 correct / 10,122 guesses."
-          },
-          {
-            "speaker": null,
-            "text": "Clue 4: ALWAYS WILD, USED TO BE WILDER \u2014 Willy Wonka is an eccentric, \"wild\" character, and was played by Gene Wilder in the first film adaptation. 1,690 correct / 5,412 guesses."
-          },
-          {
-            "speaker": null,
-            "text": "Clue 3: GOT RICH BEHIND BARS \u2014 Chocolate bars made him a lot of money. 1,816 correct / 8,076 guesses."
-          },
-          {
-            "speaker": null,
-            "text": "Clue 2: MOSTLY SHORT-STAFFED \u2014 His employees are Oompa Loompas, who are short in stature. 408 correct / 4,697 guesses."
-          },
-          {
-            "speaker": null,
-            "text": "Clue 1: RECIPE FOR SUCCESS \u2014 Everyone loved Willy Wonka's delicious confections \u2014 he had the recipe for his success. 0 correct / 3,199 guesses."
+            "text": "Clue 4: ALWAYS WILD, USED TO BE WILDER \u2014 1,690 correct / 5,412 guesses."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "Zero got it correct on clue one, which means the people who guessed on clue number two are the gold winners \u2014 four hundred and eight of you, each taking seven dollars and thirty-five cents."
+            "text": "Clue three: GOT RICH BEHIND BARS. Chocolate bars made him a lot of money."
           },
           {
             "speaker": null,
-            "text": "\ud83e\udd47 Gold (Clue 2): 408 winners \u00b7 $7.35 each"
+            "text": "Clue 3: GOT RICH BEHIND BARS \u2014 1,816 correct / 8,076 guesses."
+          },
+          {
+            "speaker": "Howie Mandel",
+            "text": "Clue number two was MOSTLY SHORT-STAFFED. His employees are Oompa Loompas who are short."
+          },
+          {
+            "speaker": null,
+            "text": "Clue 2: MOSTLY SHORT-STAFFED \u2014 408 correct / 4,697 guesses."
+          },
+          {
+            "speaker": "Howie Mandel",
+            "text": "The first clue was RECIPE FOR SUCCESS. Everyone loved Willy Wonka's delicious confections. Zero of you got clue one correct."
+          },
+          {
+            "speaker": null,
+            "text": "Clue 1: RECIPE FOR SUCCESS \u2014 0 correct / 3,199 guesses."
+          },
+          {
+            "speaker": "Howie Mandel",
+            "text": "The people who guessed on clue number two are the gold winners \u2014 408 of you each taking $7.35."
+          },
+          {
+            "speaker": null,
+            "text": "\ud83e\udd47 Gold (Clue 2): 408 winners \u00b7 $7.35 each \u2014 PYNKISSEZ, SQUASHROCKY, ROCKMYFLIX, VOMBIE"
           },
           {
             "speaker": null,
@@ -25838,11 +25874,11 @@
           },
           {
             "speaker": "Howie Mandel",
-            "text": "You know what I love about this? We have almost four thousand winners tonight. The more people that win, the more fun it is. Come back tomorrow \u2014 we probably have way more than that, considering all of you who got it right."
+            "text": "We have over 3,000, almost 4,000 winners tonight."
           },
           {
             "speaker": "Howie Mandel",
-            "text": "All our winners, including everyone who won a voucher for their K-pop Demon Hunter glass \u2014 make sure you redeem it while the offer is still good. If you didn't win one, you can try again tomorrow and all week long. We're here every weekday, 8 Eastern, 5 Pacific. Come back tomorrow."
+            "text": "Congratulations to everyone who won a Netflix voucher for their K-Pop Demon Hunter glass."
           }
         ]
       },
@@ -25851,7 +25887,7 @@
         "lines": [
           {
             "speaker": "Howie Mandel",
-            "text": "Best Guess Live. I love that part of this show. Good night."
+            "text": "We're here every weekday, 8 Eastern, 5 Pacific. Good night!"
           }
         ]
       }
